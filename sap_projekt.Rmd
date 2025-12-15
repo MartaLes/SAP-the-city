@@ -1,7 +1,12 @@
 ---
-title: "projekt_SAP_demo"
-output: html_document
-date: "2025-12-06"
+title: "Projekt: Analiza ličnosti i njenih mračnih crta"
+author:
+  - Lana Barišić
+  - Marta Leš
+  - Lucija Lovrić
+  - Karla Šoštar
+date: "2026-01-21"
+output: pdf_document
 editor_options: 
   markdown: 
     wrap: 72
@@ -10,7 +15,7 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # instalacija - samo za prvi put
-install.packages(c("tidyverse", "GGally", "ggcorrplot"))
+install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych"))
 
 ```
 
@@ -18,15 +23,44 @@ install.packages(c("tidyverse", "GGally", "ggcorrplot"))
 library(tidyverse)
 library(GGally)   
 library(ggcorrplot)
+library(psych)
 ```
+
+# Motivacija i opis problema
+
+Ličnost je jedna od središnjih tema psihologije, a danas se najčešće
+opisuje putem petofaktorskog modela Big Five, koji uključuje:
+ekstraverziju (razlikuje osobe po razini društvene angažiranosti),
+ugodnost (obuhvaća empatiju i kooperativnost nasuprot sumnjičavosti),
+savjesnost (govori o odgovornosti nasuprot neorganiziranosti),
+neuroticizam (opisuje emocionalnu nestabilnost i sklonost negativnim
+emocijama) te otvorenost (označava kreativnost nasuprot
+konvencionalnosti). Uz te osnovne dimenzije, česte su i procjene tzv.
+mračne trijade: narcizma (povišen osjećaj vlastite važnosti i manjak
+empatije), psihopatije (impulzivnost, bezosjećajnost i antisocijalnost)
+i makijavelizma (manipulativnost i instrumentalno iskorištavanje
+drugih). Cilj ovog projekta je analizirati u kakvoj su vezi osnovne crte
+ličnosti, mračne crte ličnosti te sklonost stresu, depresiji i
+anksioznosti.
+
+# Učitavanje i uređivanje podataka
+
+Podatke iz CSV datoteke učitavamo u varijablu *dataset* kako bismo ih
+mogle bolje analizirati.
 
 ```{r}
 dataset <- read_csv('Personality_data.csv')
 ```
 
+Dalje, prikažemo prvih nekoliko redaka da vidimo primjere vrijednosti
+svakog od stupaca.
+
 ```{r}
 head(dataset)
 ```
+
+Zatim, pomoću metoda *names()* i *glimpse()*, dajemo si bolji uvid u
+tipove podataka i strukturu.
 
 ```{r}
 names(dataset)
@@ -40,6 +74,52 @@ glimpse(dataset)
 ```{r}
 colSums(is.na(dataset))
 ```
+
+# Jesu li ljudi s izraženijom mračnom trijadom skloniji depresiji?
+
+### Nezavisna varijabla (prediktori)- Mračna trijada:
+
+-   Narcizam
+
+-   Psihopatija
+
+-   Makijavelizam
+
+### Zavisna varijabla
+
+-   Depresija (kontinuirana skala)
+
+### Kontrolne varijable
+
+-   Dob
+
+-   Spol
+
+-   Neuroticizam (važan jer je jak prediktor depresije)
+
+-   Ostale *Big Five* crte
+
+## Upoznavanje podataka i provjera distribucija
+
+```{r}
+summary(dataset)
+
+
+describe(dataset[, c("narcissism", "psychoticism", "machiavelism", "depression")])
+
+ 
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(dataset, aes(depression)) +
+  geom_histogram(bins = 30, fill = "steelblue") +
+  theme_minimal()
+
+```
+
+# Postoje li razlike u nekim crtama ličnosti među spolovima?
 
 ```{r}
 # odabir 
