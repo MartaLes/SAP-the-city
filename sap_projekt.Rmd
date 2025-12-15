@@ -43,7 +43,7 @@ colSums(is.na(dataset))
 
 ```{r}
 # odabir 
-traits_vars <- data %>%
+traits_vars <- dataset %>%
   select(
     depression, anxiety, stress,
     narcissism, machiavelism, psychoticism, sadism,
@@ -83,7 +83,7 @@ Extraversion-Narcissism(0.56) Machiavelism–Psychoticism (0.51)
 
 ```{r}
 table(dataset$sex)
-df_sex <- data %>%
+df_sex <- dataset %>%
   filter(sex %in% c("Male", "Female"))
 
 ```
