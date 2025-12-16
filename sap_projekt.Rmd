@@ -15,7 +15,7 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # instalacija - samo za prvi put
-install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych"))
+install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych", "corrplot"))
 
 ```
 
@@ -24,6 +24,9 @@ library(tidyverse)
 library(GGally)   
 library(ggcorrplot)
 library(psych)
+library(dplyr)
+library(corrplot)
+
 ```
 
 # Motivacija i opis problema
@@ -43,7 +46,7 @@ drugih). Cilj ovog projekta je analizirati u kakvoj su vezi osnovne crte
 ličnosti, mračne crte ličnosti te sklonost stresu, depresiji i
 anksioznosti.
 
-# Učitavanje i uređivanje podataka
+# Učitavanje i pregled podataka
 
 Podatke iz CSV datoteke učitavamo u varijablu *dataset* kako bismo ih
 mogle bolje analizirati.
@@ -71,8 +74,32 @@ names(dataset)
 glimpse(dataset)
 ```
 
+Prema uvidu u strukturu podataka vidljivo je da je varijabla **age**
+tipa *character*, što nije prikladno jer bi u statističkim modelima bila
+tretirana kao kategorijska umjesto numerička varijabla. Stoga je
+varijabla **age** pretvorena u numerički tip podataka.
+
+Varijabla **sex** predstavlja kategorijsku varijablu te je, radi
+ispravne primjene u regresijskim modelima, pretvorena u tip *factor*.
+
+Kako bi se osigurala valjanost analize, iz uzorka su uklonjeni svi
+ispitanici koji sadrže vrijednosti *CONSENT_REVOKED* ili *DATA_EXPIRED*,
+budući da ti zapisi ne predstavljaju stvarne podatke ispitanika.
+
 ```{r}
-colSums(is.na(dataset))
+
+data_clean <- dataset %>%
+  filter(
+    if_all(everything(),
+           ~ !(. %in% c("CONSENT_REVOKED", "DATA_EXPIRED")))
+  ) %>%
+  mutate(
+    age = as.numeric(age),
+    sex = factor(sex)
+  )
+
+
+head(data_clean)
 ```
 
 # Jesu li ljudi s izraženijom mračnom trijadom skloniji depresiji?
@@ -102,21 +129,84 @@ colSums(is.na(dataset))
 ## Upoznavanje podataka i provjera distribucija
 
 ```{r}
-summary(dataset)
-
-
-describe(dataset[, c("narcissism", "psychoticism", "machiavelism", "depression")])
-
- 
+describe(data_clean %>%
+  select(depression, narcissism, machiavelism, psychoticism))
 ```
 
 ```{r}
-library(ggplot2)
 
-ggplot(dataset, aes(depression)) +
+ggplot(data_clean, aes(depression)) +
   geom_histogram(bins = 30, fill = "steelblue") +
   theme_minimal()
 
+```
+
+```{r}
+ggplot(data_clean, aes(narcissism, depression)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(machiavelism, depression)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(psychoticism, depression)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+```
+
+## Pearsonove korelacije
+
+```{r}
+cor.test(data_clean$depression, data_clean$narcissism)
+cor.test(data_clean$depression, data_clean$machiavelism)
+cor.test(data_clean$depression, data_clean$psychoticism)
+
+```
+
+```{r}
+vars <- data_clean %>%
+  select(depression, narcissism, machiavelism, psychoticism) %>%
+  na.omit()
+
+corrplot(cor(vars))
+
+
+```
+
+## Linearna regresija
+
+```{r}
+model1 <- lm(depression ~ narcissism + machiavelism + psychoticism,
+             data = data_clean)
+
+summary(model1)
+
+```
+
+```{r}
+model2 <- lm(depression ~ narcissism + machiavelism + psychoticism +
+               neuroticism + extraversion + openness +
+               agreeableness + conscientiousness +
+               age + sex,
+             data = data_clean)
+
+summary(model2)
+
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(model2)
+
+```
+
+```{r}
++
 ```
 
 # Postoje li razlike u nekim crtama ličnosti među spolovima?
