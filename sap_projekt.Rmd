@@ -26,7 +26,6 @@ library(corrplot)
 
 ```
 
-
 # Motivacija i opis problema
 
 Ličnost je jedna od središnjih tema psihologije, a danas se najčešće
@@ -102,41 +101,11 @@ head(data_clean)
 
 # Jesu li ljudi s izraženijom mračnom trijadom skloniji depresiji?
 
-### Nezavisna varijabla (prediktori)- Mračna trijada:
-
--   Narcizam
-
--   Psihopatija
-
--   Makijavelizam
-
-### Zavisna varijabla
-
--   Depresija (kontinuirana skala)
-
-### Kontrolne varijable
-
--   Dob
-
--   Spol
-
--   Neuroticizam (važan jer je jak prediktor depresije)
-
--   Ostale *Big Five* crte
-
-## Upoznavanje podataka i provjera distribucija
+## Upoznavanje podataka
 
 ```{r}
 describe(data_clean %>%
   select(depression, narcissism, machiavelism, psychoticism))
-```
-
-```{r}
-
-ggplot(data_clean, aes(depression)) +
-  geom_histogram(bins = 30, fill = "steelblue") +
-  theme_minimal()
-
 ```
 
 ```{r}
@@ -167,11 +136,11 @@ cor.test(data_clean$depression, data_clean$psychoticism)
 ```
 
 ```{r}
-vars <- data_clean %>%
+vars1 <- data_clean %>%
   select(depression, narcissism, machiavelism, psychoticism) %>%
   na.omit()
 
-corrplot(cor(vars))
+corrplot(cor(vars1))
 
 
 ```
@@ -179,30 +148,51 @@ corrplot(cor(vars))
 ## Linearna regresija
 
 ```{r}
-model1 <- lm(depression ~ narcissism + machiavelism + psychoticism,
+model_dark_triad <- lm(depression ~ narcissism + machiavelism + psychoticism,
              data = data_clean)
 
-summary(model1)
+summary(model_dark_triad)
 
 ```
 
 ```{r}
-model2 <- lm(depression ~ narcissism + machiavelism + psychoticism +
+model_all_vars <- lm(depression ~ narcissism + machiavelism + psychoticism +
                neuroticism + extraversion + openness +
                agreeableness + conscientiousness +
                age + sex,
              data = data_clean)
 
-summary(model2)
+summary(model_all_vars)
 
 ```
 
 ```{r}
-par(mfrow = c(2,2))
-plot(model2)
+vars2 <- data_clean %>%
+  select(depression, narcissism, machiavelism, psychoticism,
+               neuroticism, extraversion, openness,
+               agreeableness, conscientiousness,
+               age) %>%
+  na.omit()
+
+corrplot(cor(vars2))
 
 ```
 
+```{r}
+
+data_clean <- data_clean %>%
+  mutate(dark_triad = rowMeans(
+    select(., narcissism, machiavelism, psychoticism),
+    na.rm = TRUE
+  ))
+
+cor.test(data_clean$dark_triad, data_clean$depression)
+
+lm(depression ~ dark_triad + neuroticism + age + sex,
+   data = data_clean) |> summary()
+
+
+```
 
 # Postoje li razlike u nekim crtama ličnosti među spolovima?
 
@@ -342,7 +332,8 @@ Neuroticizmu (p = 0.0198 - značajna razlika)
 Otvorenosti (p = 0.0323) - žene imaju statistički značajnu višu
 otvorenost
 
-Ugodnosti (p = 7.8×$10^{-6}$ - vrlo značajna razlika) - žene su ugodnije.
+Ugodnosti (p = 7.8×$10^{-6}$ - vrlo značajna razlika) - žene su
+ugodnije.
 
 Nema značajnih razlika u:
 
@@ -406,18 +397,18 @@ odnosu na žene, što ukazuje na snažan spolni efekt na ovu osobinu.
 
 Nezavisna varijabla (prediktori):
 
--->Dob (age)
+--\>Dob (age)
 
 Zavisne varijable:
 
---> Ekstraverzija (extraversion)
---> Ugodnost (agreeableness)
---> Savjesnost (conscientiousness)
---> Neuroticizam (neuroticism)
---> Otvorenost (openness)
+--\> Ekstraverzija (extraversion) --\> Ugodnost (agreeableness) --\>
+Savjesnost (conscientiousness) --\> Neuroticizam (neuroticism) --\>
+Otvorenost (openness)
 
-U nastavku se analiza provodi zasebno za svaku osobinu.
-Budući da su i dob i crte ličnosti kontinuirane varijable, a istraživačko pitanje se odnosi na linearnu promjenu s godinama, jednostavna linearna regresija predstavlja najprikladniji statistički pristup.
+U nastavku se analiza provodi zasebno za svaku osobinu. Budući da su i
+dob i crte ličnosti kontinuirane varijable, a istraživačko pitanje se
+odnosi na linearnu promjenu s godinama, jednostavna linearna regresija
+predstavlja najprikladniji statistički pristup.
 
 ```{r}
 describe(data_clean %>%
@@ -426,8 +417,8 @@ describe(data_clean %>%
 
 ```
 
-Deskriptivna statistika pruža osnovni uvid u raspodjelu dobi i razinu pojedinih crta ličnosti u uzorku ispitanika.
-
+Deskriptivna statistika pruža osnovni uvid u raspodjelu dobi i razinu
+pojedinih crta ličnosti u uzorku ispitanika.
 
 ```{r}
 ggplot(data_clean, aes(age)) +
@@ -435,7 +426,9 @@ ggplot(data_clean, aes(age)) +
   theme_minimal()
 
 ```
-Histogram dobi prikazuje raspodjelu ispitanika po dobnim skupinama te omogućuje procjenu raspona i strukture dobi u uzorku.
+
+Histogram dobi prikazuje raspodjelu ispitanika po dobnim skupinama te
+omogućuje procjenu raspona i strukture dobi u uzorku.
 
 ```{r}
 ggplot(data_clean, aes(age, extraversion)) +
@@ -465,8 +458,11 @@ ggplot(data_clean, aes(age, openness)) +
 
 ```
 
-Raspršeni dijagrami s pripadajućim regresijskim linijama korišteni su za vizualnu procjenu linearnog odnosa između dobi i pojedinih crta ličnosti. Grafički prikazi ne upućuju na izražene linearne trendove, iako se kod nekih osobina može uočiti blagi rast ili pad vrijednosti s porastom dobi.
-
+Raspršeni dijagrami s pripadajućim regresijskim linijama korišteni su za
+vizualnu procjenu linearnog odnosa između dobi i pojedinih crta
+ličnosti. Grafički prikazi ne upućuju na izražene linearne trendove,
+iako se kod nekih osobina može uočiti blagi rast ili pad vrijednosti s
+porastom dobi.
 
 ```{r}
 cor.test(data_clean$age, data_clean$extraversion)
@@ -476,7 +472,10 @@ cor.test(data_clean$age, data_clean$neuroticism)
 cor.test(data_clean$age, data_clean$openness)
 
 ```
-Pearsonove korelacije korištene su kao preliminarna analiza odnosa dobi i crta ličnosti. Rezultati korelacija ne upućuju na statistički značajne povezanosti između dobi i promatranih osobina.
+
+Pearsonove korelacije korištene su kao preliminarna analiza odnosa dobi
+i crta ličnosti. Rezultati korelacija ne upućuju na statistički značajne
+povezanosti između dobi i promatranih osobina.
 
 ```{r}
 vars <- data_clean %>%
@@ -487,9 +486,9 @@ vars <- data_clean %>%
 corrplot(cor(vars))
 
 ```
-Korelacijska matrica dodatno potvrđuje izostanak snažnih povezanosti između dobi i pojedinih crta ličnosti.
 
-
+Korelacijska matrica dodatno potvrđuje izostanak snažnih povezanosti
+između dobi i pojedinih crta ličnosti.
 
 ```{r}
 model_consc <- lm(conscientiousness ~ age, data = data_clean)
@@ -504,9 +503,17 @@ model_open <- lm(openness ~ age, data = data_clean)
 summary(model_open)
 
 ```
-Za svaku crtu ličnosti provedena je analiza jednostavne linearne regresije u kojoj je dob korištena kao nezavisna varijabla. U niti jednom modelu dob se nije pokazala statistički značajnim prediktorom (p > 0.05). Vrijednosti koeficijenta determinacije bile su vrlo niske, što upućuje na slab objašnjavajući doprinos dobi.
 
-Na temelju provedene analize može se zaključiti da se u promatranom uzorku ne uočava statistički značajno jačanje niti slabljenje crta ličnosti s godinama. Dob se u ovom istraživanju nije pokazala značajnim prediktorom promjena u okviru Big Five modela ličnosti.
+Za svaku crtu ličnosti provedena je analiza jednostavne linearne
+regresije u kojoj je dob korištena kao nezavisna varijabla. U niti
+jednom modelu dob se nije pokazala statistički značajnim prediktorom (p
+\> 0.05). Vrijednosti koeficijenta determinacije bile su vrlo niske, što
+upućuje na slab objašnjavajući doprinos dobi.
+
+Na temelju provedene analize može se zaključiti da se u promatranom
+uzorku ne uočava statistički značajno jačanje niti slabljenje crta
+ličnosti s godinama. Dob se u ovom istraživanju nije pokazala značajnim
+prediktorom promjena u okviru Big Five modela ličnosti.
 
 ```{r}
 library(broom)
@@ -527,10 +534,11 @@ results
 
 ```
 
-Tablica prikazuje procijenjene regresijske koeficijente za učinak dobi na pojedine crte ličnosti.
-
+Tablica prikazuje procijenjene regresijske koeficijente za učinak dobi
+na pojedine crte ličnosti.
 
 # Jesu li crte ličnosti i sklonost stresu, depresiji i anksioznosti povezane sa zanimanjem?
+
 ```{r}
 df_job <- dataset %>% filter(!sex %in% c("CONSENT_REVOKED"),
                              !`student status` %in% c("CONSENT_REVOKED", "DATA_EXPIRED"),
@@ -538,8 +546,6 @@ df_job <- dataset %>% filter(!sex %in% c("CONSENT_REVOKED"),
                              )
 
 ```
-
-
 
 ```{r}
 df_job <- df_job %>% mutate(
@@ -565,6 +571,7 @@ df_job %>%
   )
 
 ```
+
 ```{r}
 mental_long <- df_job %>%
   pivot_longer(
@@ -585,25 +592,43 @@ ggplot(mental_long, aes(x = occupation_group, y = score, fill = occupation_group
   )
 
 ```
-Vizualni pregled distribucija pokazuje da se razine stresa, depresije i anksioznosti uvelike preklapaju između skupina definiranih prema zanimanju, što upućuje na izražene individualne razlike unutar skupina. Iako nezaposleni sudionici pokazuju viši medijan depresivnosti u odnosu na ostale skupine, razlike nisu statistički potvrđene. Razine stresa pokazuju vrlo slične obrasce u svim skupinama, dok se anksioznost nepojavljuje sustavno povezanom sa zanimanjem. Ovi nalazi sugeriraju da profesionalni status sam po sebi ima ograničen doprinos objašnjenju mentalnog zdravlja te da individualne crte ličnosti vjerojatno imaju snažniju ulogu.
 
+Vizualni pregled distribucija pokazuje da se razine stresa, depresije i
+anksioznosti uvelike preklapaju između skupina definiranih prema
+zanimanju, što upućuje na izražene individualne razlike unutar skupina.
+Iako nezaposleni sudionici pokazuju viši medijan depresivnosti u odnosu
+na ostale skupine, razlike nisu statistički potvrđene. Razine stresa
+pokazuju vrlo slične obrasce u svim skupinama, dok se anksioznost
+nepojavljuje sustavno povezanom sa zanimanjem. Ovi nalazi sugeriraju da
+profesionalni status sam po sebi ima ograničen doprinos objašnjenju
+mentalnog zdravlja te da individualne crte ličnosti vjerojatno imaju
+snažniju ulogu.
 
 ## Provođenje ANOVA analize - Razlikuju li se razine anksioznosti, depresije i stresa po zanimanjima?
+
 ```{r}
 summary(aov(anxiety ~ occupation_group, data = df_job))
 summary(aov(depression ~ occupation_group, data = df_job))
 summary(aov(stress ~ occupation_group, data = df_job))
 
 ```
-Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja razlika u razini anksioznosti, depresije i stresa između skupina definiranih prema zanimanju.
 
-Rezultati pokazuju da ne postoje statistički značajne razlike u razini anksioznosti među zanimanjima, F(3, 370) = 1.31, p = 0.269. Također, nisu utvrđene statistički značajne razlike u razini stresa, F(3, 370) = 0.61, p = 0.606.
+Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja
+razlika u razini anksioznosti, depresije i stresa između skupina
+definiranih prema zanimanju.
 
-Za depresiju je uočen trend prema razlikama između skupina, no rezultat nije dosegnuo konvencionalnu razinu statističke značajnosti, F(3, 370) = 2.33, p = 0.0736. Dobiveni nalazi upućuju na to da zanimanje samo po sebi nije snažan prediktor razine mentalnog zdravlja u ovom uzorku.
+Rezultati pokazuju da ne postoje statistički značajne razlike u razini
+anksioznosti među zanimanjima, F(3, 370) = 1.31, p = 0.269. Također,
+nisu utvrđene statistički značajne razlike u razini stresa, F(3, 370) =
+0.61, p = 0.606.
 
-
+Za depresiju je uočen trend prema razlikama između skupina, no rezultat
+nije dosegnuo konvencionalnu razinu statističke značajnosti, F(3, 370) =
+2.33, p = 0.0736. Dobiveni nalazi upućuju na to da zanimanje samo po
+sebi nije snažan prediktor razine mentalnog zdravlja u ovom uzorku.
 
 ## Provođenje višestruke regresije za pokazivanje doprinosa zanimanja anksioznosti povrh ličnosti
+
 ```{r}
 model_anxiety <- lm(
   anxiety ~ occupation_group + 
@@ -616,17 +641,34 @@ summary(model_anxiety)
 
 ```
 
-U svrhu ispitivanja odnosa između zanimanja i anksioznosti, proveden je model višestruke linearne regresije kojim se ispituje doprinos radnog statusa povrh crta ličnosti.
+U svrhu ispitivanja odnosa između zanimanja i anksioznosti, proveden je
+model višestruke linearne regresije kojim se ispituje doprinos radnog
+statusa povrh crta ličnosti.
 
-Rezultati pokazuju da je model statistički značajan u cjelini (F(12, 361) = 7.807, p = 5.873x$10^{-13}$), pri čemu Multiple R-squared iznosi 0.2061, a Adjusted R-squared 0.1797. Iako je objašnjeni udio varijance manji u odnosu na modele za stres i depresiju, vrijednosti upućuju na to da model ipak ima smisla za interpretaciju.
+Rezultati pokazuju da je model statistički značajan u cjelini (F(12,
+361) = 7.807, p = 5.873x$10^{-13}$), pri čemu Multiple R-squared iznosi
+0.2061, a Adjusted R-squared 0.1797. Iako je objašnjeni udio varijance
+manji u odnosu na modele za stres i depresiju, vrijednosti upućuju na to
+da model ipak ima smisla za interpretaciju.
 
-Analizom mračnih crta ličnosti nije utvrđen nijedan statistički značajan prediktor anksioznosti. Narcizam, makijavelizam, psihoticizam i sadizam nisu pokazali jedinstveni doprinos u ovom modelu, što sugerira da se njihova povezanost s anksioznošću ne zadržava nakon uključivanja ostalih crta ličnosti.
+Analizom mračnih crta ličnosti nije utvrđen nijedan statistički značajan
+prediktor anksioznosti. Narcizam, makijavelizam, psihoticizam i sadizam
+nisu pokazali jedinstveni doprinos u ovom modelu, što sugerira da se
+njihova povezanost s anksioznošću ne zadržava nakon uključivanja ostalih
+crta ličnosti.
 
-Unutar petofaktorskog modela ličnosti, neuroticizam se jasno istaknuo kao ključni prediktor anksioznosti ($\beta$ = 0.372737, p = 1.77x$10^{-8}$). Osobe s višim razinama neuroticizma pokazuju izraženiju anksioznost, neovisno o zanimanju i ostalim osobinama ličnosti, što je u skladu s postojećim teorijskim i empirijskim nalazima. Ekstraverzija nije dosegnula razinu statističke značajnosti ($\beta$ = 0.117466, p = 0.088), no uočen je slab trend koji upućuje na višu razinu anksioznosti kod ekstravertiranijih osoba. Ostale Big Five crte nisu se pokazale značajnima u ovom modelu.
-
-
+Unutar petofaktorskog modela ličnosti, neuroticizam se jasno istaknuo
+kao ključni prediktor anksioznosti ($\beta$ = 0.372737, p =
+1.77x$10^{-8}$). Osobe s višim razinama neuroticizma pokazuju izraženiju
+anksioznost, neovisno o zanimanju i ostalim osobinama ličnosti, što je u
+skladu s postojećim teorijskim i empirijskim nalazima. Ekstraverzija
+nije dosegnula razinu statističke značajnosti ($\beta$ = 0.117466, p =
+0.088), no uočen je slab trend koji upućuje na višu razinu anksioznosti
+kod ekstravertiranijih osoba. Ostale Big Five crte nisu se pokazale
+značajnima u ovom modelu.
 
 ## Provođenje višestruke regresije za pokazivanje doprinosa zanimanja depresiji povrh ličnosti
+
 ```{r}
 model_depression <- lm(
   depression ~ occupation_group + 
@@ -639,18 +681,34 @@ summary(model_depression)
 
 ```
 
-Kako bi se ispitao doprinos zanimanja depresiji uz kontrolu crta ličnosti, proveden je model višestruke linearne regresije.
+Kako bi se ispitao doprinos zanimanja depresiji uz kontrolu crta
+ličnosti, proveden je model višestruke linearne regresije.
 
-Model se pokazao izrazito snažnim u objašnjenju ishoda, s vrijednostima F(12, 361) = 26.49 i p = 2.2x$10^{-16}$. Multiple R-squared iznosi 0.4682, dok Adjusted R-squared iznosi 0.4506, što upućuje na to da model objašnjava velik dio varijance depresije te ima vrlo dobru objašnjavajuću snagu.
+Model se pokazao izrazito snažnim u objašnjenju ishoda, s vrijednostima
+F(12, 361) = 26.49 i p = 2.2x$10^{-16}$. Multiple R-squared iznosi
+0.4682, dok Adjusted R-squared iznosi 0.4506, što upućuje na to da model
+objašnjava velik dio varijance depresije te ima vrlo dobru
+objašnjavajuću snagu.
 
-Među mračnim crtama ličnosti, psihoticizam se ponovno pokazao statistički značajnim pozitivnim prediktorom depresije ($\beta$ = 0.204240, p = 0.00316). Ovaj rezultat sugerira da osobe s izraženijim obilježjima psihoticizma imaju višu razinu depresije, čak i nakon kontrole ostalih osobina ličnosti i radnog statusa. Makijavelizam je pokazao granični efekt ($\beta$ = 0.112090, p = 0.05728), dok narcizam i sadizam nisu imali značajan doprinos u objašnjenju depresije.
+Među mračnim crtama ličnosti, psihoticizam se ponovno pokazao
+statistički značajnim pozitivnim prediktorom depresije ($\beta$ =
+0.204240, p = 0.00316). Ovaj rezultat sugerira da osobe s izraženijim
+obilježjima psihoticizma imaju višu razinu depresije, čak i nakon
+kontrole ostalih osobina ličnosti i radnog statusa. Makijavelizam je
+pokazao granični efekt ($\beta$ = 0.112090, p = 0.05728), dok narcizam i
+sadizam nisu imali značajan doprinos u objašnjenju depresije.
 
-Unutar petofaktorskog modela, neuroticizam se ponovno istaknuo kao najsnažniji pozitivni prediktor depresije ($\beta$ = 0.439192, p = 1.96x$10^{-13}$), potvrđujući njegovu ključnu ulogu u objašnjenju emocionalnih poteškoća. Za razliku od modela za stres i anksioznost, ekstraverzija se ovdje pokazala statistički značajnim negativnim prediktorom ($\beta$ = -0.302426, p = 1.10x$10^{-6}$), što upućuje na to da osobe s višom razinom ekstraverzije pokazuju nižu razinu depresije. Ostale crte Big Five modela nisu se pokazale značajnima.
-
-
-
+Unutar petofaktorskog modela, neuroticizam se ponovno istaknuo kao
+najsnažniji pozitivni prediktor depresije ($\beta$ = 0.439192, p =
+1.96x$10^{-13}$), potvrđujući njegovu ključnu ulogu u objašnjenju
+emocionalnih poteškoća. Za razliku od modela za stres i anksioznost,
+ekstraverzija se ovdje pokazala statistički značajnim negativnim
+prediktorom ($\beta$ = -0.302426, p = 1.10x$10^{-6}$), što upućuje na to
+da osobe s višom razinom ekstraverzije pokazuju nižu razinu depresije.
+Ostale crte Big Five modela nisu se pokazale značajnima.
 
 ## Provođenje višestruke regresije za pokazivanje doprinosa zanimanja depresiji povrh ličnosti
+
 ```{r}
 model_stress <- lm(
   stress ~ occupation_group + 
@@ -663,13 +721,29 @@ summary(model_stress)
 
 ```
 
-Iz modela višestruke linearne regresije koji izračunava doprinos zanimanja stresu povrh ličnosti zaključujemo sljedeće stvari.
+Iz modela višestruke linearne regresije koji izračunava doprinos
+zanimanja stresu povrh ličnosti zaključujemo sljedeće stvari.
 
-Model se pokazuje statistički značajnim u cjelini s vrijednostima F(12, 361) = 13.12 i p = 2.2x$10^{-16}$ (< 0.001) te je Multiple R-squared = 0.3036 i Adjusted R-squared = 0.2805. Ove vrijednosti upućuju da model ima dobru potpornu (objašnjavajuću) snagu.
+Model se pokazuje statistički značajnim u cjelini s vrijednostima F(12,
+361) = 13.12 i p = 2.2x$10^{-16}$ (\< 0.001) te je Multiple R-squared =
+0.3036 i Adjusted R-squared = 0.2805. Ove vrijednosti upućuju da model
+ima dobru potpornu (objašnjavajuću) snagu.
 
-Među mračnim crtama ličnosti, psihoticizam se istaknuo kao statistički značajan pozitivan prediktor ($\beta$ = 0.204240, p = 0.00316 (< 0.01)). To znači da osobe s višim razinama psihoticizma pokazuju višu razinu stresa, čak i nakon utjecaja ostalih crta ličnosti i oblika radnog angažmana. Makijavelizam je pokazao trend prema pozitivnoj povezanosti ($/beta$ = 0.112090, p = 0.05728 (< 0.1)), ali rezultati su nedovoljni za snažnu povezanost. Narcizam i sadizam nisu pokazali značajan doprinos.
+Među mračnim crtama ličnosti, psihoticizam se istaknuo kao statistički
+značajan pozitivan prediktor ($\beta$ = 0.204240, p = 0.00316 (\<
+0.01)). To znači da osobe s višim razinama psihoticizma pokazuju višu
+razinu stresa, čak i nakon utjecaja ostalih crta ličnosti i oblika
+radnog angažmana. Makijavelizam je pokazao trend prema pozitivnoj
+povezanosti ($/beta$ = 0.112090, p = 0.05728 (\< 0.1)), ali rezultati su
+nedovoljni za snažnu povezanost. Narcizam i sadizam nisu pokazali
+značajan doprinos.
 
-Unutar petofaktorskog Big 5 modela, neurocitizam se pokazao daleko najsnažnijim prediktorom ishoda ($\beta$ = 0.406136, p = 1.42x$10^{-9}$ (< 0.001)). Viša razina neurocitizma povezana je s višom razinom stresa, neovisno o radnom odnosu i ostalim crtama ličnosti. Ovaj rezultat je u potpunosti u skladu s teorijskim očekivanjima. Izdvajamo i otvorenost kao statistički značajan pozititvan prediktor ($\beta$ = 0.142228, p = 0.00554 (< 0.01). Ovaj podatak sugerira da osobe s više otvorenosti mogu biti osjetljivije na stres. Ekstraverzija, ugodnost i savjesnost nisu pokazale statistički značajan u ovom modelu.
-
-
-
+Unutar petofaktorskog Big 5 modela, neurocitizam se pokazao daleko
+najsnažnijim prediktorom ishoda ($\beta$ = 0.406136, p = 1.42x$10^{-9}$
+(\< 0.001)). Viša razina neurocitizma povezana je s višom razinom
+stresa, neovisno o radnom odnosu i ostalim crtama ličnosti. Ovaj
+rezultat je u potpunosti u skladu s teorijskim očekivanjima. Izdvajamo i
+otvorenost kao statistički značajan pozititvan prediktor ($\beta$ =
+0.142228, p = 0.00554 (\< 0.01). Ovaj podatak sugerira da osobe s više
+otvorenosti mogu biti osjetljivije na stres. Ekstraverzija, ugodnost i
+savjesnost nisu pokazale statistički značajan u ovom modelu.
