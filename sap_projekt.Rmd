@@ -419,6 +419,7 @@ Zavisne varijable:
 --> Otvorenost (openness)
 
 U nastavku se analiza provodi zasebno za svaku osobinu.
+Budući da su i dob i crte ličnosti kontinuirane varijable, a istraživačko pitanje se odnosi na linearnu promjenu s godinama, jednostavna linearna regresija predstavlja najprikladniji statistički pristup.
 
 ```{r}
 describe(data_clean %>%
@@ -427,12 +428,17 @@ describe(data_clean %>%
 
 ```
 
+Deskriptivna statistika pruža osnovni uvid u raspodjelu dobi i razinu pojedinih crta ličnosti u uzorku ispitanika.
+
+
 ```{r}
 ggplot(data_clean, aes(age)) +
   geom_histogram(bins = 30, fill = "steelblue") +
   theme_minimal()
 
 ```
+Histogram dobi prikazuje raspodjelu ispitanika po dobnim skupinama te omogućuje procjenu raspona i strukture dobi u uzorku.
+
 ```{r}
 ggplot(data_clean, aes(age, extraversion)) +
   geom_point(alpha = 0.4) +
@@ -461,7 +467,8 @@ ggplot(data_clean, aes(age, openness)) +
 
 ```
 
-Pearsonove korelacije
+Raspršeni dijagrami s pripadajućim regresijskim linijama korišteni su za vizualnu procjenu linearnog odnosa između dobi i pojedinih crta ličnosti. Grafički prikazi ne upućuju na izražene linearne trendove, iako se kod nekih osobina može uočiti blagi rast ili pad vrijednosti s porastom dobi.
+
 
 ```{r}
 cor.test(data_clean$age, data_clean$extraversion)
@@ -471,6 +478,8 @@ cor.test(data_clean$age, data_clean$neuroticism)
 cor.test(data_clean$age, data_clean$openness)
 
 ```
+Pearsonove korelacije korištene su kao preliminarna analiza odnosa dobi i crta ličnosti. Rezultati korelacija ne upućuju na statistički značajne povezanosti između dobi i promatranih osobina.
+
 ```{r}
 vars <- data_clean %>%
   select(age, extraversion, agreeableness,
@@ -480,8 +489,9 @@ vars <- data_clean %>%
 corrplot(cor(vars))
 
 ```
+Korelacijska matrica dodatno potvrđuje izostanak snažnih povezanosti između dobi i pojedinih crta ličnosti.
 
-Linearna regresija
+
 
 ```{r}
 model_consc <- lm(conscientiousness ~ age, data = data_clean)
@@ -496,5 +506,27 @@ model_open <- lm(openness ~ age, data = data_clean)
 summary(model_open)
 
 ```
+Za svaku crtu ličnosti provedena je analiza jednostavne linearne regresije u kojoj je dob korištena kao nezavisna varijabla. U niti jednom modelu dob se nije pokazala statistički značajnim prediktorom (p > 0.05). Vrijednosti koeficijenta determinacije bile su vrlo niske, što upućuje na slab objašnjavajući doprinos dobi.
 
+Na temelju provedene analize može se zaključiti da se u promatranom uzorku ne uočava statistički značajno jačanje niti slabljenje crta ličnosti s godinama. Dob se u ovom istraživanju nije pokazala značajnim prediktorom promjena u okviru Big Five modela ličnosti.
 
+```{r}
+library(broom)
+
+models <- list(
+  Extraversion = model_extra,
+  Agreeableness = model_agree,
+  Conscientiousness = model_consc,
+  Neuroticism = model_neuro,
+  Openness = model_open
+)
+
+results <- lapply(models, tidy) |> 
+  bind_rows(.id = "Trait") |> 
+  filter(term == "age")
+
+results
+
+```
+
+Tablica prikazuje procijenjene regresijske koeficijente za učinak dobi na pojedine crte ličnosti.
