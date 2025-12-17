@@ -14,8 +14,9 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(repos = c(CRAN = "https://cloud.r-project.org"))
 # instalacija - samo za prvi put
-install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych", "corrplot"))
+install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych", "corrplot", "nortest"))
 
 library(tidyverse)
 library(GGally)   
@@ -23,7 +24,7 @@ library(ggcorrplot)
 library(psych)
 library(dplyr)
 library(corrplot)
-
+library(nortest)
 ```
 
 
@@ -550,7 +551,7 @@ df_job <- df_job %>% mutate(
     )
   ) %>% filter(!occupation_group %in% c("Other", "Due to start a new job within the next month", "Not in paid work (e.g. homemaker', 'retired or disabled)"))
 
-#table(df_job$occupation_group)
+table(df_job$occupation_group)
 
 ```
 
@@ -589,13 +590,101 @@ Vizualni pregled distribucija pokazuje da se razine stresa, depresije i anksiozn
 
 
 ## Provođenje ANOVA analize - Razlikuju li se razine anksioznosti, depresije i stresa po zanimanjima?
+
+
+Test pretpostavke normalnosti za anksioznost
+```{r}
+
+require(nortest)
+lillie.test(df_job$anxiety)
+
+lillie.test(df_job$anxiety[df_job$occupation_group=='Full-Time'])
+lillie.test(df_job$anxiety[df_job$occupation_group=='Part-Time'])
+lillie.test(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
+lillie.test(df_job$anxiety[df_job$occupation_group=='Student'])
+
+hist(df_job$anxiety[df_job$occupation_group=='Full-Time'])
+hist(df_job$anxiety[df_job$occupation_group=='Part-Time'])
+hist(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
+hist(df_job$anxiety[df_job$occupation_group=='Student'])
+
+```
+Test pretpostavke normalnosti za depresiju
+```{r}
+
+require(nortest)
+lillie.test(df_job$anxiety)
+
+lillie.test(df_job$anxiety[df_job$occupation_group=='Full-Time'])
+lillie.test(df_job$anxiety[df_job$occupation_group=='Part-Time'])
+lillie.test(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
+lillie.test(df_job$anxiety[df_job$occupation_group=='Student'])
+
+hist(df_job$anxiety[df_job$occupation_group=='Full-Time'])
+hist(df_job$anxiety[df_job$occupation_group=='Part-Time'])
+hist(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
+hist(df_job$anxiety[df_job$occupation_group=='Student'])
+
+```
+
+Test pretpostavki normalnosti za stres
+```{r}
+
+require(nortest)
+lillie.test(df_job$stress)
+
+lillie.test(df_job$stress[df_job$occupation_group=='Full-Time'])
+lillie.test(df_job$stress[df_job$occupation_group=='Part-Time'])
+lillie.test(df_job$stress[df_job$occupation_group=='Unemployed (and job seeking)'])
+lillie.test(df_job$stress[df_job$occupation_group=='Student'])
+
+hist(df_job$stress[df_job$occupation_group=='Full-Time'])
+hist(df_job$stress[df_job$occupation_group=='Part-Time'])
+hist(df_job$stress[df_job$occupation_group=='Unemployed (and job seeking)'])
+hist(df_job$stress[df_job$occupation_group=='Student'])
+
+```
+
+Test pretpostavki homogenosti varijanci za anksioznost
+```{r}
+
+bartlett.test(df_job$anxiety ~ df_job$occupation_group)
+
+var((df_job$anxiety[df_job$occupation_group=='Full-Time']))
+var((df_job$anxiety[df_job$occupation_group=='Part-Time']))
+var((df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)']))
+var((df_job$anxiety[df_job$occupation_group=='Student']))
+```
+
+Test pretpostavki homogenosti varijanci za depresiju
+```{r}
+
+bartlett.test(df_job$depression ~ df_job$occupation_group)
+
+var((df_job$depression[df_job$occupation_group=='Full-Time']))
+var((df_job$depression[df_job$occupation_group=='Part-Time']))
+var((df_job$depression[df_job$occupation_group=='Unemployed (and job seeking)']))
+var((df_job$depression[df_job$occupation_group=='Student']))
+```
+
+Test pretpostavki homogenosti varijanci za stres
+```{r}
+
+bartlett.test(df_job$stress ~ df_job$occupation_group)
+
+var((df_job$stress[df_job$occupation_group=='Full-Time']))
+var((df_job$stress[df_job$occupation_group=='Part-Time']))
+var((df_job$stress[df_job$occupation_group=='Unemployed (and job seeking)']))
+var((df_job$stress[df_job$occupation_group=='Student']))
+```
+
 ```{r}
 summary(aov(anxiety ~ occupation_group, data = df_job))
 summary(aov(depression ~ occupation_group, data = df_job))
 summary(aov(stress ~ occupation_group, data = df_job))
 
 ```
-Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja razlika u razini anksioznosti, depresije i stresa između skupina definiranih prema zanimanju.
+Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja razlika u razini anksioznosti, depresije i stresa između skupina definiranih prema zanimanju. Prethodno tome, provedena su testiranja pretpostavki normalnosti podataka i homogenosti varijanci za anksioznost, depresiju i stres s obzirom na kategoriju koja opisuje radni odnos occupation_group. Sve su se pretpostavke pokazale ispravnima.
 
 Rezultati pokazuju da ne postoje statistički značajne razlike u razini anksioznosti među zanimanjima, F(3, 370) = 1.31, p = 0.269. Također, nisu utvrđene statistički značajne razlike u razini stresa, F(3, 370) = 0.61, p = 0.606.
 
