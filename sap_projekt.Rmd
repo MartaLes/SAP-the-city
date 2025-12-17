@@ -205,9 +205,6 @@ plot(model2)
 
 ```
 
-```{r}
-+
-```
 
 # Postoje li razlike u nekim crtama ličnosti među spolovima?
 
@@ -406,3 +403,98 @@ rezultate na svim analiziranim mračnim crtama — narcizmu, makijavelizmu,
 psihoticizmu i sadizmu (sve p \< 0.05). Najizraženija razlika uočena je
 kod sadizma, gdje muškarci ostvaruju znatno više prosječne vrijednosti u
 odnosu na žene, što ukazuje na snažan spolni efekt na ovu osobinu.
+
+# Jačaju li neke osobine s godinama?
+
+Nezavisna varijabla (prediktori):
+
+-->Dob (age)
+
+Zavisne varijable:
+
+--> Ekstraverzija (extraversion)
+--> Ugodnost (agreeableness)
+--> Savjesnost (conscientiousness)
+--> Neuroticizam (neuroticism)
+--> Otvorenost (openness)
+
+U nastavku se analiza provodi zasebno za svaku osobinu.
+
+```{r}
+describe(data_clean %>%
+  select(age, extraversion, agreeableness,
+         conscientiousness, neuroticism, openness))
+
+```
+
+```{r}
+ggplot(data_clean, aes(age)) +
+  geom_histogram(bins = 30, fill = "steelblue") +
+  theme_minimal()
+
+```
+```{r}
+ggplot(data_clean, aes(age, extraversion)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(age, agreeableness)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(age, conscientiousness)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(age, neuroticism)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(age, openness)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+```
+
+Pearsonove korelacije
+
+```{r}
+cor.test(data_clean$age, data_clean$extraversion)
+cor.test(data_clean$age, data_clean$agreeableness)
+cor.test(data_clean$age, data_clean$conscientiousness)
+cor.test(data_clean$age, data_clean$neuroticism)
+cor.test(data_clean$age, data_clean$openness)
+
+```
+```{r}
+vars <- data_clean %>%
+  select(age, extraversion, agreeableness,
+         conscientiousness, neuroticism, openness) %>%
+  na.omit()
+
+corrplot(cor(vars))
+
+```
+
+Linearna regresija
+
+```{r}
+model_consc <- lm(conscientiousness ~ age, data = data_clean)
+summary(model_consc)
+model_extra <- lm(extraversion ~ age, data = data_clean)
+summary(model_extra)
+model_agree <- lm(agreeableness ~ age, data = data_clean)
+summary(model_agree)
+model_neuro <- lm(neuroticism ~ age, data = data_clean)
+summary(model_neuro)
+model_open <- lm(openness ~ age, data = data_clean)
+summary(model_open)
+
+```
+
+
