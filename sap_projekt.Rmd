@@ -1,14 +1,16 @@
 ---
-title: "Projekt: Analiza ličnosti i njenih mračnih crta"
+title: 'Projekt: Analiza ličnosti i njenih mračnih crta'
 author:
-  - Lana Barišić
-  - Marta Leš
-  - Lucija Lovrić
-  - Karla Šoštar
+- Lana Barišić
+- Marta Leš
+- Lucija Lovrić
+- Karla Šoštar
 date: "2026-01-21"
-output: pdf_document
-editor_options: 
-  markdown: 
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  markdown:
     wrap: 72
 ---
 
@@ -16,7 +18,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 # instalacija - samo za prvi put
-install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych", "corrplot", "nortest"))
+#install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych", "corrplot", "nortest"))
 
 library(tidyverse)
 library(GGally)   
@@ -194,8 +196,7 @@ lm(depression ~ dark_triad + neuroticism + age + sex,
 
 
 ```
-
-# Postoje li razlike u nekim crtama ličnosti među spolovima?
+Korelacijska matrica
 
 ```{r}
 # odabir 
@@ -237,9 +238,13 @@ Najveće korelacije su:
 Psychoticism–Sadism (0.65) Depression–Neuroticism (0.58)
 Extraversion-Narcissism(0.56) Machiavelism–Psychoticism (0.51)
 
+
+
+# Postoje li razlike u nekim crtama ličnosti među spolovima?
+
 ```{r}
-table(dataset$sex)
-df_sex <- dataset %>%
+table(data_clean$sex)
+df_sex <- data_clean %>%
   filter(sex %in% c("Male", "Female"))
 
 ```
@@ -264,49 +269,72 @@ ggplot(big_five, aes(x = sex, y = score, fill = sex)) +
 
 ```
 
-U ovom uzorku se pojavljuju obrasci u skladu s očekivanjima.
+Vizualna analiza boxplotova ukazuje na obrasce razlika između spolova koji su u skladu s teorijskim očekivanjima. Najizraženije razlike uočavaju se kod neuroticizma i ugodnosti, pri čemu žene u prosjeku postižu više vrijednosti, što je vidljivo kroz više medijane i pomak distribucije prema višim vrijednostima.
 
-Najveće razlike bilježimo kod neurotizcizma (žene više) i ugodnost (žene
-više). Kod ekstraverzije, otvorenosti i savjesnosti ne bilježimo velike
-razlike što se tiče medijana.
+Kod ekstraverzije, otvorenosti i savjesnosti razlike između spolova su manje izražene; medijani su vrlo slični, a distribucije se u velikoj mjeri preklapaju, što upućuje na izostanak izraženih spolnih razlika u tim osobinama na razini deskriptivne analize.
+
+Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu li zadovoljene osnovne pretpostavke testa, uključujući normalnost distribucije, homogenost varijanci te nezavisnost uzoraka.
+
+Za početak ćemo provjeriti preptpostavku o normalnosti uzorka.
 
 ```{r}
-df_clean <- dataset |> 
-  filter(sex %in% c("Male", "Female"))
 
-ggplot(df_clean, aes(sample = neuroticism)) +
+ggplot(df_sex, aes(sample = neuroticism)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~sex)
 
-ggplot(df_clean, aes(sample = agreeableness)) +
+ggplot(df_sex, aes(sample = agreeableness)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~sex)
 
-ggplot(df_clean, aes(sample = openness)) +
+ggplot(df_sex, aes(sample = openness)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~sex)
 
-ggplot(df_clean, aes(sample = extraversion)) +
+ggplot(df_sex, aes(sample = extraversion)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~sex)
 
-ggplot(df_clean, aes(sample = conscientiousness)) +
+ggplot(df_sex, aes(sample = conscientiousness)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~sex)
 
 ```
 
-Distribucije u skupinama su priližno normalne. Promatramo dvije
-nezavisne skupine: Female i Male (ostale ćemo ukloniti). Big Five i
-ostale osobine su kontinuirane.
-
-Provest ćemo t-test za nezavisne uzorke.
+Distribucije u skupinama su priližno normalne.
+Zatim ćemo provjeriti varijance.
 
 ```{r}
-# lista osobina
-traits <- c("neuroticism", "extraversion", "openness", 
-            "agreeableness", "conscientiousness")
+traits <- c("neuroticism", "agreeableness", "openness", "extraversion", "conscientiousness")
 
+var_by_sex <- df_sex %>%
+  group_by(sex) %>%
+  summarise(across(all_of(traits), ~ var(.x, na.rm = TRUE))) 
+
+var_by_sex
+```
+```{r}
+
+var_tests <- lapply(traits, function(tr) {
+  f <- as.formula(paste(tr, "~ sex"))
+  vt <- var.test(f, data = df_sex)
+  tibble(
+    trait = tr,
+    F_statistic = round(vt$statistic, 3),
+    p_value = round(vt$p.value, 4)
+  )
+})
+
+bind_rows(var_tests)
+
+```
+Rezultati testa za jednakost varijanci pokazuju da ni za jednu od analiziranih osobina ličnosti nije utvrđena statistički značajna razlika u varijancama između muškaraca i žena. Sve dobivene p-vrijednosti veće su od 0.05, stoga se u svim slučajevima ne odbacuje nul-hipoteza o jednakosti varijanci.
+
+Dodatno, promatramo dvije nezavisne skupine: Female i Male (ostale ćemo ukloniti).
+
+Stoga, sve pretpostavke su zadovoljene i provest ćemo t-test za nezavisne uzorke.
+
+```{r}
 # t-test za svaku osobinu
 results <- lapply(traits, function(tr) {
   formula <- as.formula(paste(tr, "~ sex")) #npr. neuroticism ~ sex 
@@ -326,23 +354,11 @@ results_df
 
 ```
 
-Žene postižu značajno veće rezultate od muškaraca u:
+Rezultati dvostranih t-testova za nezavisne uzorke ukazuju na postojanje statistički značajnih spolnih razlika u pojedinim dimenzijama ličnosti. Žene postižu značajno više prosječne rezultate od muškaraca u neuroticizmu (t = 2.52, p = 0.012) i ugodnosti (t = 3.76, p < 0.001).
 
-Neuroticizmu (p = 0.0198 - značajna razlika)
+Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = −1.71, p = 0.087) i savjesnost (t = 0.43, p = 0.669) nisu utvrđene statistički značajne razlike između spolova, iako su uočene blage razlike u prosječnim vrijednostima.
 
-Otvorenosti (p = 0.0323) - žene imaju statistički značajnu višu
-otvorenost
-
-Ugodnosti (p = 7.8×$10^{-6}$ - vrlo značajna razlika) - žene su
-ugodnije.
-
-Nema značajnih razlika u:
-
-Ekstraverziji (p = 0.127) - žene su malo niže, a muškarci više, no
-razlika nije statistički značajna.
-
-Savjesnosti (p = 0.069).
-
+Sad ćemo pogledati mračne osobine.
 ```{r}
 dark_traits <- df_sex %>%
   pivot_longer(
@@ -362,6 +378,58 @@ ggplot(dark_traits, aes(x = sex, y = score, fill = sex)) +
   )
 
 ```
+Vizualna analiza mračnih osobina ličnosti ukazuje na izraženije spolne razlike u odnosu na Big Five osobine. Muškarci u prosjeku postižu više rezultate u makijavelizmu, narcizmu, psihoticizmu i sadizmu, što je vidljivo kroz više medijane i pomak distribucija prema višim vrijednostima. Razlike su posebno izražene kod sadizma i psihoticizma, dok su kod makijavelizma i narcizma prisutne umjerene razlike uz djelomično preklapanje distribucija.
+
+Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki normalnosti distribucije i jednakosti varijanci. Analiza se temelji na istim dvjema nezavisnim skupinama ispitanik (Female i Male).
+
+```{r}
+ggplot(df_sex, aes(sample = narcissism)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~sex)
+
+ggplot(df_sex, aes(sample = machiavelism)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~sex)
+
+ggplot(df_sex, aes(sample = psychoticism)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~sex)
+
+ggplot(df_sex, aes(sample = sadism)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~sex)
+
+```
+
+Distribucije u skupinama su priližno normalne.
+
+```{r}
+dark <- c("narcissism", "machiavelism", "psychoticism", "sadism")
+
+var_by_sex <- df_sex %>%
+  group_by(sex) %>%
+  summarise(across(all_of(dark), ~ var(.x, na.rm = TRUE))) 
+
+var_by_sex
+```
+```{r}
+
+var_tests <- lapply(dark, function(tr) {
+  f <- as.formula(paste(tr, "~ sex"))
+  vt <- var.test(f, data = df_sex)
+  tibble(
+    trait = tr,
+    F_statistic = round(vt$statistic, 3),
+    p_value = round(vt$p.value, 4)
+  )
+})
+
+bind_rows(var_tests)
+```
+
+Varijance mračnih osobina ličnosti između muškaraca i žena su usporedive i približno jednake, stoga je pretpostavka homogenosti varijanci zadovoljena.
+
+Provest ćemo t-test.
 
 ```{r}
 dark <- c("narcissism", "machiavelism", "psychoticism", "sadism")
@@ -392,7 +460,35 @@ Rezultati pokazuju da muškarci postižu statistički značajno više
 rezultate na svim analiziranim mračnim crtama — narcizmu, makijavelizmu,
 psihoticizmu i sadizmu (sve p \< 0.05). Najizraženija razlika uočena je
 kod sadizma, gdje muškarci ostvaruju znatno više prosječne vrijednosti u
-odnosu na žene, što ukazuje na snažan spolni efekt na ovu osobinu.
+odnosu na žene, što upućuje na izraženije spolne razlike u ovoj dimenziji ličnosti.
+
+```{r}
+df_sex$sex <- factor(df_sex$sex, levels = c("Female", "Male"))
+levels(df_sex$sex)
+
+```
+```{r}
+traits_dark <- c("narcissism", "machiavelism", 
+                 "psychoticism", "sadism")
+
+results_one_tailed <- lapply(traits_dark, function(tr) {
+  f <- as.formula(paste(tr, "~ sex"))
+  test <- t.test(f, data = df_sex, alternative = "less")
+  
+  tibble(
+    trait = tr,
+    t_statistic = round(test$statistic, 3),
+    p_value = round(test$p.value, 5),
+    mean_female = round(test$estimate["mean in group Female"], 3),
+    mean_male = round(test$estimate["mean in group Male"], 3)
+  )
+})
+
+results_one_tailed_df <- bind_rows(results_one_tailed)
+results_one_tailed_df
+
+```
+Rezultati jednostranog t-testa, provedenog u smjeru teorijske pretpostavke da muškarci postižu više rezultate od žena, potvrđuju postojanje statistički značajnih spolnih razlika u svim analiziranim mračnim osobinama ličnosti. Muškarci ostvaruju značajno više vrijednosti u narcizmu, makijavelizmu, psihoticizmu i sadizmu, pri čemu je razlika najizraženija kod sadizma.
 
 # Jačaju li neke osobine s godinama?
 
