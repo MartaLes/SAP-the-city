@@ -20,6 +20,7 @@ options(repos = c(CRAN = "https://cloud.r-project.org"))
 # instalacija - samo za prvi put
 #install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych", "corrplot", "nortest"))
 
+
 library(tidyverse)
 library(GGally)   
 library(ggcorrplot)
@@ -28,6 +29,7 @@ library(dplyr)
 library(corrplot)
 library(nortest)
 ```
+
 
 # Motivacija i opis problema
 
@@ -633,6 +635,157 @@ results
 
 Tablica prikazuje procijenjene regresijske koeficijente za učinak dobi
 na pojedine crte ličnosti.
+
+
+Kategorizacija kontinuiranih varijabli provedena je radi primjene hi-kvadrat testa, kojim se ispituje povezanost između dobnih skupina i distribucije razina crta ličnosti.
+
+```{r}
+data_clean <- data_clean %>%
+  mutate(age_group = case_when(
+    age < 30 ~ "Mladi",
+    age >= 30 & age < 35 ~ "Srednji",
+    age >= 35 ~ "Stariji"
+  ))
+
+data_clean$age_group <- factor(data_clean$age_group)
+
+```
+
+Crte ličnosti podijeljene su u tri kategorije (niska, srednja i visoka razina) na temelju tercila distribucije rezultata.
+
+```{r}
+traits <- c("extraversion","agreeableness", "conscientiousness", "neuroticism", "openness")
+
+for (t in traits) {
+  data_clean[[paste0(t, "_cat")]] <- cut(
+    data_clean[[t]],
+    breaks = quantile(data_clean[[t]], probs = c(0, 1/3, 2/3, 1), na.rm = TRUE),
+    labels = c("Niska", "Srednja", "Visoka"),
+    include.lowest = TRUE
+  )
+}
+
+```
+
+```{r}
+chisq.test(table(data_clean$age_group, data_clean$extraversion_cat))
+chisq.test(table(data_clean$age_group, data_clean$agreeableness_cat))
+chisq.test(table(data_clean$age_group, data_clean$conscientiousness_cat))
+chisq.test(table(data_clean$age_group, data_clean$neuroticism_cat))
+chisq.test(table(data_clean$age_group, data_clean$openness_cat))
+table(data_clean$age_group, data_clean$openness_cat)
+```
+Hi-kvadrat testom ispitana je povezanost između dobnih skupina i kategoriziranih razina crta ličnosti. Rezultati nisu pokazali statistički značajnu povezanost između dobi i ekstraverzije, savjesnosti, neuroticizma niti otvorenosti (p > 0.05).
+
+Rezultati hi-kvadrat testova nisu pokazali statistički značajnu povezanost između dobnih skupina i osobina.
+
+Kod osobine ugodnosti uočen je povišen hi-kvadrat rezultat (8.80), no pripadajuća p-vrijednost (0.066) ne doseže prag statističke značajnosti. Stoga se ne može zaključiti da se razine ugodnosti značajno razlikuju između dobnih skupina.
+
+Iako je kod ugodnosti uočena blaga tendencija promjene raspodjele razina između dobnih skupina, ona nije statistički potvrđena, što može biti posljedica kategorizacije kontinuiranih varijabli i smanjene statističke snage hi-kvadrat testa.
+
+Na temelju hi-kvadrat analize kategoriziranih varijabli ne može se zaključiti da se crte ličnosti značajno mijenjaju ili jačaju s godinama u promatranom uzorku.
+
+
+
+Kako bi se istovremeno procijenio doprinos više prediktora u objašnjenju varijabilnosti crta ličnosti, primijenjena je višestruka linearna regresija u kojoj su dob i ostale relevantne varijable uključene kao nezavisni prediktori, dok su crte ličnosti tretirane kao kontinuirane zavisne varijable.
+
+```{r}
+data_clean$occupation <- factor(data_clean$"employment status")
+
+```
+
+```{r}
+data_clean$occupation <- fct_lump_min(
+  data_clean$occupation,
+  min = 10
+)
+```
+
+```{r}
+
+chisq.test(
+  table(data_clean$occupation, data_clean$extraversion_cat),simulate.p.value = TRUE
+)
+chisq.test(
+  table(data_clean$occupation, data_clean$agreeableness_cat),simulate.p.value = TRUE
+)
+chisq.test(
+  table(data_clean$occupation, data_clean$conscientiousness_cat),simulate.p.value = TRUE
+)
+chisq.test(
+  table(data_clean$occupation, data_clean$neuroticism_cat),simulate.p.value = TRUE
+)
+chisq.test(
+  table(data_clean$occupation, data_clean$openness_cat),simulate.p.value = TRUE
+)
+
+
+```
+Zbog niskih očekivanih frekvencija u pojedinim ćelijama korištena je Monte Carlo simulacija p-vrijednosti.
+
+Ovi nalazi upućuju na to da se razine pojedinih crta ličnosti razlikuju između skupina različitog zanimanja. Zanimanje se pokazalo značajno povezanim s ekstraverzijom, savjesnošću i neuroticizmom, dok za ugodnost i otvorenost takva povezanost nije utvrđena. Time se sugerira da socijalni i radni kontekst može biti povezan s izraženošću određenih crta ličnosti.
+
+```{r}
+library(rcompanion)
+
+# Ekstraverzija
+cramerV(table(data_clean$occupation, data_clean$extraversion_cat))
+prop_extr <- prop.table(
+  table(data_clean$occupation, data_clean$extraversion_cat),
+  1
+)
+
+round(prop_extr * 100, 1)
+
+
+# Savjesnost
+cramerV(table(data_clean$occupation, data_clean$conscientiousness_cat))
+prop_consc <- prop.table(
+  table(data_clean$occupation, data_clean$conscientiousness_cat),
+  1
+)
+
+round(prop_consc * 100, 1)
+
+
+# Neuroticizam
+cramerV(table(data_clean$occupation, data_clean$neuroticism_cat))
+prop_neuro <- prop.table(
+  table(data_clean$occupation, data_clean$neuroticism_cat),
+  1
+)
+
+round(prop_neuro * 100, 1)
+
+```
+Dok analize prema dobnim skupinama nisu pokazale statistički značajne razlike u crtama ličnosti, rezultati prema zanimanju sugeriraju da se ekstraverzija, savjesnost i neuroticizam mogu razlikovati ovisno o socijalnom/profesionalnom kontekstu, a ne nužno o kronološkoj dobi.
+
+Ukupno gledano, zanimanje je statistički značajno povezano s ekstraverzijom, savjesnošću i neuroticizmom, pri čemu su efekti slabi do umjereni; pritom se u skupinama nezaposlenih i osoba izvan plaćenog rada češće uočavaju nepovoljniji profili (niža savjesnost i viši neuroticizam), dok su zaposleni s punim radnim vremenom češće u niskom/srednjem neuroticizmu te srednjoj/visokoj savjesnosti i ekstraverziji. 
+
+Budući da su skupine zanimanja različitih veličina, zaključci se temelje na relativnim razlikama u raspodjelama (udjelima) kategorija unutar skupina, a ne na apsolutnim frekvencijama.
+
+```{r}
+make_percent_table <- function(x, row_var, col_var) {
+  tab <- prop.table(table(x[[row_var]], x[[col_var]]), 1) * 100
+  df <- as.data.frame.matrix(round(tab, 1))
+  df[[row_var]] <- rownames(df)
+  rownames(df) <- NULL
+  df <- df[, c(row_var, colnames(df)[colnames(df) != row_var])]
+  df
+}
+
+df_extr  <- make_percent_table(data_clean, "occupation", "extraversion_cat")
+df_consc <- make_percent_table(data_clean, "occupation", "conscientiousness_cat")
+df_neuro <- make_percent_table(data_clean, "occupation", "neuroticism_cat")
+
+df_extr
+df_consc
+df_neuro
+
+
+```
+
+
 
 # Jesu li crte ličnosti i sklonost stresu, depresiji i anksioznosti povezane sa zanimanjem?
 
