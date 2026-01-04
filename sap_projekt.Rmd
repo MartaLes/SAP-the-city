@@ -22,7 +22,7 @@ options(repos = c(CRAN = "https://cloud.r-project.org"))
 
 
 library(tidyverse)
-library(GGally)   team
+library(GGally) 
 library(ggcorrplot)
 library(psych)
 library(dplyr)
@@ -33,20 +33,13 @@ library(nortest)
 
 # Motivacija i opis problema
 
-Ličnost je jedna od središnjih tema psihologije, a danas se najčešće
-opisuje putem petofaktorskog modela Big Five, koji uključuje:
-ekstraverziju (razlikuje osobe po razini društvene angažiranosti),
-ugodnost (obuhvaća empatiju i kooperativnost nasuprot sumnjičavosti),
-savjesnost (govori o odgovornosti nasuprot neorganiziranosti),
-neuroticizam (opisuje emocionalnu nestabilnost i sklonost negativnim
-emocijama) te otvorenost (označava kreativnost nasuprot
-konvencionalnosti). Uz te osnovne dimenzije, česte su i procjene tzv.
-mračne trijade: narcizma (povišen osjećaj vlastite važnosti i manjak
-empatije), psihopatije (impulzivnost, bezosjećajnost i antisocijalnost)
-i makijavelizma (manipulativnost i instrumentalno iskorištavanje
-drugih). Cilj ovog projekta je analizirati u kakvoj su vezi osnovne crte
-ličnosti, mračne crte ličnosti te sklonost stresu, depresiji i
-anksioznosti.
+Ličnost je jedno od temeljnih područja psihologije i najčešće se opisuje
+petofaktorskim Big Five modelom koji uključuje ekstraverziju, ugodnost,
+savjesnost, neuroticizam i otvorenost. Uz osnovne crte ličnosti, često
+se ispituju i mračne crte, odnosno mračna trijada koju čine narcizam,
+psihopatija i makijavelizam. Cilj ovog projekta je ispitati povezanost
+osnovnih i mračnih crta ličnosti, te ostalih obilježja poput spola i
+dobi, sa sklonošću stresu, depresiji i anksioznosti.
 
 # Učitavanje i pregled podataka
 
@@ -104,101 +97,7 @@ data_clean <- dataset %>%
 head(data_clean)
 ```
 
-# Jesu li ljudi s izraženijom mračnom trijadom skloniji depresiji?
-
-## Upoznavanje podataka
-
-```{r}
-describe(data_clean %>%
-  select(depression, narcissism, machiavelism, psychoticism))
-```
-
-```{r}
-ggplot(data_clean, aes(narcissism, depression)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal()
-
-ggplot(data_clean, aes(machiavelism, depression)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal()
-
-ggplot(data_clean, aes(psychoticism, depression)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal()
-
-```
-
-## Pearsonove korelacije
-
-```{r}
-cor.test(data_clean$depression, data_clean$narcissism)
-cor.test(data_clean$depression, data_clean$machiavelism)
-cor.test(data_clean$depression, data_clean$psychoticism)
-
-```
-
-```{r}
-vars1 <- data_clean %>%
-  select(depression, narcissism, machiavelism, psychoticism) %>%
-  na.omit()
-
-corrplot(cor(vars1))
-
-
-```
-
-## Linearna regresija
-
-```{r}
-model_dark_triad <- lm(depression ~ narcissism + machiavelism + psychoticism,
-             data = data_clean)
-
-summary(model_dark_triad)
-
-```
-
-```{r}
-model_all_vars <- lm(depression ~ narcissism + machiavelism + psychoticism +
-               neuroticism + extraversion + openness +
-               agreeableness + conscientiousness +
-               age + sex,
-             data = data_clean)
-
-summary(model_all_vars)
-
-```
-
-```{r}
-vars2 <- data_clean %>%
-  select(depression, narcissism, machiavelism, psychoticism,
-               neuroticism, extraversion, openness,
-               agreeableness, conscientiousness,
-               age) %>%
-  na.omit()
-
-corrplot(cor(vars2))
-
-```
-
-```{r}
-
-data_clean <- data_clean %>%
-  mutate(dark_triad = rowMeans(
-    select(., narcissism, machiavelism, psychoticism),
-    na.rm = TRUE
-  ))
-
-cor.test(data_clean$dark_triad, data_clean$depression)
-
-lm(depression ~ dark_triad + neuroticism + age + sex,
-   data = data_clean) |> summary()
-
-
-```
-Korelacijska matrica
+###Korelacijska matrica
 
 ```{r}
 # odabir 
@@ -240,7 +139,220 @@ Najveće korelacije su:
 Psychoticism–Sadism (0.65) Depression–Neuroticism (0.58)
 Extraversion-Narcissism(0.56) Machiavelism–Psychoticism (0.51)
 
+# Jesu li ljudi s izraženijom mračnom trijadom skloniji depresiji?
 
+## Upoznavanje podataka
+
+Po analizi podataka već odrađenoj u uvodu znamo da radimo s numeričkim
+podacima, te da je za ispitivanje povezanosti osobina mračne trijade i
+depresije prikladno raditi linearnu regresiju. Dakle, nezavisne
+varijable ovdje su: narcizam, makijavelizam i psihoticizam, a zavisna
+varijabla je depresija.
+
+```{r}
+describe(data_clean %>%
+  select(depression, narcissism, machiavelism, psychoticism))
+
+```
+
+Vrijednosti svake od varijable kreću se negdje unutar intervala od -3.0
+i 3.0, s medijanima i srednjim vrijednostima uvijek blizu nule. Također,
+uz n=398, znamo da radimo s velikim uzorkom što povećava statističku
+snagu analize.
+
+## Jednostavna linearna regresija
+
+Kako bismo analizirali zaseban utjecaj svake od ovih varijabli,
+procijenit ćemo jednostavne regresijske modele, pri čemu će se za svaku
+nezavisnu varijablu izgraditi poseban model.
+
+```{r}
+
+ggplot(data_clean, aes(narcissism, depression)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(machiavelism, depression)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+ggplot(data_clean, aes(psychoticism, depression)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE) +
+  theme_minimal()
+
+```
+
+Nagibi pravaca služe kao potvrda utjecaja pojedine nezavisne varijable
+na varijablu depresija. Model narcizma jedini ima negativan nagib,
+ukazujući na negativan utjecaj, dok psihoticizam i makijavelizam imaju
+pozitivan učinak.
+
+## Pearsonove korelacije
+
+```{r}
+cor.test(data_clean$depression, data_clean$narcissism)
+cor.test(data_clean$depression, data_clean$machiavelism)
+cor.test(data_clean$depression, data_clean$psychoticism)
+
+```
+
+Pearsonovom korelacijskom analizom utvrđena je statistički značajna
+negativna povezanost između narcizma i depresije (r = −0.21, p \<
+0.001). Makijavelizam (r = 0.15, p = 0.002) i psihoticizam (r = 0.20, p
+\< 0.001) pokazali su statistički značajnu pozitivnu povezanost s
+depresijom. Veličine učinaka su male do umjerene.
+
+Ovo se može prikazati i matrično:
+
+```{r}
+vars1 <- data_clean %>%
+  select(depression, narcissism, machiavelism, psychoticism) %>%
+  na.omit()
+
+corrplot(cor(vars1))
+
+
+```
+
+Među prediktorima su prisutne umjerene pozitivne korelacije, no nijedna
+ne upućuje na problematičnu multikolinearnost. Ovo ćemo još formalno
+analizirat koristeći, ponovno, Pearsonove korelacije.
+
+```{r}
+cor.test(data_clean$machiavelism, data_clean$narcissism)
+cor.test(data_clean$machiavelism, data_clean$psychoticism)
+
+cor.test(data_clean$narcissism, data_clean$machiavelism)
+cor.test(data_clean$narcissism, data_clean$psychoticism)
+
+cor.test(data_clean$psychoticism, data_clean$narcissism)
+cor.test(data_clean$psychoticism, data_clean$machiavelism)
+```
+
+Pearsonove korelacije između nezavisnih varijabli pokazale su umjerene
+pozitivne povezanosti između makijavelizma, narcizma i psihoticizma (r ≈
+0,36–0,42, p \< 0,001). Iako su ove osobine povezane, snaga korelacija
+ne sugerira problematičnu multikolinearnost, što podupire njihovo
+uključivanje kao zasebnih prediktora u regresijski model.
+
+## Višestruka linearna regresija
+
+Sada možemo definirati model višestruke linearne regresije, gdje gledamo
+sveukupni utjecaj mračne trijade na depresiju.
+
+```{r}
+model_dark_triad <- lm(depression ~ narcissism + machiavelism + psychoticism,
+             data = data_clean)
+
+summary(model_dark_triad)
+
+```
+
+Rezultati reiteriraju prijašnje zaključke da je narcisizam negativno
+značajan prediktor depresije (b = −0.40, p \< 0.001), dok su
+makiavelizam (b = 0.21, p \< 0.001) i psihoticizam (b = 0.28, p \<
+0.001) pozitivno značajni prediktori. Model je statistički značajan
+(F-stat = 25.92, p \< 0.001). Međutim, ukupna prediktivna snaga modela
+je umjerena (R² oko 0.16), što sugerira da postoje i drugi faktori koji
+utječu na depresiju.
+
+Kako bismo provjerili postoje li drugi, prikladniji i značajniji,
+prediktori prikazat ćemo korelacijsku matricu sa ostalim varijablama.
+
+```{r}
+vars2 <- data_clean %>%
+  select(depression, narcissism, machiavelism, psychoticism,
+               neuroticism, extraversion, openness,
+               agreeableness, conscientiousness,
+               age) %>%
+  na.omit()
+
+corrplot(cor(vars2))
+
+```
+
+Tu su vidljive pozitivne povezanosti depresije s neuroticizmom,
+psihoticizmom i najmanje makijavelizmom. S druge strane, negativnu
+korelaciju s depresijom imaju narcizam, ekstraverzija i savjesnost,
+nešto manje kod ugodnosti. Najjače povezanosti su sa ekstraverzijom i
+neuroticizmom, koji su međusobno negativno korelirani.
+
+```{r}
+
+model_2 <- lm(depression ~ narcissism + extraversion + neuroticism + conscientiousness + agreeableness + psychoticism,
+             data = data_clean)
+
+summary(model_2)
+
+
+```
+
+Model značajno predviđa depresiju (R² = 0.42, p \< 0.001). Neuroticizam
+je bio najsnažniji pozitivni prediktor depresije (b = 0.46, p \< 0.001),
+dok je ekstraverzija imala značajan negativan učinak (b = −0.24, p \<
+0.001). Psihoticizam je također pokazao umjeren, ali značajan pozitivan
+doprinos (b = 0.17, p = 0.0018). Narcizam, savjesnost i ugodnost nisu
+bili statistički značajni prediktori (p \> 0.05), što upućuje na to da
+njihov odnos s depresijom nije jedinstven nakon kontrole ostalih
+osobina.
+
+Još ćemo provjeriti predstavlja li kolinearnost značajki problem za ovu
+interpretaciju:
+
+```{r}
+vif <- function(model) {
+  X <- model.matrix(model)[, -1]  
+  vif_values <- sapply(1:ncol(X), function(i) {
+    lm_fit <- lm(X[, i] ~ X[, -i])
+    1 / (1 - summary(lm_fit)$r.squared)
+  })
+  names(vif_values) <- colnames(X)
+  return(vif_values)
+}
+
+vif(model_2)
+```
+
+VIF faktori za sve prediktore manji su od 5, što ukazuje da ne postoji
+značajna multikolinearnost među varijablama.
+
+### Provjera pretpostavki linearnih regresija
+
+Još je preostalo provjeriti prate li reziduali ovih modela normalnu
+distribuciju.
+
+```{r}
+qqnorm(
+  residuals(model_dark_triad),
+  main = "QQ-plot reziduala modela depresije i mračne trijade"
+)
+qqline(residuals(model_dark_triad))
+
+hist(residuals(model_dark_triad), breaks = 20, main = "Histogram reziduala modela depresije i mračne trijade")
+
+qqnorm(
+  residuals(model_2),
+  main = "QQ-plot reziduala modela depresije i ostalih značajki"
+)
+qqline(residuals(model_2))
+
+hist(residuals(model_2), breaks = 20, main = "Histogram reziduala modela depresije i ostalih značajki")
+```
+
+Normalnost reziduala provjerena je pomoću QQ-plota i histograma, koji su
+pokazali približno normalnu distribuciju, uz manja odstupanja na
+krajevima distribucije. Odstupanja su zastupljenija kod drugog modela
+koji ne uključuje samo varijable mračne trijade, već i ostale značajke.
+
+## Zaključak
+
+Pokazali smo da osobine koje čine mračnu trijadu: psihoticizam,
+makijavelizam i narcizam, same po sebi utječu na depresiju, ali njihov
+učinak nije jednako snažan kao učinak nekih drugih osobina, poput niske
+ekstraverzije i visokog neuroticizma s elementima psihoticizma.
 
 # Postoje li razlike u nekim crtama ličnosti među spolovima?
 
@@ -271,11 +383,20 @@ ggplot(big_five, aes(x = sex, y = score, fill = sex)) +
 
 ```
 
-Vizualna analiza boxplotova ukazuje na obrasce razlika između spolova koji su u skladu s teorijskim očekivanjima. Najizraženije razlike uočavaju se kod neuroticizma i ugodnosti, pri čemu žene u prosjeku postižu više vrijednosti, što je vidljivo kroz više medijane i pomak distribucije prema višim vrijednostima.
+Vizualna analiza boxplotova ukazuje na obrasce razlika između spolova
+koji su u skladu s teorijskim očekivanjima. Najizraženije razlike
+uočavaju se kod neuroticizma i ugodnosti, pri čemu žene u prosjeku
+postižu više vrijednosti, što je vidljivo kroz više medijane i pomak
+distribucije prema višim vrijednostima.
 
-Kod ekstraverzije, otvorenosti i savjesnosti razlike između spolova su manje izražene; medijani su vrlo slični, a distribucije se u velikoj mjeri preklapaju, što upućuje na izostanak izraženih spolnih razlika u tim osobinama na razini deskriptivne analize.
+Kod ekstraverzije, otvorenosti i savjesnosti razlike između spolova su
+manje izražene; medijani su vrlo slični, a distribucije se u velikoj
+mjeri preklapaju, što upućuje na izostanak izraženih spolnih razlika u
+tim osobinama na razini deskriptivne analize.
 
-Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu li zadovoljene osnovne pretpostavke testa, uključujući normalnost distribucije, homogenost varijanci te nezavisnost uzoraka.
+Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu
+li zadovoljene osnovne pretpostavke testa, uključujući normalnost
+distribucije, homogenost varijanci te nezavisnost uzoraka.
 
 Za početak ćemo provjeriti preptpostavku o normalnosti uzorka.
 
@@ -303,8 +424,8 @@ ggplot(df_sex, aes(sample = conscientiousness)) +
 
 ```
 
-Distribucije u skupinama su priližno normalne.
-Zatim ćemo provjeriti varijance.
+Distribucije u skupinama su priližno normalne. Zatim ćemo provjeriti
+varijance.
 
 ```{r}
 traits <- c("neuroticism", "agreeableness", "openness", "extraversion", "conscientiousness")
@@ -330,11 +451,18 @@ var_tests <- lapply(traits, function(tr) {
 bind_rows(var_tests)
 
 ```
-Rezultati testa za jednakost varijanci pokazuju da ni za jednu od analiziranih osobina ličnosti nije utvrđena statistički značajna razlika u varijancama između muškaraca i žena. Sve dobivene p-vrijednosti veće su od 0.05, stoga se u svim slučajevima ne odbacuje nul-hipoteza o jednakosti varijanci.
 
-Dodatno, promatramo dvije nezavisne skupine: Female i Male (ostale ćemo ukloniti).
+Rezultati testa za jednakost varijanci pokazuju da ni za jednu od
+analiziranih osobina ličnosti nije utvrđena statistički značajna razlika
+u varijancama između muškaraca i žena. Sve dobivene p-vrijednosti veće
+su od 0.05, stoga se u svim slučajevima ne odbacuje nul-hipoteza o
+jednakosti varijanci.
 
-Stoga, sve pretpostavke su zadovoljene i provest ćemo t-test za nezavisne uzorke.
+Dodatno, promatramo dvije nezavisne skupine: Female i Male (ostale ćemo
+ukloniti).
+
+Stoga, sve pretpostavke su zadovoljene i provest ćemo t-test za
+nezavisne uzorke.
 
 ```{r}
 # t-test za svaku osobinu
@@ -356,11 +484,18 @@ results_df
 
 ```
 
-Rezultati dvostranih t-testova za nezavisne uzorke ukazuju na postojanje statistički značajnih spolnih razlika u pojedinim dimenzijama ličnosti. Žene postižu značajno više prosječne rezultate od muškaraca u neuroticizmu (t = 2.52, p = 0.012) i ugodnosti (t = 3.76, p < 0.001).
+Rezultati dvostranih t-testova za nezavisne uzorke ukazuju na postojanje
+statistički značajnih spolnih razlika u pojedinim dimenzijama ličnosti.
+Žene postižu značajno više prosječne rezultate od muškaraca u
+neuroticizmu (t = 2.52, p = 0.012) i ugodnosti (t = 3.76, p \< 0.001).
 
-Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = −1.71, p = 0.087) i savjesnost (t = 0.43, p = 0.669) nisu utvrđene statistički značajne razlike između spolova, iako su uočene blage razlike u prosječnim vrijednostima.
+Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = −1.71, p =
+0.087) i savjesnost (t = 0.43, p = 0.669) nisu utvrđene statistički
+značajne razlike između spolova, iako su uočene blage razlike u
+prosječnim vrijednostima.
 
 Sad ćemo pogledati mračne osobine.
+
 ```{r}
 dark_traits <- df_sex %>%
   pivot_longer(
@@ -380,9 +515,18 @@ ggplot(dark_traits, aes(x = sex, y = score, fill = sex)) +
   )
 
 ```
-Vizualna analiza mračnih osobina ličnosti ukazuje na izraženije spolne razlike u odnosu na Big Five osobine. Muškarci u prosjeku postižu više rezultate u makijavelizmu, narcizmu, psihoticizmu i sadizmu, što je vidljivo kroz više medijane i pomak distribucija prema višim vrijednostima. Razlike su posebno izražene kod sadizma i psihoticizma, dok su kod makijavelizma i narcizma prisutne umjerene razlike uz djelomično preklapanje distribucija.
 
-Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki normalnosti distribucije i jednakosti varijanci. Analiza se temelji na istim dvjema nezavisnim skupinama ispitanik (Female i Male).
+Vizualna analiza mračnih osobina ličnosti ukazuje na izraženije spolne
+razlike u odnosu na Big Five osobine. Muškarci u prosjeku postižu više
+rezultate u makijavelizmu, narcizmu, psihoticizmu i sadizmu, što je
+vidljivo kroz više medijane i pomak distribucija prema višim
+vrijednostima. Razlike su posebno izražene kod sadizma i psihoticizma,
+dok su kod makijavelizma i narcizma prisutne umjerene razlike uz
+djelomično preklapanje distribucija.
+
+Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki
+normalnosti distribucije i jednakosti varijanci. Analiza se temelji na
+istim dvjema nezavisnim skupinama ispitanik (Female i Male).
 
 ```{r}
 ggplot(df_sex, aes(sample = narcissism)) +
@@ -429,7 +573,9 @@ var_tests <- lapply(dark, function(tr) {
 bind_rows(var_tests)
 ```
 
-Varijance mračnih osobina ličnosti između muškaraca i žena su usporedive i približno jednake, stoga je pretpostavka homogenosti varijanci zadovoljena.
+Varijance mračnih osobina ličnosti između muškaraca i žena su usporedive
+i približno jednake, stoga je pretpostavka homogenosti varijanci
+zadovoljena.
 
 Provest ćemo t-test.
 
@@ -462,7 +608,8 @@ Rezultati pokazuju da muškarci postižu statistički značajno više
 rezultate na svim analiziranim mračnim crtama — narcizmu, makijavelizmu,
 psihoticizmu i sadizmu (sve p \< 0.05). Najizraženija razlika uočena je
 kod sadizma, gdje muškarci ostvaruju znatno više prosječne vrijednosti u
-odnosu na žene, što upućuje na izraženije spolne razlike u ovoj dimenziji ličnosti.
+odnosu na žene, što upućuje na izraženije spolne razlike u ovoj
+dimenziji ličnosti.
 
 ```{r}
 df_sex$sex <- factor(df_sex$sex, levels = c("Female", "Male"))
@@ -490,7 +637,13 @@ results_one_tailed_df <- bind_rows(results_one_tailed)
 results_one_tailed_df
 
 ```
-Rezultati jednostranog t-testa, provedenog u smjeru teorijske pretpostavke da muškarci postižu više rezultate od žena, potvrđuju postojanje statistički značajnih spolnih razlika u svim analiziranim mračnim osobinama ličnosti. Muškarci ostvaruju značajno više vrijednosti u narcizmu, makijavelizmu, psihoticizmu i sadizmu, pri čemu je razlika najizraženija kod sadizma.
+
+Rezultati jednostranog t-testa, provedenog u smjeru teorijske
+pretpostavke da muškarci postižu više rezultate od žena, potvrđuju
+postojanje statistički značajnih spolnih razlika u svim analiziranim
+mračnim osobinama ličnosti. Muškarci ostvaruju značajno više vrijednosti
+u narcizmu, makijavelizmu, psihoticizmu i sadizmu, pri čemu je razlika
+najizraženija kod sadizma.
 
 # Jačaju li neke osobine s godinama?
 
@@ -636,8 +789,9 @@ results
 Tablica prikazuje procijenjene regresijske koeficijente za učinak dobi
 na pojedine crte ličnosti.
 
-
-Kategorizacija kontinuiranih varijabli provedena je radi primjene hi-kvadrat testa, kojim se ispituje povezanost između dobnih skupina i distribucije razina crta ličnosti.
+Kategorizacija kontinuiranih varijabli provedena je radi primjene
+hi-kvadrat testa, kojim se ispituje povezanost između dobnih skupina i
+distribucije razina crta ličnosti.
 
 ```{r}
 data_clean <- data_clean %>%
@@ -651,7 +805,8 @@ data_clean$age_group <- factor(data_clean$age_group)
 
 ```
 
-Crte ličnosti podijeljene su u tri kategorije (niska, srednja i visoka razina) na temelju tercila distribucije rezultata.
+Crte ličnosti podijeljene su u tri kategorije (niska, srednja i visoka
+razina) na temelju tercila distribucije rezultata.
 
 ```{r}
 traits <- c("extraversion","agreeableness", "conscientiousness", "neuroticism", "openness")
@@ -675,19 +830,34 @@ chisq.test(table(data_clean$age_group, data_clean$neuroticism_cat))
 chisq.test(table(data_clean$age_group, data_clean$openness_cat))
 table(data_clean$age_group, data_clean$openness_cat)
 ```
-Hi-kvadrat testom ispitana je povezanost između dobnih skupina i kategoriziranih razina crta ličnosti. Rezultati nisu pokazali statistički značajnu povezanost između dobi i ekstraverzije, savjesnosti, neuroticizma niti otvorenosti (p > 0.05).
 
-Rezultati hi-kvadrat testova nisu pokazali statistički značajnu povezanost između dobnih skupina i osobina.
+Hi-kvadrat testom ispitana je povezanost između dobnih skupina i
+kategoriziranih razina crta ličnosti. Rezultati nisu pokazali
+statistički značajnu povezanost između dobi i ekstraverzije,
+savjesnosti, neuroticizma niti otvorenosti (p \> 0.05).
 
-Kod osobine ugodnosti uočen je povišen hi-kvadrat rezultat (8.80), no pripadajuća p-vrijednost (0.066) ne doseže prag statističke značajnosti. Stoga se ne može zaključiti da se razine ugodnosti značajno razlikuju između dobnih skupina.
+Rezultati hi-kvadrat testova nisu pokazali statistički značajnu
+povezanost između dobnih skupina i osobina.
 
-Iako je kod ugodnosti uočena blaga tendencija promjene raspodjele razina između dobnih skupina, ona nije statistički potvrđena, što može biti posljedica kategorizacije kontinuiranih varijabli i smanjene statističke snage hi-kvadrat testa.
+Kod osobine ugodnosti uočen je povišen hi-kvadrat rezultat (8.80), no
+pripadajuća p-vrijednost (0.066) ne doseže prag statističke značajnosti.
+Stoga se ne može zaključiti da se razine ugodnosti značajno razlikuju
+između dobnih skupina.
 
-Na temelju hi-kvadrat analize kategoriziranih varijabli ne može se zaključiti da se crte ličnosti značajno mijenjaju ili jačaju s godinama u promatranom uzorku.
+Iako je kod ugodnosti uočena blaga tendencija promjene raspodjele razina
+između dobnih skupina, ona nije statistički potvrđena, što može biti
+posljedica kategorizacije kontinuiranih varijabli i smanjene statističke
+snage hi-kvadrat testa.
 
+Na temelju hi-kvadrat analize kategoriziranih varijabli ne može se
+zaključiti da se crte ličnosti značajno mijenjaju ili jačaju s godinama
+u promatranom uzorku.
 
-
-Kako bi se istovremeno procijenio doprinos više prediktora u objašnjenju varijabilnosti crta ličnosti, primijenjena je višestruka linearna regresija u kojoj su dob i ostale relevantne varijable uključene kao nezavisni prediktori, dok su crte ličnosti tretirane kao kontinuirane zavisne varijable.
+Kako bi se istovremeno procijenio doprinos više prediktora u objašnjenju
+varijabilnosti crta ličnosti, primijenjena je višestruka linearna
+regresija u kojoj su dob i ostale relevantne varijable uključene kao
+nezavisni prediktori, dok su crte ličnosti tretirane kao kontinuirane
+zavisne varijable.
 
 ```{r}
 data_clean$occupation <- factor(data_clean$"employment status")
@@ -721,9 +891,16 @@ chisq.test(
 
 
 ```
-Zbog niskih očekivanih frekvencija u pojedinim ćelijama korištena je Monte Carlo simulacija p-vrijednosti.
 
-Ovi nalazi upućuju na to da se razine pojedinih crta ličnosti razlikuju između skupina različitog zanimanja. Zanimanje se pokazalo značajno povezanim s ekstraverzijom, savjesnošću i neuroticizmom, dok za ugodnost i otvorenost takva povezanost nije utvrđena. Time se sugerira da socijalni i radni kontekst može biti povezan s izraženošću određenih crta ličnosti.
+Zbog niskih očekivanih frekvencija u pojedinim ćelijama korištena je
+Monte Carlo simulacija p-vrijednosti.
+
+Ovi nalazi upućuju na to da se razine pojedinih crta ličnosti razlikuju
+između skupina različitog zanimanja. Zanimanje se pokazalo značajno
+povezanim s ekstraverzijom, savjesnošću i neuroticizmom, dok za ugodnost
+i otvorenost takva povezanost nije utvrđena. Time se sugerira da
+socijalni i radni kontekst može biti povezan s izraženošću određenih
+crta ličnosti.
 
 ```{r}
 library(rcompanion)
@@ -758,11 +935,23 @@ prop_neuro <- prop.table(
 round(prop_neuro * 100, 1)
 
 ```
-Dok analize prema dobnim skupinama nisu pokazale statistički značajne razlike u crtama ličnosti, rezultati prema zanimanju sugeriraju da se ekstraverzija, savjesnost i neuroticizam mogu razlikovati ovisno o socijalnom/profesionalnom kontekstu, a ne nužno o kronološkoj dobi.
 
-Ukupno gledano, zanimanje je statistički značajno povezano s ekstraverzijom, savjesnošću i neuroticizmom, pri čemu su efekti slabi do umjereni; pritom se u skupinama nezaposlenih i osoba izvan plaćenog rada češće uočavaju nepovoljniji profili (niža savjesnost i viši neuroticizam), dok su zaposleni s punim radnim vremenom češće u niskom/srednjem neuroticizmu te srednjoj/visokoj savjesnosti i ekstraverziji. 
+Dok analize prema dobnim skupinama nisu pokazale statistički značajne
+razlike u crtama ličnosti, rezultati prema zanimanju sugeriraju da se
+ekstraverzija, savjesnost i neuroticizam mogu razlikovati ovisno o
+socijalnom/profesionalnom kontekstu, a ne nužno o kronološkoj dobi.
 
-Budući da su skupine zanimanja različitih veličina, zaključci se temelje na relativnim razlikama u raspodjelama (udjelima) kategorija unutar skupina, a ne na apsolutnim frekvencijama.
+Ukupno gledano, zanimanje je statistički značajno povezano s
+ekstraverzijom, savjesnošću i neuroticizmom, pri čemu su efekti slabi do
+umjereni; pritom se u skupinama nezaposlenih i osoba izvan plaćenog rada
+češće uočavaju nepovoljniji profili (niža savjesnost i viši
+neuroticizam), dok su zaposleni s punim radnim vremenom češće u
+niskom/srednjem neuroticizmu te srednjoj/visokoj savjesnosti i
+ekstraverziji.
+
+Budući da su skupine zanimanja različitih veličina, zaključci se temelje
+na relativnim razlikama u raspodjelama (udjelima) kategorija unutar
+skupina, a ne na apsolutnim frekvencijama.
 
 ```{r}
 make_percent_table <- function(x, row_var, col_var) {
@@ -858,6 +1047,7 @@ snažniju ulogu.
 
 
 Test pretpostavke normalnosti za anksioznost
+
 ```{r}
 
 require(nortest)
