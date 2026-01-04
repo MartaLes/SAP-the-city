@@ -19,7 +19,7 @@ options(repos = c(CRAN = "https://cloud.r-project.org"))
 install.packages(c("tidyverse", "GGally", "ggcorrplot", "psych", "corrplot", "nortest"))
 
 library(tidyverse)
-library(GGally)   
+library(GGally)   team
 library(ggcorrplot)
 library(psych)
 library(dplyr)
@@ -238,9 +238,10 @@ Psychoticism–Sadism (0.65) Depression–Neuroticism (0.58)
 Extraversion-Narcissism(0.56) Machiavelism–Psychoticism (0.51)
 
 ```{r}
-table(dataset$sex)
+table(data_clean$sex)
 df_sex <- dataset %>%
   filter(sex %in% c("Male", "Female"))
+
 
 ```
 
@@ -700,7 +701,14 @@ summary(aov(depression ~ occupation_group, data = df_job))
 summary(aov(stress ~ occupation_group, data = df_job))
 
 ```
-Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja razlika u razini anksioznosti, depresije i stresa između skupina definiranih prema zanimanju. Prethodno tome, provedena su testiranja pretpostavki normalnosti podataka i homogenosti varijanci za anksioznost, depresiju i stres s obzirom na kategoriju koja opisuje radni odnos occupation_group. Sve su se pretpostavke pokazale ispravnima.
+
+Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja
+razlika u razini anksioznosti, depresije i stresa između skupina
+definiranih prema zanimanju. Prethodno tome, provedena su testiranja
+pretpostavki normalnosti podataka i homogenosti varijanci za
+anksioznost, depresiju i stres s obzirom na kategoriju koja opisuje
+radni odnos occupation_group. Sve su se pretpostavke pokazale
+ispravnima.
 
 Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja
 razlika u razini anksioznosti, depresije i stresa između skupina
