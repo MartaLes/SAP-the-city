@@ -7,6 +7,7 @@ author:
 - Karla Šoštar
 date: "2026-01-21"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 editor_options:
@@ -200,7 +201,7 @@ cor.test(data_clean$depression, data_clean$psychoticism)
 ```
 
 Pearsonovom korelacijskom analizom utvrđena je statistički značajna
-negativna povezanost između narcizma i depresije (r = −0.21, p \<
+negativna povezanost između narcizma i depresije (r = -0.21, p \<
 0.001). Makijavelizam (r = 0.15, p = 0.002) i psihoticizam (r = 0.20, p
 \< 0.001) pokazali su statistički značajnu pozitivnu povezanost s
 depresijom. Veličine učinaka su male do umjerene.
@@ -233,7 +234,7 @@ cor.test(data_clean$psychoticism, data_clean$machiavelism)
 ```
 
 Pearsonove korelacije između nezavisnih varijabli pokazale su umjerene
-pozitivne povezanosti između makijavelizma, narcizma i psihoticizma (r ≈
+pozitivne povezanosti između makijavelizma, narcizma i psihoticizma (r $\approx$
 0,36–0,42, p \< 0,001). Iako su ove osobine povezane, snaga korelacija
 ne sugerira problematičnu multikolinearnost, što podupire njihovo
 uključivanje kao zasebnih prediktora u regresijski model.
@@ -252,8 +253,8 @@ summary(model_dark_triad)
 ```
 
 Rezultati reiteriraju prijašnje zaključke da je narcisizam negativno
-značajan prediktor depresije (b = −0.40, p \< 0.001), dok su
-makiavelizam (b = 0.21, p \< 0.001) i psihoticizam (b = 0.28, p \<
+značajan prediktor depresije ($\beta$ = -0.40, p \< 0.001), dok su
+makijavelizam ($\beta$ = 0.21, p \< 0.001) i psihoticizam ($\beta$ = 0.28, p \<
 0.001) pozitivno značajni prediktori. Model je statistički značajan
 (F-stat = 25.92, p \< 0.001). Međutim, ukupna prediktivna snaga modela
 je umjerena (R² oko 0.16), što sugerira da postoje i drugi faktori koji
@@ -291,10 +292,10 @@ summary(model_2)
 ```
 
 Model značajno predviđa depresiju (R² = 0.42, p \< 0.001). Neuroticizam
-je bio najsnažniji pozitivni prediktor depresije (b = 0.46, p \< 0.001),
-dok je ekstraverzija imala značajan negativan učinak (b = −0.24, p \<
+je bio najsnažniji pozitivni prediktor depresije ($\beta$ = 0.46, p \< 0.001),
+dok je ekstraverzija imala značajan negativan učinak ($\beta$ = -0.24, p \<
 0.001). Psihoticizam je također pokazao umjeren, ali značajan pozitivan
-doprinos (b = 0.17, p = 0.0018). Narcizam, savjesnost i ugodnost nisu
+doprinos ($\beta$ = 0.17, p = 0.0018). Narcizam, savjesnost i ugodnost nisu
 bili statistički značajni prediktori (p \> 0.05), što upućuje na to da
 njihov odnos s depresijom nije jedinstven nakon kontrole ostalih
 osobina.
@@ -398,7 +399,7 @@ Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu
 li zadovoljene osnovne pretpostavke testa, uključujući normalnost
 distribucije, homogenost varijanci te nezavisnost uzoraka.
 
-Za početak ćemo provjeriti preptpostavku o normalnosti uzorka.
+Za početak ćemo provjeriti pretpostavku o normalnosti uzorka.
 
 ```{r}
 
@@ -424,7 +425,7 @@ ggplot(df_sex, aes(sample = conscientiousness)) +
 
 ```
 
-Distribucije u skupinama su priližno normalne. Zatim ćemo provjeriti
+Distribucije u skupinama su približno normalne. Zatim ćemo provjeriti
 varijance.
 
 ```{r}
@@ -489,7 +490,7 @@ statistički značajnih spolnih razlika u pojedinim dimenzijama ličnosti.
 Žene postižu značajno više prosječne rezultate od muškaraca u
 neuroticizmu (t = 2.52, p = 0.012) i ugodnosti (t = 3.76, p \< 0.001).
 
-Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = −1.71, p =
+Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = -1.71, p =
 0.087) i savjesnost (t = 0.43, p = 0.669) nisu utvrđene statistički
 značajne razlike između spolova, iako su uočene blage razlike u
 prosječnim vrijednostima.
@@ -526,7 +527,7 @@ djelomično preklapanje distribucija.
 
 Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki
 normalnosti distribucije i jednakosti varijanci. Analiza se temelji na
-istim dvjema nezavisnim skupinama ispitanik (Female i Male).
+istim dvjema nezavisnim skupinama ispitanika (Female i Male).
 
 ```{r}
 ggplot(df_sex, aes(sample = narcissism)) +
@@ -979,15 +980,7 @@ df_neuro
 # Jesu li crte ličnosti i sklonost stresu, depresiji i anksioznosti povezane sa zanimanjem?
 
 ```{r}
-df_job <- dataset %>% filter(!sex %in% c("CONSENT_REVOKED"),
-                             !`student status` %in% c("CONSENT_REVOKED", "DATA_EXPIRED"),
-                             !`employment status` %in% c("CONSENT_REVOKED", "DATA_EXPIRED")
-                             )
-
-```
-
-```{r}
-df_job <- df_job %>% mutate(
+df_job <- data_clean %>% mutate(
     occupation_group = if_else(
       `student status` == "Yes",
       "Student",
@@ -1034,73 +1027,181 @@ ggplot(mental_long, aes(x = occupation_group, y = score, fill = occupation_group
 
 Vizualni pregled distribucija pokazuje da se razine stresa, depresije i
 anksioznosti uvelike preklapaju između skupina definiranih prema
-zanimanju, što upućuje na izražene individualne razlike unutar skupina.
+radnom statusu (zanimanju), što upućuje na izražene individualne razlike unutar skupina.
 Iako nezaposleni sudionici pokazuju viši medijan depresivnosti u odnosu
-na ostale skupine, razlike nisu statistički potvrđene. Razine stresa
+na ostale skupine, razlike nisu statistički potvrđene. Također je vidljivo da se veći broj ekstremnih vrijednosti
+javlja u skupini zaposlenih s punim radnim vremenom, što dodatno ukazuje
+na veliku heterogenost unutar te skupine. Razine stresa
 pokazuju vrlo slične obrasce u svim skupinama, dok se anksioznost
-nepojavljuje sustavno povezanom sa zanimanjem. Ovi nalazi sugeriraju da
-profesionalni status sam po sebi ima ograničen doprinos objašnjenju
+ne pojavljuje sustavno povezanom sa zanimanjem. Ovi nalazi sugeriraju da
+radni status sam po sebi ima ograničen doprinos objašnjenju
 mentalnog zdravlja te da individualne crte ličnosti vjerojatno imaju
 snažniju ulogu.
 
-## Provođenje ANOVA analize - Razlikuju li se razine anksioznosti, depresije i stresa po zanimanjima?
+## Provođenje ANOVA analize - Razlikuju li se razine anksioznosti, depresije i stresa po zanimanju (radnim statusima)?
 
+Za početak potrebno je provesti testove pretpostavki normalnosti podataka i homogenosti varijanci za anksioznost, depresiju i stres.
 
-Test pretpostavke normalnosti za anksioznost
+### Test pretpostavke normalnosti za anksioznost
 
 ```{r}
-
 require(nortest)
+
+# Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$anxiety)
 
-lillie.test(df_job$anxiety[df_job$occupation_group=='Full-Time'])
-lillie.test(df_job$anxiety[df_job$occupation_group=='Part-Time'])
-lillie.test(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
-lillie.test(df_job$anxiety[df_job$occupation_group=='Student'])
+# Lilliefors test po skupinama zanimanja
+lillie.test(df_job$anxiety[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$anxiety[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$anxiety[df_job$occupation_group == "Unemployed (and job seeking)"])
+lillie.test(df_job$anxiety[df_job$occupation_group == "Student"])
 
-hist(df_job$anxiety[df_job$occupation_group=='Full-Time'])
-hist(df_job$anxiety[df_job$occupation_group=='Part-Time'])
-hist(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
-hist(df_job$anxiety[df_job$occupation_group=='Student'])
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
+
+hist(
+  df_job$anxiety[df_job$occupation_group == "Full-Time"],
+  main = "Anxiety – Full-Time",
+  xlab = "Anxiety",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$anxiety[df_job$occupation_group == "Part-Time"],
+  main = "Anxiety – Part-Time",
+  xlab = "Anxiety",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$anxiety[df_job$occupation_group == "Unemployed (and job seeking)"],
+  main = "Anxiety – Unemployed",
+  xlab = "Anxiety",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$anxiety[df_job$occupation_group == "Student"],
+  main = "Anxiety – Student",
+  xlab = "Anxiety",
+  col = "lightgray",
+  border = "white"
+)
+
+par(mfrow = c(1, 1))
 
 ```
-Test pretpostavke normalnosti za depresiju
+Iz dobivenih ispisa zaključujemo da na temelju cijelog uzorka nema potrebe za odbacivanjem nulte hipoteze o normalnosti uzorka (p > 0.05). Gledajući svaku skupinu radnog statusa zasebno, možemo uočiti kako jedino statistički značajno odstupanje od normalnosti postoji kod ispitanika koji rade na nepuno radno vrijeme, ali to možemo izuzeti iz općeg zaključka jer se ta skupina sastoji od malog uzorka na koje su testovi o normalnosti osjetljivi.  
+Gledajući histograme, manja odstupanja od simetrije vidljiva su u skupinama s manjim brojem ispitanika (osobito kod zaposlenih s nepunim radnim vremenom i nezaposlenih), što je vjerojatno posljedica veličine uzorka, a ne stvarnih razlika u raspodjeli anksioznosti.  
+
+### Test pretpostavke normalnosti za depresiju
 ```{r}
-
 require(nortest)
-lillie.test(df_job$anxiety)
 
-lillie.test(df_job$anxiety[df_job$occupation_group=='Full-Time'])
-lillie.test(df_job$anxiety[df_job$occupation_group=='Part-Time'])
-lillie.test(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
-lillie.test(df_job$anxiety[df_job$occupation_group=='Student'])
+# Lilliefors test normalnosti (ukupno)
+lillie.test(df_job$depression)
 
-hist(df_job$anxiety[df_job$occupation_group=='Full-Time'])
-hist(df_job$anxiety[df_job$occupation_group=='Part-Time'])
-hist(df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)'])
-hist(df_job$anxiety[df_job$occupation_group=='Student'])
+# Lilliefors test po skupinama zanimanja
+lillie.test(df_job$depression[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$depression[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$depression[df_job$occupation_group == "Unemployed (and job seeking)"])
+lillie.test(df_job$depression[df_job$occupation_group == "Student"])
+
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
+
+hist(
+  df_job$depression[df_job$occupation_group == "Full-Time"],
+  main = "Depression – Full-Time",
+  xlab = "Depression",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$depression[df_job$occupation_group == "Part-Time"],
+  main = "Depression – Part-Time",
+  xlab = "Depression",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$depression[df_job$occupation_group == "Unemployed (and job seeking)"],
+  main = "Depression – Unemployed",
+  xlab = "Depression",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$depression[df_job$occupation_group == "Student"],
+  main = "Depression – Student",
+  xlab = "Depression",
+  col = "lightgray",
+  border = "white"
+)
+
+par(mfrow = c(1, 1))
 
 ```
+Lillieforsov test pokazuje da distribucija depresije odstupa od normalnosti kod zaposlenih ispitanika (Full-Time i Part-Time) i studenata pomalo. Kod nezaposlenih nema statistički značajnog odstupanja.  
+Histogrami potvrđuju ove nalaze, iako je distribucija kod studenata pravilnija, a kod nezaposlenih ispitanika dosta manje od očekivanog. Unatoč navedenim odstupanjima, primjena parametarskih metoda čini se opravdanom s obzirom na veličinu uzoraka i karakteristike robustnosti linearne regresije i ANOVA-e na kršenja pretpostavki normalnosti uzoraka.  
 
-Test pretpostavki normalnosti za stres
+### Test pretpostavki normalnosti za stres
 ```{r}
-
 require(nortest)
+
+# Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$stress)
 
-lillie.test(df_job$stress[df_job$occupation_group=='Full-Time'])
-lillie.test(df_job$stress[df_job$occupation_group=='Part-Time'])
-lillie.test(df_job$stress[df_job$occupation_group=='Unemployed (and job seeking)'])
-lillie.test(df_job$stress[df_job$occupation_group=='Student'])
+# Lilliefors test po skupinama zanimanja
+lillie.test(df_job$stress[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$stress[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$stress[df_job$occupation_group == "Unemployed (and job seeking)"])
+lillie.test(df_job$stress[df_job$occupation_group == "Student"])
 
-hist(df_job$stress[df_job$occupation_group=='Full-Time'])
-hist(df_job$stress[df_job$occupation_group=='Part-Time'])
-hist(df_job$stress[df_job$occupation_group=='Unemployed (and job seeking)'])
-hist(df_job$stress[df_job$occupation_group=='Student'])
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
 
+hist(
+  df_job$stress[df_job$occupation_group == "Full-Time"],
+  main = "Stress – Full-Time",
+  xlab = "Stress",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$stress[df_job$occupation_group == "Part-Time"],
+  main = "Stress – Part-Time",
+  xlab = "Stress",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$stress[df_job$occupation_group == "Unemployed (and job seeking)"],
+  main = "Stress – Unemployed",
+  xlab = "Stress",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$stress[df_job$occupation_group == "Student"],
+  main = "Stress – Student",
+  xlab = "Stress",
+  col = "lightgray",
+  border = "white"
+)
+
+par(mfrow = c(1, 1))
 ```
+Također, test normalnosti proveden je i za varijablu stresa na ukupnom uzorku te unutar svake skupine prema radnom statusu. Rezultati pokazuju da nijedan test nije statistički značajan, kako na ukupnoj razini, tako i na pojedinačnoj.  
+Vizualni pregled histograma dodatno potvrđuje ove nalaze. Manja odstupanja i asimetrije prisutne su u skupini nezaposlenih i zaposlenih na nepuno radno vrijeme, što je očekivano i prihvatljivo s obzirom na manju količinu uzorka.  
 
-Test pretpostavki homogenosti varijanci za anksioznost
+### Test pretpostavki homogenosti varijanci za anksioznost
 ```{r}
 
 bartlett.test(df_job$anxiety ~ df_job$occupation_group)
@@ -1110,8 +1211,9 @@ var((df_job$anxiety[df_job$occupation_group=='Part-Time']))
 var((df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)']))
 var((df_job$anxiety[df_job$occupation_group=='Student']))
 ```
+Bartlettov test pokazao je da su varijance anksioznosti između skupina zanimanja međusobno jednake (p = 0.774). I pojedinačne varijance po skupinama su vrlo slične, bez izraženih odstupanja. Time je zadovoljena pretpostavka homogenosti varijanci, što opravdava primjenu ANOVA testa za usporedbu anksioznosti između skupina.  
 
-Test pretpostavki homogenosti varijanci za depresiju
+### Test pretpostavki homogenosti varijanci za depresiju
 ```{r}
 
 bartlett.test(df_job$depression ~ df_job$occupation_group)
@@ -1121,8 +1223,9 @@ var((df_job$depression[df_job$occupation_group=='Part-Time']))
 var((df_job$depression[df_job$occupation_group=='Unemployed (and job seeking)']))
 var((df_job$depression[df_job$occupation_group=='Student']))
 ```
+Bartlettov test homogenosti varijanci za depresiju pokazao se neznačajnim. Dodatno, izračunate varijance po skupinama su vrlo slične. Ovi podaci upućuju na to da je pretpostavka homogenosti varijanci zadovoljena.   
 
-Test pretpostavki homogenosti varijanci za stres
+### Test pretpostavki homogenosti varijanci za stres
 ```{r}
 
 bartlett.test(df_job$stress ~ df_job$occupation_group)
@@ -1132,6 +1235,7 @@ var((df_job$stress[df_job$occupation_group=='Part-Time']))
 var((df_job$stress[df_job$occupation_group=='Unemployed (and job seeking)']))
 var((df_job$stress[df_job$occupation_group=='Student']))
 ```
+Kao i u prethodnim, testovima homogenosti varijanci, test za stres nije pokazao statistički značajne razlike među skupinama zanimanja (radnog statusa), iako je uočljiva nešto veća varijabilnost u skupini studenata. Unatoč razlikama (koje nisu dovoljno izražene), potvrđena je homogenost varijanci za varijablu stres.  
 
 ```{r}
 summary(aov(anxiety ~ occupation_group, data = df_job))
@@ -1162,7 +1266,7 @@ nije dosegnuo konvencionalnu razinu statističke značajnosti, F(3, 370) =
 2.33, p = 0.0736. Dobiveni nalazi upućuju na to da zanimanje samo po
 sebi nije snažan prediktor razine mentalnog zdravlja u ovom uzorku.
 
-## Provođenje višestruke regresije za pokazivanje doprinosa zanimanja anksioznosti povrh ličnosti
+## Višestruka linearna regresija: doprinos radnog statusa anksioznosti uz kontrolu crta ličnosti
 
 ```{r}
 model_anxiety <- lm(
@@ -1202,7 +1306,7 @@ nije dosegnula razinu statističke značajnosti ($\beta$ = 0.117466, p =
 kod ekstravertiranijih osoba. Ostale Big Five crte nisu se pokazale
 značajnima u ovom modelu.
 
-## Provođenje višestruke regresije za pokazivanje doprinosa zanimanja depresiji povrh ličnosti
+## Višestruka linearna regresija: doprinos radnog statusa depresiji uz kontrolu crta ličnosti
 
 ```{r}
 model_depression <- lm(
@@ -1242,7 +1346,7 @@ prediktorom ($\beta$ = -0.302426, p = 1.10x$10^{-6}$), što upućuje na to
 da osobe s višom razinom ekstraverzije pokazuju nižu razinu depresije.
 Ostale crte Big Five modela nisu se pokazale značajnima.
 
-## Provođenje višestruke regresije za pokazivanje doprinosa zanimanja depresiji povrh ličnosti
+## Višestruka linearna regresija: doprinos radnog statusa stresu uz kontrolu crta ličnosti
 
 ```{r}
 model_stress <- lm(
@@ -1269,7 +1373,7 @@ značajan pozitivan prediktor ($\beta$ = 0.204240, p = 0.00316 (\<
 0.01)). To znači da osobe s višim razinama psihoticizma pokazuju višu
 razinu stresa, čak i nakon utjecaja ostalih crta ličnosti i oblika
 radnog angažmana. Makijavelizam je pokazao trend prema pozitivnoj
-povezanosti ($/beta$ = 0.112090, p = 0.05728 (\< 0.1)), ali rezultati su
+povezanosti ($\beta$ = 0.112090, p = 0.05728 (\< 0.1)), ali rezultati su
 nedovoljni za snažnu povezanost. Narcizam i sadizam nisu pokazali
 značajan doprinos.
 
@@ -1281,4 +1385,4 @@ rezultat je u potpunosti u skladu s teorijskim očekivanjima. Izdvajamo i
 otvorenost kao statistički značajan pozititvan prediktor ($\beta$ =
 0.142228, p = 0.00554 (\< 0.01). Ovaj podatak sugerira da osobe s više
 otvorenosti mogu biti osjetljivije na stres. Ekstraverzija, ugodnost i
-savjesnost nisu pokazale statistički značajan u ovom modelu.
+savjesnost nisu pokazale statistički značajan utjecaj u ovom modelu.
