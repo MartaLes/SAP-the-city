@@ -1,0 +1,3143 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Projekt: Analiza ličnosti i njenih mračnih crta},
+  pdfauthor={Lana Barišić; Marta Leš; Lucija Lovrić; Karla Šoštar},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Projekt: Analiza ličnosti i njenih mračnih crta}
+\author{Lana Barišić \and Marta Leš \and Lucija Lovrić \and Karla
+Šoštar}
+\date{2026-01-21}
+
+\begin{document}
+\maketitle
+
+\section{Motivacija i opis problema}\label{motivacija-i-opis-problema}
+
+Ličnost je jedno od temeljnih područja psihologije i najčešće se opisuje
+petofaktorskim Big Five modelom koji uključuje ekstraverziju, ugodnost,
+savjesnost, neuroticizam i otvorenost. Uz osnovne crte ličnosti, često
+se ispituju i mračne crte, odnosno mračna trijada koju čine narcizam,
+psihopatija i makijavelizam. Cilj ovog projekta je ispitati povezanost
+osnovnih i mračnih crta ličnosti, te ostalih obilježja poput spola i
+dobi, sa sklonošću stresu, depresiji i anksioznosti.
+
+\section{Učitavanje i pregled
+podataka}\label{uux10ditavanje-i-pregled-podataka}
+
+Podatke iz CSV datoteke učitavamo u varijablu \emph{dataset} kako bismo
+ih mogle bolje analizirati.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}Personality\_data.csv\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## New names:
+## Rows: 578 Columns: 18
+## -- Column specification
+## -------------------------------------------------------- Delimiter: "," chr
+## (5): age, sex, ethnicity simplified, student status, employment status dbl
+## (13): ...1, depression, anxiety, stress, narcissism, machiavelism, psych...
+## i Use `spec()` to retrieve the full column specification for this data. i
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## * `` -> `...1`
+\end{verbatim}
+
+Dalje, prikažemo prvih nekoliko redaka da vidimo primjere vrijednosti
+svakog od stupaca.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 18
+##    ...1 depression anxiety stress narcissism machiavelism psychoticism  sadism
+##   <dbl>      <dbl>   <dbl>  <dbl>      <dbl>        <dbl>        <dbl>   <dbl>
+## 1     1      1.24    1.08   0.505      1.50         0.254       -0.201  0.0193
+## 2     2      1.07    1.16   0.266      0.791        0.562        1.31   0.870 
+## 3     3     -0.581  -0.263 -0.556     -0.267       -0.692       -0.691 -0.208 
+## 4     4      3.03    1.99   1.94       0.415        0.856        2.19   1.10  
+## 5     5      1.22   -0.774  0.104     -2.34        -1.99        -0.733 -1.57  
+## 6     6      0.828  -0.186  0.728     -0.333        1.59         1.87   1.72  
+## # i 10 more variables: neuroticism <dbl>, extraversion <dbl>, openness <dbl>,
+## #   agreeableness <dbl>, conscientiousness <dbl>, age <chr>, sex <chr>,
+## #   `ethnicity simplified` <chr>, `student status` <chr>,
+## #   `employment status` <chr>
+\end{verbatim}
+
+Zatim, pomoću metoda \emph{names()} i \emph{glimpse()}, dajemo si bolji
+uvid u tipove podataka i strukturu.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "...1"                 "depression"           "anxiety"             
+##  [4] "stress"               "narcissism"           "machiavelism"        
+##  [7] "psychoticism"         "sadism"               "neuroticism"         
+## [10] "extraversion"         "openness"             "agreeableness"       
+## [13] "conscientiousness"    "age"                  "sex"                 
+## [16] "ethnicity simplified" "student status"       "employment status"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 578
+## Columns: 18
+## $ ...1                   <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ~
+## $ depression             <dbl> 1.24028239, 1.07356352, -0.58072240, 3.03206310~
+## $ anxiety                <dbl> 1.07785482, 1.15519418, -0.26310737, 1.98720356~
+## $ stress                 <dbl> 0.50512161, 0.26619388, -0.55579868, 1.94173788~
+## $ narcissism             <dbl> 1.50455897, 0.79126351, -0.26693805, 0.41549063~
+## $ machiavelism           <dbl> 0.25408691, 0.56182597, -0.69164422, 0.85587890~
+## $ psychoticism           <dbl> -0.20141634, 1.31253355, -0.69076562, 2.1866752~
+## $ sadism                 <dbl> 0.01933759, 0.86951395, -0.20777818, 1.10452165~
+## $ neuroticism            <dbl> -0.20124424, 0.56874269, -0.19237042, 1.4630829~
+## $ extraversion           <dbl> 0.64878308, 0.44347482, -1.75862486, -1.8731478~
+## $ openness               <dbl> 0.2455288, -0.9359119, -0.6614584, 1.8180786, -~
+## $ agreeableness          <dbl> -0.02353314, -1.17591066, -0.31643069, 0.655438~
+## $ conscientiousness      <dbl> -0.042944525, -1.043162336, -0.481776915, 0.039~
+## $ age                    <chr> "CONSENT_REVOKED", "CONSENT_REVOKED", "29", "37~
+## $ sex                    <chr> "CONSENT_REVOKED", "CONSENT_REVOKED", "Female",~
+## $ `ethnicity simplified` <chr> "CONSENT_REVOKED", "CONSENT_REVOKED", "Black", ~
+## $ `student status`       <chr> "CONSENT_REVOKED", "CONSENT_REVOKED", "DATA_EXP~
+## $ `employment status`    <chr> "CONSENT_REVOKED", "CONSENT_REVOKED", "DATA_EXP~
+\end{verbatim}
+
+Prema uvidu u strukturu podataka vidljivo je da je varijabla
+\textbf{age} tipa \emph{character}, što nije prikladno jer bi u
+statističkim modelima bila tretirana kao kategorijska umjesto numerička
+varijabla. Stoga je varijabla \textbf{age} pretvorena u numerički tip
+podataka.
+
+Varijabla \textbf{sex} predstavlja kategorijsku varijablu te je, radi
+ispravne primjene u regresijskim modelima, pretvorena u tip
+\emph{factor}.
+
+Kako bi se osigurala valjanost analize, iz uzorka su uklonjeni svi
+ispitanici koji sadrže vrijednosti \emph{CONSENT\_REVOKED} ili
+\emph{DATA\_EXPIRED}, budući da ti zapisi ne predstavljaju stvarne
+podatke ispitanika.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_clean }\OtherTok{\textless{}{-}}\NormalTok{ dataset }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+    \FunctionTok{if\_all}\NormalTok{(}\FunctionTok{everything}\NormalTok{(),}
+           \SpecialCharTok{\textasciitilde{}} \SpecialCharTok{!}\NormalTok{(. }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"CONSENT\_REVOKED"}\NormalTok{, }\StringTok{"DATA\_EXPIRED"}\NormalTok{)))}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{age =} \FunctionTok{as.numeric}\NormalTok{(age),}
+    \AttributeTok{sex =} \FunctionTok{factor}\NormalTok{(sex)}
+\NormalTok{  )}
+
+
+\FunctionTok{head}\NormalTok{(data\_clean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 18
+##    ...1 depression anxiety stress narcissism machiavelism psychoticism  sadism
+##   <dbl>      <dbl>   <dbl>  <dbl>      <dbl>        <dbl>        <dbl>   <dbl>
+## 1     4     3.03     1.99   1.94       0.415        0.856        2.19   1.10  
+## 2     5     1.22    -0.774  0.104     -2.34        -1.99        -0.733 -1.57  
+## 3     6     0.828   -0.186  0.728     -0.333        1.59         1.87   1.72  
+## 4     7     0.0276   0.182  0.498      0.807        1.65         0.568  0.0681
+## 5     9     0.633    1.14   0.421     -0.309        0.634        0.219  0.0423
+## 6    10    -0.267   -1.68   0.188      0.608        0.294        0.442  0.780 
+## # i 10 more variables: neuroticism <dbl>, extraversion <dbl>, openness <dbl>,
+## #   agreeableness <dbl>, conscientiousness <dbl>, age <dbl>, sex <fct>,
+## #   `ethnicity simplified` <chr>, `student status` <chr>,
+## #   `employment status` <chr>
+\end{verbatim}
+
+\begin{verbatim}
+\end{verbatim}
+
+\section{Jesu li ljudi s izraženijom mračnom trijadom skloniji
+depresiji?}\label{jesu-li-ljudi-s-izraux17eenijom-mraux10dnom-trijadom-skloniji-depresiji}
+
+\subsection{Upoznavanje podataka}\label{upoznavanje-podataka}
+
+Po analizi podataka već odrađenoj u uvodu znamo da radimo s numeričkim
+podacima, te da je za ispitivanje povezanosti osobina mračne trijade i
+depresije prikladno raditi linearnu regresiju. Dakle, nezavisne
+varijable ovdje su: narcizam, makijavelizam i psihoticizam, a zavisna
+varijabla je depresija.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{describe}\NormalTok{(data\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(depression, narcissism, machiavelism, psychoticism))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              vars   n  mean   sd median trimmed  mad   min  max range  skew
+## depression      1 398  0.04 1.10  -0.14   -0.04 0.96 -3.07 3.63  6.70  0.63
+## narcissism      2 398 -0.08 1.07   0.02   -0.05 1.16 -2.60 2.65  5.25 -0.16
+## machiavelism    3 398 -0.05 1.08   0.05    0.00 1.09 -2.91 2.39  5.30 -0.37
+## psychoticism    4 398 -0.08 1.00  -0.20   -0.14 1.04 -2.00 2.99  4.99  0.48
+##              kurtosis   se
+## depression       0.48 0.06
+## narcissism      -0.63 0.05
+## machiavelism    -0.41 0.05
+## psychoticism    -0.48 0.05
+\end{verbatim}
+
+Vrijednosti svake od varijable kreću se negdje unutar intervala od -3.0
+i 3.0, s medijanima i srednjim vrijednostima uvijek blizu nule. Također,
+uz n=398, znamo da radimo s velikim uzorkom što povećava statističku
+snagu analize.
+
+\subsection{Jednostavna linearna
+regresija}\label{jednostavna-linearna-regresija}
+
+Kako bismo analizirali zaseban utjecaj svake od ovih varijabli,
+procijenit ćemo jednostavne regresijske modele, pri čemu će se za svaku
+nezavisnu varijablu izgraditi poseban model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(narcissism, depression)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-7-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(machiavelism, depression)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-7-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(psychoticism, depression)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-7-3.pdf}}
+
+Nagibi pravaca služe kao potvrda utjecaja pojedine nezavisne varijable
+na varijablu depresija. Model narcizma jedini ima negativan nagib,
+ukazujući na negativan utjecaj, dok psihoticizam i makijavelizam imaju
+pozitivan učinak.
+
+\subsection{Pearsonove korelacije}\label{pearsonove-korelacije}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{depression, data\_clean}\SpecialCharTok{$}\NormalTok{narcissism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$depression and data_clean$narcissism
+## t = -4.2976, df = 396, p-value = 2.176e-05
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.3031034 -0.1151869
+## sample estimates:
+##        cor 
+## -0.2110948
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{depression, data\_clean}\SpecialCharTok{$}\NormalTok{machiavelism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$depression and data_clean$machiavelism
+## t = 3.1025, df = 396, p-value = 0.002057
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.05660396 0.24857887
+## sample estimates:
+##       cor 
+## 0.1540449
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{depression, data\_clean}\SpecialCharTok{$}\NormalTok{psychoticism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$depression and data_clean$psychoticism
+## t = 4.0662, df = 396, p-value = 5.767e-05
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.1039454 0.2927352
+## sample estimates:
+##       cor 
+## 0.2001979
+\end{verbatim}
+
+Pearsonovom korelacijskom analizom utvrđena je statistički značajna
+negativna povezanost između narcizma i depresije (r = -0.21, p
+\textless{} 0.001). Makijavelizam (r = 0.15, p = 0.002) i psihoticizam
+(r = 0.20, p \textless{} 0.001) pokazali su statistički značajnu
+pozitivnu povezanost s depresijom. Veličine učinaka su male do umjerene.
+
+Ovo se može prikazati i matrično:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vars1 }\OtherTok{\textless{}{-}}\NormalTok{ data\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(depression, narcissism, machiavelism, psychoticism) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{na.omit}\NormalTok{()}
+
+\FunctionTok{corrplot}\NormalTok{(}\FunctionTok{cor}\NormalTok{(vars1))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-9-1.pdf}}
+
+Među prediktorima su prisutne umjerene pozitivne korelacije, no nijedna
+ne upućuje na problematičnu multikolinearnost. Ovo ćemo još formalno
+analizirat koristeći, ponovno, Pearsonove korelacije.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{machiavelism, data\_clean}\SpecialCharTok{$}\NormalTok{narcissism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$machiavelism and data_clean$narcissism
+## t = 8.961, df = 396, p-value < 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.3254326 0.4891514
+## sample estimates:
+##       cor 
+## 0.4105959
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{machiavelism, data\_clean}\SpecialCharTok{$}\NormalTok{psychoticism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$machiavelism and data_clean$psychoticism
+## t = 9.3422, df = 396, p-value < 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.3409053 0.5022790
+## sample estimates:
+##       cor 
+## 0.4249627
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{narcissism, data\_clean}\SpecialCharTok{$}\NormalTok{machiavelism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$narcissism and data_clean$machiavelism
+## t = 8.961, df = 396, p-value < 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.3254326 0.4891514
+## sample estimates:
+##       cor 
+## 0.4105959
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{narcissism, data\_clean}\SpecialCharTok{$}\NormalTok{psychoticism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$narcissism and data_clean$psychoticism
+## t = 7.8298, df = 396, p-value = 4.519e-14
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.2778423 0.4483037
+## sample estimates:
+##       cor 
+## 0.3661405
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{psychoticism, data\_clean}\SpecialCharTok{$}\NormalTok{narcissism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$psychoticism and data_clean$narcissism
+## t = 7.8298, df = 396, p-value = 4.519e-14
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.2778423 0.4483037
+## sample estimates:
+##       cor 
+## 0.3661405
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{psychoticism, data\_clean}\SpecialCharTok{$}\NormalTok{machiavelism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$psychoticism and data_clean$machiavelism
+## t = 9.3422, df = 396, p-value < 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.3409053 0.5022790
+## sample estimates:
+##       cor 
+## 0.4249627
+\end{verbatim}
+
+Pearsonove korelacije između nezavisnih varijabli pokazale su umjerene
+pozitivne povezanosti između makijavelizma, narcizma i psihoticizma (r
+\(\approx\) 0,36--0,42, p \textless{} 0,001). Iako su ove osobine
+povezane, snaga korelacija ne sugerira problematičnu multikolinearnost,
+što podupire njihovo uključivanje kao zasebnih prediktora u regresijski
+model.
+
+\subsection{Višestruka linearna
+regresija}\label{viux161estruka-linearna-regresija}
+
+Sada možemo definirati model višestruke linearne regresije, gdje gledamo
+sveukupni utjecaj mračne trijade na depresiju.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_dark\_triad }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(depression }\SpecialCharTok{\textasciitilde{}}\NormalTok{ narcissism }\SpecialCharTok{+}\NormalTok{ machiavelism }\SpecialCharTok{+}\NormalTok{ psychoticism,}
+             \AttributeTok{data =}\NormalTok{ data\_clean)}
+
+\FunctionTok{summary}\NormalTok{(model\_dark\_triad)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = depression ~ narcissism + machiavelism + psychoticism, 
+##     data = data_clean)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.3437 -0.6086 -0.1376  0.5302  3.5540 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   0.03894    0.05100   0.763 0.445638    
+## narcissism   -0.39957    0.05334  -7.490 4.55e-13 ***
+## machiavelism  0.20893    0.05434   3.845 0.000141 ***
+## psychoticism  0.28178    0.05770   4.884 1.52e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.013 on 394 degrees of freedom
+## Multiple R-squared:  0.1648, Adjusted R-squared:  0.1585 
+## F-statistic: 25.92 on 3 and 394 DF,  p-value: 2.545e-15
+\end{verbatim}
+
+Rezultati reiteriraju prijašnje zaključke da je narcisizam negativno
+značajan prediktor depresije (\(\beta\) = -0.40, p \textless{} 0.001),
+dok su makijavelizam (\(\beta\) = 0.21, p \textless{} 0.001) i
+psihoticizam (\(\beta\) = 0.28, p \textless{} 0.001) pozitivno značajni
+prediktori. Model je statistički značajan (F-stat = 25.92, p \textless{}
+0.001). Međutim, ukupna prediktivna snaga modela je umjerena (R² oko
+0.16), što sugerira da postoje i drugi faktori koji utječu na depresiju.
+
+Kako bismo provjerili postoje li drugi, prikladniji i značajniji,
+prediktori prikazat ćemo korelacijsku matricu sa ostalim varijablama.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vars2 }\OtherTok{\textless{}{-}}\NormalTok{ data\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(depression, narcissism, machiavelism, psychoticism,}
+\NormalTok{               neuroticism, extraversion, openness,}
+\NormalTok{               agreeableness, conscientiousness,}
+\NormalTok{               age) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{na.omit}\NormalTok{()}
+
+\FunctionTok{corrplot}\NormalTok{(}\FunctionTok{cor}\NormalTok{(vars2))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-12-1.pdf}}
+
+Tu su vidljive pozitivne povezanosti depresije s neuroticizmom,
+psihoticizmom i najmanje makijavelizmom. S druge strane, negativnu
+korelaciju s depresijom imaju narcizam, ekstraverzija i savjesnost,
+nešto manje kod ugodnosti. Najjače povezanosti su sa ekstraverzijom i
+neuroticizmom, koji su međusobno negativno korelirani.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(depression }\SpecialCharTok{\textasciitilde{}}\NormalTok{ narcissism }\SpecialCharTok{+}\NormalTok{ extraversion }\SpecialCharTok{+}\NormalTok{ neuroticism }\SpecialCharTok{+}\NormalTok{ conscientiousness }\SpecialCharTok{+}\NormalTok{ agreeableness }\SpecialCharTok{+}\NormalTok{ psychoticism,}
+             \AttributeTok{data =}\NormalTok{ data\_clean)}
+
+\FunctionTok{summary}\NormalTok{(model\_2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = depression ~ narcissism + extraversion + neuroticism + 
+##     conscientiousness + agreeableness + psychoticism, data = data_clean)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.0698 -0.4943  0.0391  0.4561  2.9942 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        0.017541   0.042738   0.410  0.68172    
+## narcissism        -0.007888   0.053502  -0.147  0.88287    
+## extraversion      -0.238504   0.060134  -3.966 8.68e-05 ***
+## neuroticism        0.456224   0.055935   8.156 4.76e-15 ***
+## conscientiousness -0.030049   0.055976  -0.537  0.59170    
+## agreeableness      0.038033   0.052069   0.730  0.46556    
+## psychoticism       0.169456   0.054041   3.136  0.00184 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.8458 on 391 degrees of freedom
+## Multiple R-squared:  0.4222, Adjusted R-squared:  0.4133 
+## F-statistic: 47.61 on 6 and 391 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Model značajno predviđa depresiju (R² = 0.42, p \textless{} 0.001).
+Neuroticizam je bio najsnažniji pozitivni prediktor depresije (\(\beta\)
+= 0.46, p \textless{} 0.001), dok je ekstraverzija imala značajan
+negativan učinak (\(\beta\) = -0.24, p \textless{} 0.001). Psihoticizam
+je također pokazao umjeren, ali značajan pozitivan doprinos (\(\beta\) =
+0.17, p = 0.0018). Narcizam, savjesnost i ugodnost nisu bili statistički
+značajni prediktori (p \textgreater{} 0.05), što upućuje na to da njihov
+odnos s depresijom nije jedinstven nakon kontrole ostalih osobina.
+
+Još ćemo provjeriti predstavlja li kolinearnost značajki problem za ovu
+interpretaciju:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vif }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(model) \{}
+\NormalTok{  X }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(model)[, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]  }
+\NormalTok{  vif\_values }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(X), }\ControlFlowTok{function}\NormalTok{(i) \{}
+\NormalTok{    lm\_fit }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(X[, i] }\SpecialCharTok{\textasciitilde{}}\NormalTok{ X[, }\SpecialCharTok{{-}}\NormalTok{i])}
+    \DecValTok{1} \SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{summary}\NormalTok{(lm\_fit)}\SpecialCharTok{$}\NormalTok{r.squared)}
+\NormalTok{  \})}
+  \FunctionTok{names}\NormalTok{(vif\_values) }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(X)}
+  \FunctionTok{return}\NormalTok{(vif\_values)}
+\NormalTok{\}}
+
+\FunctionTok{vif}\NormalTok{(model\_2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        narcissism      extraversion       neuroticism conscientiousness 
+##          1.834314          2.376552          1.930409          1.706299 
+##     agreeableness      psychoticism 
+##          1.598789          1.623147
+\end{verbatim}
+
+VIF faktori za sve prediktore manji su od 5, što ukazuje da ne postoji
+značajna multikolinearnost među varijablama.
+
+\subsubsection{Provjera pretpostavki linearnih
+regresija}\label{provjera-pretpostavki-linearnih-regresija}
+
+Još je preostalo provjeriti prate li reziduali ovih modela normalnu
+distribuciju.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}
+  \FunctionTok{residuals}\NormalTok{(model\_dark\_triad),}
+  \AttributeTok{main =} \StringTok{"QQ{-}plot reziduala modela depresije i mračne trijade"}
+\NormalTok{)}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(model\_dark\_triad))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-15-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(model\_dark\_triad), }\AttributeTok{breaks =} \DecValTok{20}\NormalTok{, }\AttributeTok{main =} \StringTok{"Histogram reziduala modela depresije i mračne trijade"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-15-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}
+  \FunctionTok{residuals}\NormalTok{(model\_2),}
+  \AttributeTok{main =} \StringTok{"QQ{-}plot reziduala modela depresije i ostalih značajki"}
+\NormalTok{)}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(model\_2))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-15-3.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(model\_2), }\AttributeTok{breaks =} \DecValTok{20}\NormalTok{, }\AttributeTok{main =} \StringTok{"Histogram reziduala modela depresije i ostalih značajki"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-15-4.pdf}}
+
+Normalnost reziduala provjerena je pomoću QQ-plota i histograma, koji su
+pokazali približno normalnu distribuciju, uz manja odstupanja na
+krajevima distribucije. Odstupanja su zastupljenija kod drugog modela
+koji ne uključuje samo varijable mračne trijade, već i ostale značajke.
+
+\subsection{Zaključak}\label{zakljuux10dak}
+
+Pokazali smo da osobine koje čine mračnu trijadu: psihoticizam,
+makijavelizam i narcizam, same po sebi utječu na depresiju, ali njihov
+učinak nije jednako snažan kao učinak nekih drugih osobina, poput niske
+ekstraverzije i visokog neuroticizma s elementima psihoticizma.
+
+\section{Postoje li razlike u nekim crtama ličnosti među
+spolovima?}\label{postoje-li-razlike-u-nekim-crtama-liux10dnosti-meux111u-spolovima}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##            Female              Male Prefer not to say 
+##               186               209                 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_sex }\OtherTok{\textless{}{-}}\NormalTok{ data\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(sex }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Male"}\NormalTok{, }\StringTok{"Female"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{big\_five }\OtherTok{\textless{}{-}}\NormalTok{ df\_sex }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}
+    \AttributeTok{cols =} \FunctionTok{c}\NormalTok{(neuroticism, extraversion, openness, agreeableness, conscientiousness),}
+    \AttributeTok{names\_to =} \StringTok{"trait"}\NormalTok{,}
+    \AttributeTok{values\_to =} \StringTok{"score"}
+\NormalTok{  )}
+
+\FunctionTok{ggplot}\NormalTok{(big\_five, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ sex, }\AttributeTok{y =}\NormalTok{ score, }\AttributeTok{fill =}\NormalTok{ sex)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ trait, }\AttributeTok{scales =} \StringTok{"free"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Big Five osobine po spolu (Male vs Female)"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Spol"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Rezultat"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-17-1.pdf}}
+
+Vizualna analiza boxplotova ukazuje na obrasce razlika između spolova
+koji su u skladu s teorijskim očekivanjima. Najizraženije razlike
+uočavaju se kod neuroticizma i ugodnosti, pri čemu žene u prosjeku
+postižu više vrijednosti, što je vidljivo kroz više medijane i pomak
+distribucije prema višim vrijednostima.
+
+Kod ekstraverzije, otvorenosti i savjesnosti razlike između spolova su
+manje izražene; medijani su vrlo slični, a distribucije se u velikoj
+mjeri preklapaju, što upućuje na izostanak izraženih spolnih razlika u
+tim osobinama na razini deskriptivne analize.
+
+Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu
+li zadovoljene osnovne pretpostavke testa, uključujući normalnost
+distribucije, homogenost varijanci te nezavisnost uzoraka.
+
+Za početak ćemo provjeriti pretpostavku o normalnosti uzorka.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ neuroticism)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-18-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ agreeableness)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-18-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ openness)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-18-3.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ extraversion)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-18-4.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ conscientiousness)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-18-5.pdf}}
+
+Distribucije u skupinama su približno normalne. Zatim ćemo provjeriti
+varijance.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{traits }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"neuroticism"}\NormalTok{, }\StringTok{"agreeableness"}\NormalTok{, }\StringTok{"openness"}\NormalTok{, }\StringTok{"extraversion"}\NormalTok{, }\StringTok{"conscientiousness"}\NormalTok{)}
+
+\NormalTok{var\_by\_sex }\OtherTok{\textless{}{-}}\NormalTok{ df\_sex }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(sex) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(traits), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{var}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))) }
+
+\NormalTok{var\_by\_sex}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 6
+##   sex    neuroticism agreeableness openness extraversion conscientiousness
+##   <fct>        <dbl>         <dbl>    <dbl>        <dbl>             <dbl>
+## 1 Female        1.11         0.977     1.13         1.23             0.897
+## 2 Male          1.06         1.07      1.08         1.14             1.03
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{var\_tests }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(traits, }\ControlFlowTok{function}\NormalTok{(tr) \{}
+\NormalTok{  f }\OtherTok{\textless{}{-}} \FunctionTok{as.formula}\NormalTok{(}\FunctionTok{paste}\NormalTok{(tr, }\StringTok{"\textasciitilde{} sex"}\NormalTok{))}
+\NormalTok{  vt }\OtherTok{\textless{}{-}} \FunctionTok{var.test}\NormalTok{(f, }\AttributeTok{data =}\NormalTok{ df\_sex)}
+  \FunctionTok{tibble}\NormalTok{(}
+    \AttributeTok{trait =}\NormalTok{ tr,}
+    \AttributeTok{F\_statistic =} \FunctionTok{round}\NormalTok{(vt}\SpecialCharTok{$}\NormalTok{statistic, }\DecValTok{3}\NormalTok{),}
+    \AttributeTok{p\_value =} \FunctionTok{round}\NormalTok{(vt}\SpecialCharTok{$}\NormalTok{p.value, }\DecValTok{4}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{\})}
+
+\FunctionTok{bind\_rows}\NormalTok{(var\_tests)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 3
+##   trait             F_statistic p_value
+##   <chr>                   <dbl>   <dbl>
+## 1 neuroticism             1.05    0.740
+## 2 agreeableness           0.916   0.543
+## 3 openness                1.05    0.752
+## 4 extraversion            1.08    0.606
+## 5 conscientiousness       0.875   0.354
+\end{verbatim}
+
+Rezultati testa za jednakost varijanci pokazuju da ni za jednu od
+analiziranih osobina ličnosti nije utvrđena statistički značajna razlika
+u varijancama između muškaraca i žena. Sve dobivene p-vrijednosti veće
+su od 0.05, stoga se u svim slučajevima ne odbacuje nul-hipoteza o
+jednakosti varijanci.
+
+Dodatno, promatramo dvije nezavisne skupine: Female i Male (ostale ćemo
+ukloniti).
+
+Stoga, sve pretpostavke su zadovoljene i provest ćemo t-test za
+nezavisne uzorke.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# t{-}test za svaku osobinu}
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(traits, }\ControlFlowTok{function}\NormalTok{(tr) \{}
+\NormalTok{  formula }\OtherTok{\textless{}{-}} \FunctionTok{as.formula}\NormalTok{(}\FunctionTok{paste}\NormalTok{(tr, }\StringTok{"\textasciitilde{} sex"}\NormalTok{)) }\CommentTok{\#npr. neuroticism \textasciitilde{} sex }
+\NormalTok{  test }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(formula, }\AttributeTok{data =}\NormalTok{ df\_sex)}
+  \FunctionTok{print}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate)}
+  \FunctionTok{tibble}\NormalTok{(}
+    \AttributeTok{trait =}\NormalTok{ tr,}\CommentTok{\#naziv osobine}
+    \AttributeTok{t\_statistic =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{statistic, }\DecValTok{3}\NormalTok{), }\CommentTok{\#t vrijednost}
+    \AttributeTok{p\_value =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{p.value, }\DecValTok{5}\NormalTok{),}
+    \AttributeTok{mean\_female =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate[}\StringTok{"mean in group Female"}\NormalTok{], }\DecValTok{3}\NormalTok{),}
+    \AttributeTok{mean\_male =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate[}\StringTok{"mean in group Male"}\NormalTok{], }\DecValTok{3}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## mean in group Female   mean in group Male 
+##           0.18251516          -0.08261147 
+## mean in group Female   mean in group Male 
+##            0.2738572           -0.1091680 
+## mean in group Female   mean in group Male 
+##           0.10694830          -0.02212707 
+## mean in group Female   mean in group Male 
+##          -0.14239955           0.04568951 
+## mean in group Female   mean in group Male 
+##           0.07941870           0.03722745
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results\_df }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(results)}
+\NormalTok{results\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   trait             t_statistic p_value mean_female mean_male
+##   <chr>                   <dbl>   <dbl>       <dbl>     <dbl>
+## 1 neuroticism             2.52  0.0120        0.183    -0.083
+## 2 agreeableness           3.76  0.00019       0.274    -0.109
+## 3 openness                1.22  0.223         0.107    -0.022
+## 4 extraversion           -1.71  0.0873       -0.142     0.046
+## 5 conscientiousness       0.428 0.669         0.079     0.037
+\end{verbatim}
+
+Rezultati dvostranih t-testova za nezavisne uzorke ukazuju na postojanje
+statistički značajnih spolnih razlika u pojedinim dimenzijama ličnosti.
+Žene postižu značajno više prosječne rezultate od muškaraca u
+neuroticizmu (t = 2.52, p = 0.012) i ugodnosti (t = 3.76, p \textless{}
+0.001).
+
+Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = -1.71, p =
+0.087) i savjesnost (t = 0.43, p = 0.669) nisu utvrđene statistički
+značajne razlike između spolova, iako su uočene blage razlike u
+prosječnim vrijednostima.
+
+Sad ćemo pogledati mračne osobine.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dark\_traits }\OtherTok{\textless{}{-}}\NormalTok{ df\_sex }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}
+    \AttributeTok{cols =} \FunctionTok{c}\NormalTok{(narcissism, machiavelism, psychoticism, sadism),}
+    \AttributeTok{names\_to =} \StringTok{"trait"}\NormalTok{,}
+    \AttributeTok{values\_to =} \StringTok{"score"}
+\NormalTok{  )}
+
+\FunctionTok{ggplot}\NormalTok{(dark\_traits, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ sex, }\AttributeTok{y =}\NormalTok{ score, }\AttributeTok{fill =}\NormalTok{ sex)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ trait, }\AttributeTok{scales =} \StringTok{"free"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Mračne osobine ličnosti po spolu (Male vs Female)"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Spol"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Rezultat"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-22-1.pdf}}
+
+Vizualna analiza mračnih osobina ličnosti ukazuje na izraženije spolne
+razlike u odnosu na Big Five osobine. Muškarci u prosjeku postižu više
+rezultate u makijavelizmu, narcizmu, psihoticizmu i sadizmu, što je
+vidljivo kroz više medijane i pomak distribucija prema višim
+vrijednostima. Razlike su posebno izražene kod sadizma i psihoticizma,
+dok su kod makijavelizma i narcizma prisutne umjerene razlike uz
+djelomično preklapanje distribucija.
+
+Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki
+normalnosti distribucije i jednakosti varijanci. Analiza se temelji na
+istim dvjema nezavisnim skupinama ispitanika (Female i Male).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ narcissism)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-23-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ machiavelism)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-23-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ psychoticism)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-23-3.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(df\_sex, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{sample =}\NormalTok{ sadism)) }\SpecialCharTok{+}
+  \FunctionTok{stat\_qq}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{stat\_qq\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-23-4.pdf}}
+
+Distribucije u skupinama su priližno normalne.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dark }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"narcissism"}\NormalTok{, }\StringTok{"machiavelism"}\NormalTok{, }\StringTok{"psychoticism"}\NormalTok{, }\StringTok{"sadism"}\NormalTok{)}
+
+\NormalTok{var\_by\_sex }\OtherTok{\textless{}{-}}\NormalTok{ df\_sex }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(sex) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(dark), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{var}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))) }
+
+\NormalTok{var\_by\_sex}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 5
+##   sex    narcissism machiavelism psychoticism sadism
+##   <fct>       <dbl>        <dbl>        <dbl>  <dbl>
+## 1 Female       1.12         1.24        0.981  0.870
+## 2 Male         1.17         1.05        0.967  1.08
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{var\_tests }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(dark, }\ControlFlowTok{function}\NormalTok{(tr) \{}
+\NormalTok{  f }\OtherTok{\textless{}{-}} \FunctionTok{as.formula}\NormalTok{(}\FunctionTok{paste}\NormalTok{(tr, }\StringTok{"\textasciitilde{} sex"}\NormalTok{))}
+\NormalTok{  vt }\OtherTok{\textless{}{-}} \FunctionTok{var.test}\NormalTok{(f, }\AttributeTok{data =}\NormalTok{ df\_sex)}
+  \FunctionTok{tibble}\NormalTok{(}
+    \AttributeTok{trait =}\NormalTok{ tr,}
+    \AttributeTok{F\_statistic =} \FunctionTok{round}\NormalTok{(vt}\SpecialCharTok{$}\NormalTok{statistic, }\DecValTok{3}\NormalTok{),}
+    \AttributeTok{p\_value =} \FunctionTok{round}\NormalTok{(vt}\SpecialCharTok{$}\NormalTok{p.value, }\DecValTok{4}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{\})}
+
+\FunctionTok{bind\_rows}\NormalTok{(var\_tests)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 3
+##   trait        F_statistic p_value
+##   <chr>              <dbl>   <dbl>
+## 1 narcissism         0.957   0.764
+## 2 machiavelism       1.18    0.243
+## 3 psychoticism       1.01    0.916
+## 4 sadism             0.802   0.125
+\end{verbatim}
+
+Varijance mračnih osobina ličnosti između muškaraca i žena su usporedive
+i približno jednake, stoga je pretpostavka homogenosti varijanci
+zadovoljena.
+
+Provest ćemo t-test.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dark }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"narcissism"}\NormalTok{, }\StringTok{"machiavelism"}\NormalTok{, }\StringTok{"psychoticism"}\NormalTok{, }\StringTok{"sadism"}\NormalTok{)}
+
+\NormalTok{dark\_results }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(dark, }\ControlFlowTok{function}\NormalTok{(tr) \{}
+\NormalTok{  formula }\OtherTok{\textless{}{-}} \FunctionTok{as.formula}\NormalTok{(}\FunctionTok{paste}\NormalTok{(tr, }\StringTok{"\textasciitilde{} sex"}\NormalTok{))}
+\NormalTok{  test }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(formula, }\AttributeTok{data =}\NormalTok{ df\_sex)}
+  \FunctionTok{tibble}\NormalTok{(}
+    \AttributeTok{trait =}\NormalTok{ tr,}
+    \AttributeTok{t\_statistic =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{statistic, }\DecValTok{3}\NormalTok{),}
+    \AttributeTok{p\_value =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{p.value, }\DecValTok{5}\NormalTok{),}
+    \AttributeTok{mean\_female =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate[}\StringTok{"mean in group Female"}\NormalTok{], }\DecValTok{3}\NormalTok{),}
+    \AttributeTok{mean\_male =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate[}\StringTok{"mean in group Male"}\NormalTok{], }\DecValTok{3}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{\})}
+
+\NormalTok{dark\_results\_df }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(dark\_results)}
+\NormalTok{dark\_results\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 5
+##   trait        t_statistic p_value mean_female mean_male
+##   <chr>              <dbl>   <dbl>       <dbl>     <dbl>
+## 1 narcissism         -2.58 0.0102       -0.221     0.057
+## 2 machiavelism       -3.75 0.0002       -0.27      0.136
+## 3 psychoticism       -3.22 0.00138      -0.251     0.069
+## 4 sadism             -6.80 0            -0.385     0.29
+\end{verbatim}
+
+U analizi mračnih osobina ličnosti pronađene su jasne spolne razlike.
+Budući da je u t-testu korišten format tr \textasciitilde{} sex,
+negativne t-vrijednosti ukazuju na više rezultate u skupini muškaraca u
+odnosu na žene.
+
+Rezultati pokazuju da muškarci postižu statistički značajno više
+rezultate na svim analiziranim mračnim crtama --- narcizmu,
+makijavelizmu, psihoticizmu i sadizmu (sve p \textless{} 0.05).
+Najizraženija razlika uočena je kod sadizma, gdje muškarci ostvaruju
+znatno više prosječne vrijednosti u odnosu na žene, što upućuje na
+izraženije spolne razlike u ovoj dimenziji ličnosti.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_sex}\SpecialCharTok{$}\NormalTok{sex }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(df\_sex}\SpecialCharTok{$}\NormalTok{sex, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Female"}\NormalTok{, }\StringTok{"Male"}\NormalTok{))}
+\FunctionTok{levels}\NormalTok{(df\_sex}\SpecialCharTok{$}\NormalTok{sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Female" "Male"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{traits\_dark }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"narcissism"}\NormalTok{, }\StringTok{"machiavelism"}\NormalTok{, }
+                 \StringTok{"psychoticism"}\NormalTok{, }\StringTok{"sadism"}\NormalTok{)}
+
+\NormalTok{results\_one\_tailed }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(traits\_dark, }\ControlFlowTok{function}\NormalTok{(tr) \{}
+\NormalTok{  f }\OtherTok{\textless{}{-}} \FunctionTok{as.formula}\NormalTok{(}\FunctionTok{paste}\NormalTok{(tr, }\StringTok{"\textasciitilde{} sex"}\NormalTok{))}
+\NormalTok{  test }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(f, }\AttributeTok{data =}\NormalTok{ df\_sex, }\AttributeTok{alternative =} \StringTok{"less"}\NormalTok{)}
+  
+  \FunctionTok{tibble}\NormalTok{(}
+    \AttributeTok{trait =}\NormalTok{ tr,}
+    \AttributeTok{t\_statistic =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{statistic, }\DecValTok{3}\NormalTok{),}
+    \AttributeTok{p\_value =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{p.value, }\DecValTok{5}\NormalTok{),}
+    \AttributeTok{mean\_female =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate[}\StringTok{"mean in group Female"}\NormalTok{], }\DecValTok{3}\NormalTok{),}
+    \AttributeTok{mean\_male =} \FunctionTok{round}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate[}\StringTok{"mean in group Male"}\NormalTok{], }\DecValTok{3}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{\})}
+
+\NormalTok{results\_one\_tailed\_df }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(results\_one\_tailed)}
+\NormalTok{results\_one\_tailed\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 5
+##   trait        t_statistic p_value mean_female mean_male
+##   <chr>              <dbl>   <dbl>       <dbl>     <dbl>
+## 1 narcissism         -2.58 0.0051       -0.221     0.057
+## 2 machiavelism       -3.75 0.0001       -0.27      0.136
+## 3 psychoticism       -3.22 0.00069      -0.251     0.069
+## 4 sadism             -6.80 0            -0.385     0.29
+\end{verbatim}
+
+Rezultati jednostranog t-testa, provedenog u smjeru teorijske
+pretpostavke da muškarci postižu više rezultate od žena, potvrđuju
+postojanje statistički značajnih spolnih razlika u svim analiziranim
+mračnim osobinama ličnosti. Muškarci ostvaruju značajno više vrijednosti
+u narcizmu, makijavelizmu, psihoticizmu i sadizmu, pri čemu je razlika
+najizraženija kod sadizma.
+
+\section{Jačaju li neke osobine s
+godinama?}\label{jaux10daju-li-neke-osobine-s-godinama}
+
+Nezavisna varijabla (prediktori):
+
+--\textgreater Dob (age)
+
+Zavisne varijable:
+
+--\textgreater{} Ekstraverzija (extraversion) --\textgreater{} Ugodnost
+(agreeableness) --\textgreater{} Savjesnost (conscientiousness)
+--\textgreater{} Neuroticizam (neuroticism) --\textgreater{} Otvorenost
+(openness)
+
+U nastavku se analiza provodi zasebno za svaku osobinu. Budući da su i
+dob i crte ličnosti kontinuirane varijable, a istraživačko pitanje se
+odnosi na linearnu promjenu s godinama, jednostavna linearna regresija
+predstavlja najprikladniji statistički pristup.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{describe}\NormalTok{(data\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(age, extraversion, agreeableness,}
+\NormalTok{         conscientiousness, neuroticism, openness))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   vars   n  mean   sd median trimmed  mad   min   max range
+## age                  1 398 31.92 4.54  32.00   31.83 5.93 25.00 40.00 15.00
+## extraversion         2 398 -0.04 1.09   0.09    0.02 1.05 -3.31  2.54  5.85
+## agreeableness        3 398  0.07 1.03   0.10    0.07 1.12 -3.12  2.77  5.89
+## conscientiousness    4 398  0.05 0.99   0.07    0.08 1.05 -2.94  2.40  5.34
+## neuroticism          5 398  0.05 1.05  -0.07    0.00 1.05 -2.27  2.95  5.22
+## openness             6 398  0.04 1.05  -0.09    0.04 0.95 -3.38  2.99  6.36
+##                    skew kurtosis   se
+## age                0.12    -1.18 0.23
+## extraversion      -0.50    -0.11 0.05
+## agreeableness     -0.06    -0.33 0.05
+## conscientiousness -0.26    -0.28 0.05
+## neuroticism        0.41    -0.05 0.05
+## openness          -0.03     0.33 0.05
+\end{verbatim}
+
+Deskriptivna statistika pruža osnovni uvid u raspodjelu dobi i razinu
+pojedinih crta ličnosti u uzorku ispitanika.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(age)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{bins =} \DecValTok{30}\NormalTok{, }\AttributeTok{fill =} \StringTok{"steelblue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-30-1.pdf}}
+
+Histogram dobi prikazuje raspodjelu ispitanika po dobnim skupinama te
+omogućuje procjenu raspona i strukture dobi u uzorku.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(age, extraversion)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-31-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(age, agreeableness)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-31-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(age, conscientiousness)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-31-3.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(age, neuroticism)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-31-4.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data\_clean, }\FunctionTok{aes}\NormalTok{(age, openness)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-31-5.pdf}}
+
+Raspršeni dijagrami s pripadajućim regresijskim linijama korišteni su za
+vizualnu procjenu linearnog odnosa između dobi i pojedinih crta
+ličnosti. Grafički prikazi ne upućuju na izražene linearne trendove,
+iako se kod nekih osobina može uočiti blagi rast ili pad vrijednosti s
+porastom dobi.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age, data\_clean}\SpecialCharTok{$}\NormalTok{extraversion)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$age and data_clean$extraversion
+## t = -1.7053, df = 396, p-value = 0.08893
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.18215014  0.01302653
+## sample estimates:
+##         cor 
+## -0.08538084
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age, data\_clean}\SpecialCharTok{$}\NormalTok{agreeableness)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$age and data_clean$agreeableness
+## t = 1.2789, df = 396, p-value = 0.2017
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.0343782  0.1614170
+## sample estimates:
+##        cor 
+## 0.06413658
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age, data\_clean}\SpecialCharTok{$}\NormalTok{conscientiousness)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$age and data_clean$conscientiousness
+## t = -0.13972, df = 396, p-value = 0.889
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.10524642  0.09134006
+## sample estimates:
+##          cor 
+## -0.007021018
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age, data\_clean}\SpecialCharTok{$}\NormalTok{neuroticism)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$age and data_clean$neuroticism
+## t = 0.2454, df = 396, p-value = 0.8063
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.08607148  0.11049500
+## sample estimates:
+##        cor 
+## 0.01233089
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age, data\_clean}\SpecialCharTok{$}\NormalTok{openness)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  data_clean$age and data_clean$openness
+## t = -0.69464, df = 396, p-value = 0.4877
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.13272862  0.06363051
+## sample estimates:
+##         cor 
+## -0.03488574
+\end{verbatim}
+
+Pearsonove korelacije korištene su kao preliminarna analiza odnosa dobi
+i crta ličnosti. Rezultati korelacija ne upućuju na statistički značajne
+povezanosti između dobi i promatranih osobina.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vars }\OtherTok{\textless{}{-}}\NormalTok{ data\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(age, extraversion, agreeableness,}
+\NormalTok{         conscientiousness, neuroticism, openness) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{na.omit}\NormalTok{()}
+
+\FunctionTok{corrplot}\NormalTok{(}\FunctionTok{cor}\NormalTok{(vars))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-33-1.pdf}}
+
+Korelacijska matrica dodatno potvrđuje izostanak snažnih povezanosti
+između dobi i pojedinih crta ličnosti.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_consc }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(conscientiousness }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age, }\AttributeTok{data =}\NormalTok{ data\_clean)}
+\FunctionTok{summary}\NormalTok{(model\_consc)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = conscientiousness ~ age, data = data_clean)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.99434 -0.68117  0.01346  0.76485  2.34600 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)
+## (Intercept)  0.099902   0.353798   0.282    0.778
+## age         -0.001533   0.010973  -0.140    0.889
+## 
+## Residual standard error: 0.9919 on 396 degrees of freedom
+## Multiple R-squared:  4.929e-05,  Adjusted R-squared:  -0.002476 
+## F-statistic: 0.01952 on 1 and 396 DF,  p-value: 0.889
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_extra }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(extraversion }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age, }\AttributeTok{data =}\NormalTok{ data\_clean)}
+\FunctionTok{summary}\NormalTok{(model\_extra)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = extraversion ~ age, data = data_clean)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.1645 -0.6666  0.1027  0.7857  2.5834 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)  0.61250    0.38726   1.582   0.1145  
+## age         -0.02048    0.01201  -1.705   0.0889 .
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.086 on 396 degrees of freedom
+## Multiple R-squared:  0.00729,    Adjusted R-squared:  0.004783 
+## F-statistic: 2.908 on 1 and 396 DF,  p-value: 0.08893
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_agree }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(agreeableness }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age, }\AttributeTok{data =}\NormalTok{ data\_clean)}
+\FunctionTok{summary}\NormalTok{(model\_agree)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = agreeableness ~ age, data = data_clean)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.1780 -0.7163  0.0236  0.7345  2.6385 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)
+## (Intercept) -0.39279    0.36742  -1.069    0.286
+## age          0.01457    0.01140   1.279    0.202
+## 
+## Residual standard error: 1.03 on 396 degrees of freedom
+## Multiple R-squared:  0.004114,   Adjusted R-squared:  0.001599 
+## F-statistic: 1.636 on 1 and 396 DF,  p-value: 0.2017
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_neuro }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(neuroticism }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age, }\AttributeTok{data =}\NormalTok{ data\_clean)}
+\FunctionTok{summary}\NormalTok{(model\_neuro)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = neuroticism ~ age, data = data_clean)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.3342 -0.7428 -0.1191  0.6403  2.9115 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)
+## (Intercept) -0.045980   0.376568  -0.122    0.903
+## age          0.002866   0.011679   0.245    0.806
+## 
+## Residual standard error: 1.056 on 396 degrees of freedom
+## Multiple R-squared:  0.0001521,  Adjusted R-squared:  -0.002373 
+## F-statistic: 0.06022 on 1 and 396 DF,  p-value: 0.8063
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_open }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(openness }\SpecialCharTok{\textasciitilde{}}\NormalTok{ age, }\AttributeTok{data =}\NormalTok{ data\_clean)}
+\FunctionTok{summary}\NormalTok{(model\_open)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = openness ~ age, data = data_clean)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.4319 -0.6082 -0.1301  0.6922  2.9697 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)
+## (Intercept)  0.297455   0.373452   0.796    0.426
+## age         -0.008046   0.011583  -0.695    0.488
+## 
+## Residual standard error: 1.047 on 396 degrees of freedom
+## Multiple R-squared:  0.001217,   Adjusted R-squared:  -0.001305 
+## F-statistic: 0.4825 on 1 and 396 DF,  p-value: 0.4877
+\end{verbatim}
+
+Za svaku crtu ličnosti provedena je analiza jednostavne linearne
+regresije u kojoj je dob korištena kao nezavisna varijabla. U niti
+jednom modelu dob se nije pokazala statistički značajnim prediktorom (p
+\textgreater{} 0.05). Vrijednosti koeficijenta determinacije bile su
+vrlo niske, što upućuje na slab objašnjavajući doprinos dobi.
+
+Na temelju provedene analize može se zaključiti da se u promatranom
+uzorku ne uočava statistički značajno jačanje niti slabljenje crta
+ličnosti s godinama. Dob se u ovom istraživanju nije pokazala značajnim
+prediktorom promjena u okviru Big Five modela ličnosti.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(broom)}
+
+\NormalTok{models }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+  \AttributeTok{Extraversion =}\NormalTok{ model\_extra,}
+  \AttributeTok{Agreeableness =}\NormalTok{ model\_agree,}
+  \AttributeTok{Conscientiousness =}\NormalTok{ model\_consc,}
+  \AttributeTok{Neuroticism =}\NormalTok{ model\_neuro,}
+  \AttributeTok{Openness =}\NormalTok{ model\_open}
+\NormalTok{)}
+
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(models, tidy) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{bind\_rows}\NormalTok{(}\AttributeTok{.id =} \StringTok{"Trait"}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{filter}\NormalTok{(term }\SpecialCharTok{==} \StringTok{"age"}\NormalTok{)}
+
+\NormalTok{results}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 6
+##   Trait             term  estimate std.error statistic p.value
+##   <chr>             <chr>    <dbl>     <dbl>     <dbl>   <dbl>
+## 1 Extraversion      age   -0.0205     0.0120    -1.71   0.0889
+## 2 Agreeableness     age    0.0146     0.0114     1.28   0.202 
+## 3 Conscientiousness age   -0.00153    0.0110    -0.140  0.889 
+## 4 Neuroticism       age    0.00287    0.0117     0.245  0.806 
+## 5 Openness          age   -0.00805    0.0116    -0.695  0.488
+\end{verbatim}
+
+Tablica prikazuje procijenjene regresijske koeficijente za učinak dobi
+na pojedine crte ličnosti.
+
+Kategorizacija kontinuiranih varijabli provedena je radi primjene
+hi-kvadrat testa, kojim se ispituje povezanost između dobnih skupina i
+distribucije razina crta ličnosti.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_clean }\OtherTok{\textless{}{-}}\NormalTok{ data\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{age\_group =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{    age }\SpecialCharTok{\textless{}} \DecValTok{30} \SpecialCharTok{\textasciitilde{}} \StringTok{"Mladi"}\NormalTok{,}
+\NormalTok{    age }\SpecialCharTok{\textgreater{}=} \DecValTok{30} \SpecialCharTok{\&}\NormalTok{ age }\SpecialCharTok{\textless{}} \DecValTok{35} \SpecialCharTok{\textasciitilde{}} \StringTok{"Srednji"}\NormalTok{,}
+\NormalTok{    age }\SpecialCharTok{\textgreater{}=} \DecValTok{35} \SpecialCharTok{\textasciitilde{}} \StringTok{"Stariji"}
+\NormalTok{  ))}
+
+\NormalTok{data\_clean}\SpecialCharTok{$}\NormalTok{age\_group }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age\_group)}
+\end{Highlighting}
+\end{Shaded}
+
+Crte ličnosti podijeljene su u tri kategorije (niska, srednja i visoka
+razina) na temelju tercila distribucije rezultata.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{traits }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"extraversion"}\NormalTok{,}\StringTok{"agreeableness"}\NormalTok{, }\StringTok{"conscientiousness"}\NormalTok{, }\StringTok{"neuroticism"}\NormalTok{, }\StringTok{"openness"}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ (t }\ControlFlowTok{in}\NormalTok{ traits) \{}
+\NormalTok{  data\_clean[[}\FunctionTok{paste0}\NormalTok{(t, }\StringTok{"\_cat"}\NormalTok{)]] }\OtherTok{\textless{}{-}} \FunctionTok{cut}\NormalTok{(}
+\NormalTok{    data\_clean[[t]],}
+    \AttributeTok{breaks =} \FunctionTok{quantile}\NormalTok{(data\_clean[[t]], }\AttributeTok{probs =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\SpecialCharTok{/}\DecValTok{3}\NormalTok{, }\DecValTok{2}\SpecialCharTok{/}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Niska"}\NormalTok{, }\StringTok{"Srednja"}\NormalTok{, }\StringTok{"Visoka"}\NormalTok{),}
+    \AttributeTok{include.lowest =} \ConstantTok{TRUE}
+\NormalTok{  )}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age\_group, data\_clean}\SpecialCharTok{$}\NormalTok{extraversion\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  table(data_clean$age_group, data_clean$extraversion_cat)
+## X-squared = 2.7214, df = 4, p-value = 0.6055
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age\_group, data\_clean}\SpecialCharTok{$}\NormalTok{agreeableness\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  table(data_clean$age_group, data_clean$agreeableness_cat)
+## X-squared = 8.7962, df = 4, p-value = 0.0664
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age\_group, data\_clean}\SpecialCharTok{$}\NormalTok{conscientiousness\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  table(data_clean$age_group, data_clean$conscientiousness_cat)
+## X-squared = 1.176, df = 4, p-value = 0.882
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age\_group, data\_clean}\SpecialCharTok{$}\NormalTok{neuroticism\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  table(data_clean$age_group, data_clean$neuroticism_cat)
+## X-squared = 5.0875, df = 4, p-value = 0.2784
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age\_group, data\_clean}\SpecialCharTok{$}\NormalTok{openness\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test
+## 
+## data:  table(data_clean$age_group, data_clean$openness_cat)
+## X-squared = 0.79106, df = 4, p-value = 0.9396
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{age\_group, data\_clean}\SpecialCharTok{$}\NormalTok{openness\_cat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          
+##           Niska Srednja Visoka
+##   Mladi      44      44     48
+##   Srednji    45      47     41
+##   Stariji    44      41     44
+\end{verbatim}
+
+Hi-kvadrat testom ispitana je povezanost između dobnih skupina i
+kategoriziranih razina crta ličnosti. Rezultati nisu pokazali
+statistički značajnu povezanost između dobi i ekstraverzije,
+savjesnosti, neuroticizma niti otvorenosti (p \textgreater{} 0.05).
+
+Rezultati hi-kvadrat testova nisu pokazali statistički značajnu
+povezanost između dobnih skupina i osobina.
+
+Kod osobine ugodnosti uočen je povišen hi-kvadrat rezultat (8.80), no
+pripadajuća p-vrijednost (0.066) ne doseže prag statističke značajnosti.
+Stoga se ne može zaključiti da se razine ugodnosti značajno razlikuju
+između dobnih skupina.
+
+Iako je kod ugodnosti uočena blaga tendencija promjene raspodjele razina
+između dobnih skupina, ona nije statistički potvrđena, što može biti
+posljedica kategorizacije kontinuiranih varijabli i smanjene statističke
+snage hi-kvadrat testa.
+
+Na temelju hi-kvadrat analize kategoriziranih varijabli ne može se
+zaključiti da se crte ličnosti značajno mijenjaju ili jačaju s godinama
+u promatranom uzorku.
+
+Kako bi se istovremeno procijenio doprinos više prediktora u objašnjenju
+varijabilnosti crta ličnosti, primijenjena je višestruka linearna
+regresija u kojoj su dob i ostale relevantne varijable uključene kao
+nezavisni prediktori, dok su crte ličnosti tretirane kao kontinuirane
+zavisne varijable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_clean}\SpecialCharTok{$}\NormalTok{occupation }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(data\_clean}\SpecialCharTok{$}\StringTok{"employment status"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_clean}\SpecialCharTok{$}\NormalTok{occupation }\OtherTok{\textless{}{-}} \FunctionTok{fct\_lump\_min}\NormalTok{(}
+\NormalTok{  data\_clean}\SpecialCharTok{$}\NormalTok{occupation,}
+  \AttributeTok{min =} \DecValTok{10}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{extraversion\_cat),}\AttributeTok{simulate.p.value =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with simulated p-value (based on 2000
+##  replicates)
+## 
+## data:  table(data_clean$occupation, data_clean$extraversion_cat)
+## X-squared = 33.966, df = NA, p-value = 0.0004998
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{agreeableness\_cat),}\AttributeTok{simulate.p.value =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with simulated p-value (based on 2000
+##  replicates)
+## 
+## data:  table(data_clean$occupation, data_clean$agreeableness_cat)
+## X-squared = 6.2437, df = NA, p-value = 0.6407
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{conscientiousness\_cat),}\AttributeTok{simulate.p.value =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with simulated p-value (based on 2000
+##  replicates)
+## 
+## data:  table(data_clean$occupation, data_clean$conscientiousness_cat)
+## X-squared = 20.033, df = NA, p-value = 0.01199
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{neuroticism\_cat),}\AttributeTok{simulate.p.value =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with simulated p-value (based on 2000
+##  replicates)
+## 
+## data:  table(data_clean$occupation, data_clean$neuroticism_cat)
+## X-squared = 35.602, df = NA, p-value = 0.0004998
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{openness\_cat),}\AttributeTok{simulate.p.value =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with simulated p-value (based on 2000
+##  replicates)
+## 
+## data:  table(data_clean$occupation, data_clean$openness_cat)
+## X-squared = 10.37, df = NA, p-value = 0.2594
+\end{verbatim}
+
+Zbog niskih očekivanih frekvencija u pojedinim ćelijama korištena je
+Monte Carlo simulacija p-vrijednosti.
+
+Ovi nalazi upućuju na to da se razine pojedinih crta ličnosti razlikuju
+između skupina različitog zanimanja. Zanimanje se pokazalo značajno
+povezanim s ekstraverzijom, savjesnošću i neuroticizmom, dok za ugodnost
+i otvorenost takva povezanost nije utvrđena. Time se sugerira da
+socijalni i radni kontekst može biti povezan s izraženošću određenih
+crta ličnosti.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(rcompanion)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'rcompanion'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:psych':
+## 
+##     phi
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Ekstraverzija}
+\FunctionTok{cramerV}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{extraversion\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Cramer V 
+##   0.2066
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prop\_extr }\OtherTok{\textless{}{-}} \FunctionTok{prop.table}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{extraversion\_cat),}
+  \DecValTok{1}
+\NormalTok{)}
+
+\FunctionTok{round}\NormalTok{(prop\_extr }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                           
+##                                                            Niska Srednja Visoka
+##   Full-Time                                                 25.5    36.7   37.8
+##   Not in paid work (e.g. homemaker', 'retired or disabled)  73.3    20.0    6.7
+##   Part-Time                                                 42.9    23.2   33.9
+##   Unemployed (and job seeking)                              57.1    25.0   17.9
+##   Other                                                     52.4    33.3   14.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Savjesnost}
+\FunctionTok{cramerV}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{conscientiousness\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Cramer V 
+##   0.1586
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prop\_consc }\OtherTok{\textless{}{-}} \FunctionTok{prop.table}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{conscientiousness\_cat),}
+  \DecValTok{1}
+\NormalTok{)}
+
+\FunctionTok{round}\NormalTok{(prop\_consc }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                           
+##                                                            Niska Srednja Visoka
+##   Full-Time                                                 30.9    32.4   36.7
+##   Not in paid work (e.g. homemaker', 'retired or disabled)  33.3    53.3   13.3
+##   Part-Time                                                 28.6    33.9   37.5
+##   Unemployed (and job seeking)                              64.3    21.4   14.3
+##   Other                                                     38.1    42.9   19.0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Neuroticizam}
+\FunctionTok{cramerV}\NormalTok{(}\FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{neuroticism\_cat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Cramer V 
+##   0.2115
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prop\_neuro }\OtherTok{\textless{}{-}} \FunctionTok{prop.table}\NormalTok{(}
+  \FunctionTok{table}\NormalTok{(data\_clean}\SpecialCharTok{$}\NormalTok{occupation, data\_clean}\SpecialCharTok{$}\NormalTok{neuroticism\_cat),}
+  \DecValTok{1}
+\NormalTok{)}
+
+\FunctionTok{round}\NormalTok{(prop\_neuro }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                           
+##                                                            Niska Srednja Visoka
+##   Full-Time                                                 38.1    33.8   28.1
+##   Not in paid work (e.g. homemaker', 'retired or disabled)   6.7    13.3   80.0
+##   Part-Time                                                 32.1    41.1   26.8
+##   Unemployed (and job seeking)                              14.3    21.4   64.3
+##   Other                                                     19.0    33.3   47.6
+\end{verbatim}
+
+Dok analize prema dobnim skupinama nisu pokazale statistički značajne
+razlike u crtama ličnosti, rezultati prema zanimanju sugeriraju da se
+ekstraverzija, savjesnost i neuroticizam mogu razlikovati ovisno o
+socijalnom/profesionalnom kontekstu, a ne nužno o kronološkoj dobi.
+
+Ukupno gledano, zanimanje je statistički značajno povezano s
+ekstraverzijom, savjesnošću i neuroticizmom, pri čemu su efekti slabi do
+umjereni; pritom se u skupinama nezaposlenih i osoba izvan plaćenog rada
+češće uočavaju nepovoljniji profili (niža savjesnost i viši
+neuroticizam), dok su zaposleni s punim radnim vremenom češće u
+niskom/srednjem neuroticizmu te srednjoj/visokoj savjesnosti i
+ekstraverziji.
+
+Budući da su skupine zanimanja različitih veličina, zaključci se temelje
+na relativnim razlikama u raspodjelama (udjelima) kategorija unutar
+skupina, a ne na apsolutnim frekvencijama.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{make\_percent\_table }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, row\_var, col\_var) \{}
+\NormalTok{  tab }\OtherTok{\textless{}{-}} \FunctionTok{prop.table}\NormalTok{(}\FunctionTok{table}\NormalTok{(x[[row\_var]], x[[col\_var]]), }\DecValTok{1}\NormalTok{) }\SpecialCharTok{*} \DecValTok{100}
+\NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame.matrix}\NormalTok{(}\FunctionTok{round}\NormalTok{(tab, }\DecValTok{1}\NormalTok{))}
+\NormalTok{  df[[row\_var]] }\OtherTok{\textless{}{-}} \FunctionTok{rownames}\NormalTok{(df)}
+  \FunctionTok{rownames}\NormalTok{(df) }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\NormalTok{  df }\OtherTok{\textless{}{-}}\NormalTok{ df[, }\FunctionTok{c}\NormalTok{(row\_var, }\FunctionTok{colnames}\NormalTok{(df)[}\FunctionTok{colnames}\NormalTok{(df) }\SpecialCharTok{!=}\NormalTok{ row\_var])]}
+\NormalTok{  df}
+\NormalTok{\}}
+
+\NormalTok{df\_extr  }\OtherTok{\textless{}{-}} \FunctionTok{make\_percent\_table}\NormalTok{(data\_clean, }\StringTok{"occupation"}\NormalTok{, }\StringTok{"extraversion\_cat"}\NormalTok{)}
+\NormalTok{df\_consc }\OtherTok{\textless{}{-}} \FunctionTok{make\_percent\_table}\NormalTok{(data\_clean, }\StringTok{"occupation"}\NormalTok{, }\StringTok{"conscientiousness\_cat"}\NormalTok{)}
+\NormalTok{df\_neuro }\OtherTok{\textless{}{-}} \FunctionTok{make\_percent\_table}\NormalTok{(data\_clean, }\StringTok{"occupation"}\NormalTok{, }\StringTok{"neuroticism\_cat"}\NormalTok{)}
+
+\NormalTok{df\_extr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                 occupation Niska Srednja Visoka
+## 1                                                Full-Time  25.5    36.7   37.8
+## 2 Not in paid work (e.g. homemaker', 'retired or disabled)  73.3    20.0    6.7
+## 3                                                Part-Time  42.9    23.2   33.9
+## 4                             Unemployed (and job seeking)  57.1    25.0   17.9
+## 5                                                    Other  52.4    33.3   14.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_consc}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                 occupation Niska Srednja Visoka
+## 1                                                Full-Time  30.9    32.4   36.7
+## 2 Not in paid work (e.g. homemaker', 'retired or disabled)  33.3    53.3   13.3
+## 3                                                Part-Time  28.6    33.9   37.5
+## 4                             Unemployed (and job seeking)  64.3    21.4   14.3
+## 5                                                    Other  38.1    42.9   19.0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_neuro}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                 occupation Niska Srednja Visoka
+## 1                                                Full-Time  38.1    33.8   28.1
+## 2 Not in paid work (e.g. homemaker', 'retired or disabled)   6.7    13.3   80.0
+## 3                                                Part-Time  32.1    41.1   26.8
+## 4                             Unemployed (and job seeking)  14.3    21.4   64.3
+## 5                                                    Other  19.0    33.3   47.6
+\end{verbatim}
+
+\section{Jesu li crte ličnosti i sklonost stresu, depresiji i
+anksioznosti povezane sa
+zanimanjem?}\label{jesu-li-crte-liux10dnosti-i-sklonost-stresu-depresiji-i-anksioznosti-povezane-sa-zanimanjem}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_job }\OtherTok{\textless{}{-}}\NormalTok{ data\_clean }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{occupation\_group =} \FunctionTok{if\_else}\NormalTok{(}
+      \StringTok{\textasciigrave{}}\AttributeTok{student status}\StringTok{\textasciigrave{}} \SpecialCharTok{==} \StringTok{"Yes"}\NormalTok{,}
+      \StringTok{"Student"}\NormalTok{,}
+      \StringTok{\textasciigrave{}}\AttributeTok{employment status}\StringTok{\textasciigrave{}}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{occupation\_group }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Other"}\NormalTok{, }\StringTok{"Due to start a new job within the next month"}\NormalTok{, }\StringTok{"Not in paid work (e.g. homemaker\textquotesingle{}, \textquotesingle{}retired or disabled)"}\NormalTok{))}
+
+\FunctionTok{table}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                    Full-Time                    Part-Time 
+##                          201                           36 
+##                      Student Unemployed (and job seeking) 
+##                          109                           24
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_job }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(occupation\_group) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{n =} \FunctionTok{n}\NormalTok{(),}
+    \AttributeTok{mean\_stress =} \FunctionTok{mean}\NormalTok{(stress, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{mean\_depression =} \FunctionTok{mean}\NormalTok{(depression, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{mean\_anxiety =} \FunctionTok{mean}\NormalTok{(anxiety, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 5
+##   occupation_group                 n mean_stress mean_depression mean_anxiety
+##   <chr>                        <int>       <dbl>           <dbl>        <dbl>
+## 1 Full-Time                      201     -0.0589         -0.0448      -0.0169
+## 2 Part-Time                       36      0.0756          0.127        0.107 
+## 3 Student                        109      0.0739          0.0126      -0.0677
+## 4 Unemployed (and job seeking)    24      0.109           0.561        0.346
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mental\_long }\OtherTok{\textless{}{-}}\NormalTok{ df\_job }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}
+    \AttributeTok{cols =} \FunctionTok{c}\NormalTok{(stress, depression, anxiety),}
+    \AttributeTok{names\_to =} \StringTok{"outcome"}\NormalTok{,}
+    \AttributeTok{values\_to =} \StringTok{"score"}
+\NormalTok{  )}
+
+\FunctionTok{ggplot}\NormalTok{(mental\_long, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ occupation\_group, }\AttributeTok{y =}\NormalTok{ score, }\AttributeTok{fill =}\NormalTok{ occupation\_group)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ outcome, }\AttributeTok{scales =} \StringTok{"free\_y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Stres, depresija i anksioznost po zanimanju"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Zanimanje"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Rezultat"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-46-1.pdf}}
+
+Vizualni pregled distribucija pokazuje da se razine stresa, depresije i
+anksioznosti uvelike preklapaju između skupina definiranih prema radnom
+statusu (zanimanju), što upućuje na izražene individualne razlike unutar
+skupina. Iako nezaposleni sudionici pokazuju viši medijan depresivnosti
+u odnosu na ostale skupine, razlike nisu statistički potvrđene. Također
+je vidljivo da se veći broj ekstremnih vrijednosti javlja u skupini
+zaposlenih s punim radnim vremenom, što dodatno ukazuje na veliku
+heterogenost unutar te skupine. Razine stresa pokazuju vrlo slične
+obrasce u svim skupinama, dok se anksioznost ne pojavljuje sustavno
+povezanom sa zanimanjem. Ovi nalazi sugeriraju da radni status sam po
+sebi ima ograničen doprinos objašnjenju mentalnog zdravlja te da
+individualne crte ličnosti vjerojatno imaju snažniju ulogu.
+
+\subsection{Provođenje ANOVA analize - Razlikuju li se razine
+anksioznosti, depresije i stresa po zanimanju (radnim
+statusima)?}\label{provoux111enje-anova-analize---razlikuju-li-se-razine-anksioznosti-depresije-i-stresa-po-zanimanju-radnim-statusima}
+
+Za početak potrebno je provesti testove pretpostavki normalnosti
+podataka i homogenosti varijanci za anksioznost, depresiju i stres.
+
+\subsubsection{Test pretpostavke normalnosti za
+anksioznost}\label{test-pretpostavke-normalnosti-za-anksioznost}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{require}\NormalTok{(nortest)}
+
+\CommentTok{\# Lilliefors test normalnosti (ukupno)}
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{anxiety)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$anxiety
+## D = 0.039549, p-value = 0.1715
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Lilliefors test po skupinama zanimanja}
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Full{-}Time"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$anxiety[df_job$occupation_group == "Full-Time"]
+## D = 0.061511, p-value = 0.06185
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Part{-}Time"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$anxiety[df_job$occupation_group == "Part-Time"]
+## D = 0.15146, p-value = 0.03593
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Unemployed (and job seeking)"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$anxiety[df_job$occupation_group == "Unemployed (and job seeking)"]
+## D = 0.11293, p-value = 0.5953
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Student"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$anxiety[df_job$occupation_group == "Student"]
+## D = 0.042081, p-value = 0.9066
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Full{-}Time"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Anxiety – Full{-}Time"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Anxiety"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Part{-}Time"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Anxiety – Part{-}Time"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Anxiety"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Unemployed (and job seeking)"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Anxiety – Unemployed"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Anxiety"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Student"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Anxiety – Student"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Anxiety"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-47-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Iz dobivenih ispisa zaključujemo da na temelju cijelog uzorka nema
+potrebe za odbacivanjem nulte hipoteze o normalnosti uzorka (p
+\textgreater{} 0.05). Gledajući svaku skupinu radnog statusa zasebno,
+možemo uočiti kako jedino statistički značajno odstupanje od normalnosti
+postoji kod ispitanika koji rade na nepuno radno vrijeme, ali to možemo
+izuzeti iz općeg zaključka jer se ta skupina sastoji od malog uzorka na
+koje su testovi o normalnosti osjetljivi.\\
+Gledajući histograme, manja odstupanja od simetrije vidljiva su u
+skupinama s manjim brojem ispitanika (osobito kod zaposlenih s nepunim
+radnim vremenom i nezaposlenih), što je vjerojatno posljedica veličine
+uzorka, a ne stvarnih razlika u raspodjeli anksioznosti.
+
+\subsubsection{Test pretpostavke normalnosti za
+depresiju}\label{test-pretpostavke-normalnosti-za-depresiju}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{require}\NormalTok{(nortest)}
+
+\CommentTok{\# Lilliefors test normalnosti (ukupno)}
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{depression)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$depression
+## D = 0.089732, p-value = 1.443e-07
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Lilliefors test po skupinama zanimanja}
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Full{-}Time"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$depression[df_job$occupation_group == "Full-Time"]
+## D = 0.10029, p-value = 4.153e-05
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Part{-}Time"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$depression[df_job$occupation_group == "Part-Time"]
+## D = 0.16237, p-value = 0.01736
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Unemployed (and job seeking)"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$depression[df_job$occupation_group == "Unemployed (and job seeking)"]
+## D = 0.11286, p-value = 0.5964
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Student"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$depression[df_job$occupation_group == "Student"]
+## D = 0.085623, p-value = 0.0476
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Full{-}Time"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Depression – Full{-}Time"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Depression"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Part{-}Time"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Depression – Part{-}Time"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Depression"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Unemployed (and job seeking)"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Depression – Unemployed"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Depression"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Student"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Depression – Student"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Depression"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-48-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Lillieforsov test pokazuje da distribucija depresije odstupa od
+normalnosti kod zaposlenih ispitanika (Full-Time i Part-Time) i
+studenata pomalo. Kod nezaposlenih nema statistički značajnog
+odstupanja.\\
+Histogrami potvrđuju ove nalaze, iako je distribucija kod studenata
+pravilnija, a kod nezaposlenih ispitanika dosta manje od očekivanog.
+Unatoč navedenim odstupanjima, primjena parametarskih metoda čini se
+opravdanom s obzirom na veličinu uzoraka i karakteristike robustnosti
+linearne regresije i ANOVA-e na kršenja pretpostavki normalnosti
+uzoraka.
+
+\subsubsection{Test pretpostavki normalnosti za
+stres}\label{test-pretpostavki-normalnosti-za-stres}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{require}\NormalTok{(nortest)}
+
+\CommentTok{\# Lilliefors test normalnosti (ukupno)}
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{stress)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$stress
+## D = 0.035177, p-value = 0.3226
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Lilliefors test po skupinama zanimanja}
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Full{-}Time"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$stress[df_job$occupation_group == "Full-Time"]
+## D = 0.054948, p-value = 0.1461
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Part{-}Time"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$stress[df_job$occupation_group == "Part-Time"]
+## D = 0.091433, p-value = 0.6263
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Unemployed (and job seeking)"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$stress[df_job$occupation_group == "Unemployed (and job seeking)"]
+## D = 0.070023, p-value = 0.9916
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lillie.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Student"}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  df_job$stress[df_job$occupation_group == "Student"]
+## D = 0.062087, p-value = 0.3808
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Full{-}Time"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Stress – Full{-}Time"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Stress"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Part{-}Time"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Stress – Part{-}Time"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Stress"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Unemployed (and job seeking)"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Stress – Unemployed"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Stress"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(}
+\NormalTok{  df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group }\SpecialCharTok{==} \StringTok{"Student"}\NormalTok{],}
+  \AttributeTok{main =} \StringTok{"Stress – Student"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Stress"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightgray"}\NormalTok{,}
+  \AttributeTok{border =} \StringTok{"white"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{sap_projekt_files/figure-latex/unnamed-chunk-49-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Također, test normalnosti proveden je i za varijablu stresa na ukupnom
+uzorku te unutar svake skupine prema radnom statusu. Rezultati pokazuju
+da nijedan test nije statistički značajan, kako na ukupnoj razini, tako
+i na pojedinačnoj.\\
+Vizualni pregled histograma dodatno potvrđuje ove nalaze. Manja
+odstupanja i asimetrije prisutne su u skupini nezaposlenih i zaposlenih
+na nepuno radno vrijeme, što je očekivano i prihvatljivo s obzirom na
+manju količinu uzorka.
+
+\subsubsection{Test pretpostavki homogenosti varijanci za
+anksioznost}\label{test-pretpostavki-homogenosti-varijanci-za-anksioznost}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bartlett.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{anxiety }\SpecialCharTok{\textasciitilde{}}\NormalTok{ df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  df_job$anxiety by df_job$occupation_group
+## Bartlett's K-squared = 1.1147, df = 3, p-value = 0.7735
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Full{-}Time\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9467874
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Part{-}Time\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.159903
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Unemployed (and job seeking)\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.070241
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{anxiety[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Student\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.091825
+\end{verbatim}
+
+Bartlettov test pokazao je da su varijance anksioznosti između skupina
+zanimanja međusobno jednake (p = 0.774). I pojedinačne varijance po
+skupinama su vrlo slične, bez izraženih odstupanja. Time je zadovoljena
+pretpostavka homogenosti varijanci, što opravdava primjenu ANOVA testa
+za usporedbu anksioznosti između skupina.
+
+\subsubsection{Test pretpostavki homogenosti varijanci za
+depresiju}\label{test-pretpostavki-homogenosti-varijanci-za-depresiju}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bartlett.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{depression }\SpecialCharTok{\textasciitilde{}}\NormalTok{ df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  df_job$depression by df_job$occupation_group
+## Bartlett's K-squared = 0.82771, df = 3, p-value = 0.8428
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Full{-}Time\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.223933
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Part{-}Time\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.220683
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Unemployed (and job seeking)\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9148913
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{depression[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Student\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.222059
+\end{verbatim}
+
+Bartlettov test homogenosti varijanci za depresiju pokazao se
+neznačajnim. Dodatno, izračunate varijance po skupinama su vrlo slične.
+Ovi podaci upućuju na to da je pretpostavka homogenosti varijanci
+zadovoljena.
+
+\subsubsection{Test pretpostavki homogenosti varijanci za
+stres}\label{test-pretpostavki-homogenosti-varijanci-za-stres}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bartlett.test}\NormalTok{(df\_job}\SpecialCharTok{$}\NormalTok{stress }\SpecialCharTok{\textasciitilde{}}\NormalTok{ df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  df_job$stress by df_job$occupation_group
+## Bartlett's K-squared = 3.2863, df = 3, p-value = 0.3495
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Full{-}Time\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.159828
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Part{-}Time\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8855903
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Unemployed (and job seeking)\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.022324
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{((df\_job}\SpecialCharTok{$}\NormalTok{stress[df\_job}\SpecialCharTok{$}\NormalTok{occupation\_group}\SpecialCharTok{==}\StringTok{\textquotesingle{}Student\textquotesingle{}}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.408198
+\end{verbatim}
+
+Kao i u prethodnim, testovima homogenosti varijanci, test za stres nije
+pokazao statistički značajne razlike među skupinama zanimanja (radnog
+statusa), iako je uočljiva nešto veća varijabilnost u skupini studenata.
+Unatoč razlikama (koje nisu dovoljno izražene), potvrđena je homogenost
+varijanci za varijablu stres.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{aov}\NormalTok{(anxiety }\SpecialCharTok{\textasciitilde{}}\NormalTok{ occupation\_group, }\AttributeTok{data =}\NormalTok{ df\_job))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   Df Sum Sq Mean Sq F value Pr(>F)
+## occupation_group   3    3.8   1.281   1.258  0.288
+## Residuals        366  372.5   1.018
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{aov}\NormalTok{(depression }\SpecialCharTok{\textasciitilde{}}\NormalTok{ occupation\_group, }\AttributeTok{data =}\NormalTok{ df\_job))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   Df Sum Sq Mean Sq F value Pr(>F)  
+## occupation_group   3    8.3   2.756    2.29  0.078 .
+## Residuals        366  440.5   1.204                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{aov}\NormalTok{(stress }\SpecialCharTok{\textasciitilde{}}\NormalTok{ occupation\_group, }\AttributeTok{data =}\NormalTok{ df\_job))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   Df Sum Sq Mean Sq F value Pr(>F)
+## occupation_group   3    1.8  0.5917   0.494  0.687
+## Residuals        366  438.6  1.1983
+\end{verbatim}
+
+Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja
+razlika u razini anksioznosti, depresije i stresa između skupina
+definiranih prema zanimanju. Prethodno tome, provedena su testiranja
+pretpostavki normalnosti podataka i homogenosti varijanci za
+anksioznost, depresiju i stres s obzirom na kategoriju koja opisuje
+radni odnos occupation\_group. Sve su se pretpostavke pokazale
+ispravnima.
+
+Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja
+razlika u razini anksioznosti, depresije i stresa između skupina
+definiranih prema zanimanju.
+
+Rezultati pokazuju da ne postoje statistički značajne razlike u razini
+anksioznosti među zanimanjima, F(3, 370) = 1.31, p = 0.269. Također,
+nisu utvrđene statistički značajne razlike u razini stresa, F(3, 370) =
+0.61, p = 0.606.
+
+Za depresiju je uočen trend prema razlikama između skupina, no rezultat
+nije dosegnuo konvencionalnu razinu statističke značajnosti, F(3, 370) =
+2.33, p = 0.0736. Dobiveni nalazi upućuju na to da zanimanje samo po
+sebi nije snažan prediktor razine mentalnog zdravlja u ovom uzorku.
+
+\subsection{Višestruka linearna regresija: doprinos radnog statusa
+anksioznosti uz kontrolu crta
+ličnosti}\label{viux161estruka-linearna-regresija-doprinos-radnog-statusa-anksioznosti-uz-kontrolu-crta-liux10dnosti}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_anxiety }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}
+\NormalTok{  anxiety }\SpecialCharTok{\textasciitilde{}}\NormalTok{ occupation\_group }\SpecialCharTok{+} 
+\NormalTok{  narcissism }\SpecialCharTok{+}\NormalTok{ machiavelism }\SpecialCharTok{+}\NormalTok{ psychoticism }\SpecialCharTok{+}\NormalTok{ sadism }\SpecialCharTok{+}\NormalTok{ neuroticism }\SpecialCharTok{+}
+\NormalTok{  extraversion }\SpecialCharTok{+}\NormalTok{ openness }\SpecialCharTok{+}\NormalTok{ agreeableness }\SpecialCharTok{+}\NormalTok{ conscientiousness,}
+  \AttributeTok{data =}\NormalTok{ df\_job}
+\NormalTok{)}
+
+\FunctionTok{summary}\NormalTok{(model\_anxiety)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = anxiety ~ occupation_group + narcissism + machiavelism + 
+##     psychoticism + sadism + neuroticism + extraversion + openness + 
+##     agreeableness + conscientiousness, data = df_job)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.8996 -0.4889  0.0388  0.5458  3.2993 
+## 
+## Coefficients:
+##                                              Estimate Std. Error t value
+## (Intercept)                                   0.02965    0.06545   0.453
+## occupation_groupPart-Time                     0.15199    0.16864   0.901
+## occupation_groupStudent                      -0.12761    0.11065  -1.153
+## occupation_groupUnemployed (and job seeking)  0.03057    0.21044   0.145
+## narcissism                                   -0.05830    0.06341  -0.919
+## machiavelism                                  0.09415    0.05824   1.617
+## psychoticism                                  0.07842    0.06832   1.148
+## sadism                                        0.06215    0.06370   0.976
+## neuroticism                                   0.36507    0.06493   5.622
+## extraversion                                  0.10847    0.06926   1.566
+## openness                                      0.06268    0.05057   1.240
+## agreeableness                                -0.03295    0.06455  -0.510
+## conscientiousness                            -0.01173    0.06490  -0.181
+##                                              Pr(>|t|)    
+## (Intercept)                                     0.651    
+## occupation_groupPart-Time                       0.368    
+## occupation_groupStudent                         0.250    
+## occupation_groupUnemployed (and job seeking)    0.885    
+## narcissism                                      0.358    
+## machiavelism                                    0.107    
+## psychoticism                                    0.252    
+## sadism                                          0.330    
+## neuroticism                                   3.8e-08 ***
+## extraversion                                    0.118    
+## openness                                        0.216    
+## agreeableness                                   0.610    
+## conscientiousness                               0.857    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9141 on 357 degrees of freedom
+## Multiple R-squared:  0.2074, Adjusted R-squared:  0.1808 
+## F-statistic: 7.785 on 12 and 357 DF,  p-value: 6.727e-13
+\end{verbatim}
+
+U svrhu ispitivanja odnosa između zanimanja i anksioznosti, proveden je
+model višestruke linearne regresije kojim se ispituje doprinos radnog
+statusa povrh crta ličnosti.
+
+Rezultati pokazuju da je model statistički značajan u cjelini (F(12,
+361) = 7.807, p = 5.873x\(10^{-13}\)), pri čemu Multiple R-squared
+iznosi 0.2061, a Adjusted R-squared 0.1797. Iako je objašnjeni udio
+varijance manji u odnosu na modele za stres i depresiju, vrijednosti
+upućuju na to da model ipak ima smisla za interpretaciju.
+
+Analizom mračnih crta ličnosti nije utvrđen nijedan statistički značajan
+prediktor anksioznosti. Narcizam, makijavelizam, psihoticizam i sadizam
+nisu pokazali jedinstveni doprinos u ovom modelu, što sugerira da se
+njihova povezanost s anksioznošću ne zadržava nakon uključivanja ostalih
+crta ličnosti.
+
+Unutar petofaktorskog modela ličnosti, neuroticizam se jasno istaknuo
+kao ključni prediktor anksioznosti (\(\beta\) = 0.372737, p =
+1.77x\(10^{-8}\)). Osobe s višim razinama neuroticizma pokazuju
+izraženiju anksioznost, neovisno o zanimanju i ostalim osobinama
+ličnosti, što je u skladu s postojećim teorijskim i empirijskim
+nalazima. Ekstraverzija nije dosegnula razinu statističke značajnosti
+(\(\beta\) = 0.117466, p = 0.088), no uočen je slab trend koji upućuje
+na višu razinu anksioznosti kod ekstravertiranijih osoba. Ostale Big
+Five crte nisu se pokazale značajnima u ovom modelu.
+
+\subsection{Višestruka linearna regresija: doprinos radnog statusa
+depresiji uz kontrolu crta
+ličnosti}\label{viux161estruka-linearna-regresija-doprinos-radnog-statusa-depresiji-uz-kontrolu-crta-liux10dnosti}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_depression }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}
+\NormalTok{  depression }\SpecialCharTok{\textasciitilde{}}\NormalTok{ occupation\_group }\SpecialCharTok{+} 
+\NormalTok{  narcissism }\SpecialCharTok{+}\NormalTok{ machiavelism }\SpecialCharTok{+}\NormalTok{ psychoticism }\SpecialCharTok{+}\NormalTok{ sadism }\SpecialCharTok{+}\NormalTok{ neuroticism }\SpecialCharTok{+}
+\NormalTok{  extraversion }\SpecialCharTok{+}\NormalTok{ openness }\SpecialCharTok{+}\NormalTok{ agreeableness }\SpecialCharTok{+}\NormalTok{ conscientiousness,}
+  \AttributeTok{data =}\NormalTok{ df\_job}
+\NormalTok{)}
+
+\FunctionTok{summary}\NormalTok{(model\_depression)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = depression ~ occupation_group + narcissism + machiavelism + 
+##     psychoticism + sadism + neuroticism + extraversion + openness + 
+##     agreeableness + conscientiousness, data = df_job)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -3.02443 -0.46695  0.04059  0.47651  2.56926 
+## 
+## Coefficients:
+##                                               Estimate Std. Error t value
+## (Intercept)                                   0.061512   0.058468   1.052
+## occupation_groupPart-Time                    -0.008989   0.150665  -0.060
+## occupation_groupStudent                      -0.039037   0.098851  -0.395
+## occupation_groupUnemployed (and job seeking) -0.187553   0.188009  -0.998
+## narcissism                                   -0.025449   0.056648  -0.449
+## machiavelism                                  0.087583   0.052027   1.683
+## psychoticism                                  0.133949   0.061037   2.195
+## sadism                                        0.012428   0.056907   0.218
+## neuroticism                                   0.437118   0.058011   7.535
+## extraversion                                 -0.306129   0.061879  -4.947
+## openness                                      0.031523   0.045180   0.698
+## agreeableness                                 0.056224   0.057668   0.975
+## conscientiousness                            -0.020256   0.057979  -0.349
+##                                              Pr(>|t|)    
+## (Intercept)                                    0.2935    
+## occupation_groupPart-Time                      0.9525    
+## occupation_groupStudent                        0.6931    
+## occupation_groupUnemployed (and job seeking)   0.3192    
+## narcissism                                     0.6535    
+## machiavelism                                   0.0932 .  
+## psychoticism                                   0.0288 *  
+## sadism                                         0.8273    
+## neuroticism                                  4.05e-13 ***
+## extraversion                                 1.16e-06 ***
+## openness                                       0.4858    
+## agreeableness                                  0.3302    
+## conscientiousness                              0.7270    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.8166 on 357 degrees of freedom
+## Multiple R-squared:  0.4695, Adjusted R-squared:  0.4517 
+## F-statistic: 26.33 on 12 and 357 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Kako bi se ispitao doprinos zanimanja depresiji uz kontrolu crta
+ličnosti, proveden je model višestruke linearne regresije.
+
+Model se pokazao izrazito snažnim u objašnjenju ishoda, s vrijednostima
+F(12, 361) = 26.49 i p = 2.2x\(10^{-16}\). Multiple R-squared iznosi
+0.4682, dok Adjusted R-squared iznosi 0.4506, što upućuje na to da model
+objašnjava velik dio varijance depresije te ima vrlo dobru
+objašnjavajuću snagu.
+
+Među mračnim crtama ličnosti, psihoticizam se ponovno pokazao
+statistički značajnim pozitivnim prediktorom depresije (\(\beta\) =
+0.204240, p = 0.00316). Ovaj rezultat sugerira da osobe s izraženijim
+obilježjima psihoticizma imaju višu razinu depresije, čak i nakon
+kontrole ostalih osobina ličnosti i radnog statusa. Makijavelizam je
+pokazao granični efekt (\(\beta\) = 0.112090, p = 0.05728), dok narcizam
+i sadizam nisu imali značajan doprinos u objašnjenju depresije.
+
+Unutar petofaktorskog modela, neuroticizam se ponovno istaknuo kao
+najsnažniji pozitivni prediktor depresije (\(\beta\) = 0.439192, p =
+1.96x\(10^{-13}\)), potvrđujući njegovu ključnu ulogu u objašnjenju
+emocionalnih poteškoća. Za razliku od modela za stres i anksioznost,
+ekstraverzija se ovdje pokazala statistički značajnim negativnim
+prediktorom (\(\beta\) = -0.302426, p = 1.10x\(10^{-6}\)), što upućuje
+na to da osobe s višom razinom ekstraverzije pokazuju nižu razinu
+depresije. Ostale crte Big Five modela nisu se pokazale značajnima.
+
+\subsection{Višestruka linearna regresija: doprinos radnog statusa
+stresu uz kontrolu crta
+ličnosti}\label{viux161estruka-linearna-regresija-doprinos-radnog-statusa-stresu-uz-kontrolu-crta-liux10dnosti}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_stress }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}
+\NormalTok{  stress }\SpecialCharTok{\textasciitilde{}}\NormalTok{ occupation\_group }\SpecialCharTok{+} 
+\NormalTok{  narcissism }\SpecialCharTok{+}\NormalTok{ machiavelism }\SpecialCharTok{+}\NormalTok{ psychoticism }\SpecialCharTok{+}\NormalTok{ sadism }\SpecialCharTok{+}\NormalTok{ neuroticism }\SpecialCharTok{+}
+\NormalTok{  extraversion }\SpecialCharTok{+}\NormalTok{ openness }\SpecialCharTok{+}\NormalTok{ agreeableness }\SpecialCharTok{+}\NormalTok{ conscientiousness,}
+  \AttributeTok{data =}\NormalTok{ df\_job}
+\NormalTok{)}
+
+\FunctionTok{summary}\NormalTok{(model\_stress)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = stress ~ occupation_group + narcissism + machiavelism + 
+##     psychoticism + sadism + neuroticism + extraversion + openness + 
+##     agreeableness + conscientiousness, data = df_job)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.0923 -0.5034  0.0875  0.5923  3.2132 
+## 
+## Coefficients:
+##                                                Estimate Std. Error t value
+## (Intercept)                                   0.0258670  0.0661666   0.391
+## occupation_groupPart-Time                     0.0674423  0.1705019   0.396
+## occupation_groupStudent                       0.0296155  0.1118665   0.265
+## occupation_groupUnemployed (and job seeking) -0.3841763  0.2127636  -1.806
+## narcissism                                   -0.0019928  0.0641068  -0.031
+## machiavelism                                  0.1107641  0.0588771   1.881
+## psychoticism                                  0.2158670  0.0690734   3.125
+## sadism                                       -0.0355856  0.0643995  -0.553
+## neuroticism                                   0.3993105  0.0656486   6.083
+## extraversion                                 -0.0960818  0.0700258  -1.372
+## openness                                      0.1384934  0.0511283   2.709
+## agreeableness                                -0.0468288  0.0652604  -0.718
+## conscientiousness                            -0.0002919  0.0656131  -0.004
+##                                              Pr(>|t|)    
+## (Intercept)                                   0.69608    
+## occupation_groupPart-Time                     0.69267    
+## occupation_groupStudent                       0.79136    
+## occupation_groupUnemployed (and job seeking)  0.07182 .  
+## narcissism                                    0.97522    
+## machiavelism                                  0.06075 .  
+## psychoticism                                  0.00192 ** 
+## sadism                                        0.58090    
+## neuroticism                                  3.05e-09 ***
+## extraversion                                  0.17090    
+## openness                                      0.00708 ** 
+## agreeableness                                 0.47349    
+## conscientiousness                             0.99645    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9241 on 357 degrees of freedom
+## Multiple R-squared:  0.3076, Adjusted R-squared:  0.2843 
+## F-statistic: 13.22 on 12 and 357 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Iz modela višestruke linearne regresije koji izračunava doprinos
+zanimanja stresu povrh ličnosti zaključujemo sljedeće stvari.
+
+Model se pokazuje statistički značajnim u cjelini s vrijednostima F(12,
+361) = 13.12 i p = 2.2x\(10^{-16}\) (\textless{} 0.001) te je Multiple
+R-squared = 0.3036 i Adjusted R-squared = 0.2805. Ove vrijednosti
+upućuju da model ima dobru potpornu (objašnjavajuću) snagu.
+
+Među mračnim crtama ličnosti, psihoticizam se istaknuo kao statistički
+značajan pozitivan prediktor (\(\beta\) = 0.204240, p = 0.00316
+(\textless{} 0.01)). To znači da osobe s višim razinama psihoticizma
+pokazuju višu razinu stresa, čak i nakon utjecaja ostalih crta ličnosti
+i oblika radnog angažmana. Makijavelizam je pokazao trend prema
+pozitivnoj povezanosti (\(\beta\) = 0.112090, p = 0.05728 (\textless{}
+0.1)), ali rezultati su nedovoljni za snažnu povezanost. Narcizam i
+sadizam nisu pokazali značajan doprinos.
+
+Unutar petofaktorskog Big 5 modela, neurocitizam se pokazao daleko
+najsnažnijim prediktorom ishoda (\(\beta\) = 0.406136, p =
+1.42x\(10^{-9}\) (\textless{} 0.001)). Viša razina neurocitizma povezana
+je s višom razinom stresa, neovisno o radnom odnosu i ostalim crtama
+ličnosti. Ovaj rezultat je u potpunosti u skladu s teorijskim
+očekivanjima. Izdvajamo i otvorenost kao statistički značajan pozititvan
+prediktor (\(\beta\) = 0.142228, p = 0.00554 (\textless{} 0.01). Ovaj
+podatak sugerira da osobe s više otvorenosti mogu biti osjetljivije na
+stres. Ekstraverzija, ugodnost i savjesnost nisu pokazale statistički
+značajan utjecaj u ovom modelu.
+
+\end{document}
