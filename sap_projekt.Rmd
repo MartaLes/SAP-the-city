@@ -98,47 +98,8 @@ data_clean <- dataset %>%
 head(data_clean)
 ```
 
-###Korelacijska matrica
-
-```{r}
-# odabir 
-traits_vars <- dataset %>%
-  select(
-    depression, anxiety, stress,
-    narcissism, machiavelism, psychoticism, sadism,
-    neuroticism, extraversion, openness, agreeableness, conscientiousness
-  )
-
-# korelacijska matrica
-corr_mat <- cor(traits_vars, use = "pairwise.complete.obs")
-
-# korelacijska heatmapa
-ggcorrplot(
-  corr_mat,
-  type = "lower",
-  lab = TRUE,
-  lab_size = 3,
-  hc.order = TRUE,
-  outline.col = "white"
-)
-
+```         
 ```
-
-Osobe s većom anksioznošću, depresijom i stresom imaju tendenciju biti i
-više neurotične.
-
-Mračne osobine su međusobno umjereno povezane.
-
-Visoka savjesnost štiti od depresije i stresa (negativna korelacija).
-
-Ugodnost je snažno suprotna psihoticizmu i sadizmu.
-
-Big Five su međusobno slabo do umjereno povezane.
-
-Najveće korelacije su:
-
-Psychoticism–Sadism (0.65) Depression–Neuroticism (0.58)
-Extraversion-Narcissism(0.56) Machiavelism–Psychoticism (0.51)
 
 # Jesu li ljudi s izraženijom mračnom trijadom skloniji depresiji?
 
