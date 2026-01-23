@@ -31,7 +31,6 @@ library(corrplot)
 library(nortest)
 ```
 
-
 # Motivacija i opis problema
 
 Ličnost je jedno od temeljnih područja psihologije i najčešće se opisuje
@@ -184,21 +183,22 @@ ne upućuje na problematičnu multikolinearnost. Ovo ćemo još formalno
 analizirat koristeći, ponovno, Pearsonove korelacije.
 
 ```{r}
-cor.test(data_clean$machiavelism, data_clean$narcissism)
-cor.test(data_clean$machiavelism, data_clean$psychoticism)
+#Zakomentiramo ispis ovih testova da bi izbjegle redundantnost ispisa
+#cor.test(data_clean$machiavelism, data_clean$narcissism)
+#cor.test(data_clean$machiavelism, data_clean$psychoticism)
 
 cor.test(data_clean$narcissism, data_clean$machiavelism)
-cor.test(data_clean$narcissism, data_clean$psychoticism)
+#cor.test(data_clean$narcissism, data_clean$psychoticism)
 
 cor.test(data_clean$psychoticism, data_clean$narcissism)
 cor.test(data_clean$psychoticism, data_clean$machiavelism)
 ```
 
 Pearsonove korelacije između nezavisnih varijabli pokazale su umjerene
-pozitivne povezanosti između makijavelizma, narcizma i psihoticizma (r $\approx$
-0,36–0,42, p \< 0,001). Iako su ove osobine povezane, snaga korelacija
-ne sugerira problematičnu multikolinearnost, što podupire njihovo
-uključivanje kao zasebnih prediktora u regresijski model.
+pozitivne povezanosti između makijavelizma, narcizma i psihoticizma (r u
+rasponu 0,36–0,42, p \< 0,001). Iako su ove osobine povezane, snaga
+korelacija ne sugerira problematičnu multikolinearnost, što podupire
+uključivanje njih kao zasebnih prediktora u regresijski model.
 
 ## Višestruka linearna regresija
 
@@ -215,11 +215,11 @@ summary(model_dark_triad)
 
 Rezultati reiteriraju prijašnje zaključke da je narcisizam negativno
 značajan prediktor depresije ($\beta$ = -0.40, p \< 0.001), dok su
-makijavelizam ($\beta$ = 0.21, p \< 0.001) i psihoticizam ($\beta$ = 0.28, p \<
-0.001) pozitivno značajni prediktori. Model je statistički značajan
-(F-stat = 25.92, p \< 0.001). Međutim, ukupna prediktivna snaga modela
-je umjerena (R² oko 0.16), što sugerira da postoje i drugi faktori koji
-utječu na depresiju.
+makijavelizam ($\beta$ = 0.21, p \< 0.001) i psihoticizam ($\beta$ =
+0.28, p \< 0.001) pozitivno značajni prediktori. Model je statistički
+značajan (F-statistic = 25.92, p \< 0.001). Međutim, ukupna prediktivna
+snaga modela je umjerena (R-squared oko 0.16), što sugerira da postoje i
+drugi faktori koji utječu na depresiju.
 
 Kako bismo provjerili postoje li drugi, prikladniji i značajniji,
 prediktori prikazat ćemo korelacijsku matricu sa ostalim varijablama.
@@ -252,14 +252,14 @@ summary(model_2)
 
 ```
 
-Model značajno predviđa depresiju (R² = 0.42, p \< 0.001). Neuroticizam
-je bio najsnažniji pozitivni prediktor depresije ($\beta$ = 0.46, p \< 0.001),
-dok je ekstraverzija imala značajan negativan učinak ($\beta$ = -0.24, p \<
-0.001). Psihoticizam je također pokazao umjeren, ali značajan pozitivan
-doprinos ($\beta$ = 0.17, p = 0.0018). Narcizam, savjesnost i ugodnost nisu
-bili statistički značajni prediktori (p \> 0.05), što upućuje na to da
-njihov odnos s depresijom nije jedinstven nakon kontrole ostalih
-osobina.
+Model značajno predviđa depresiju (R-squared= 0.42, p \< 0.001).
+Neuroticizam je bio najsnažniji pozitivni prediktor depresije ($\beta$ =
+0.46, p \< 0.001), dok je ekstraverzija imala značajan negativan učinak
+($\beta$ = -0.24, p \< 0.001). Psihoticizam je također pokazao umjeren,
+ali značajan pozitivan doprinos ($\beta$ = 0.17, p = 0.001). Narcizam,
+savjesnost i ugodnost nisu bili statistički značajni prediktori (p \>
+0.05), što upućuje na to da njihov odnos s depresijom nije jedinstven
+nakon kontrole ostalih osobina.
 
 Još ćemo provjeriti predstavlja li kolinearnost značajki problem za ovu
 interpretaciju:
@@ -345,11 +345,20 @@ ggplot(big_five, aes(x = sex, y = score, fill = sex)) +
 
 ```
 
-Vizualna analiza boxplotova ukazuje na obrasce razlika između spolova koji su u skladu s teorijskim očekivanjima. Najizraženije razlike uočavaju se kod neuroticizma i ugodnosti, pri čemu žene u prosjeku postižu više vrijednosti, što je vidljivo kroz više medijane i pomak distribucije prema višim vrijednostima.
+Vizualna analiza boxplotova ukazuje na obrasce razlika između spolova
+koji su u skladu s teorijskim očekivanjima. Najizraženije razlike
+uočavaju se kod neuroticizma i ugodnosti, pri čemu žene u prosjeku
+postižu više vrijednosti, što je vidljivo kroz više medijane i pomak
+distribucije prema višim vrijednostima.
 
-Kod ekstraverzije, otvorenosti i savjesnosti razlike između spolova su manje izražene; medijani su vrlo slični, a distribucije se u velikoj mjeri preklapaju, što upućuje na izostanak izraženih spolnih razlika u tim osobinama na razini deskriptivne analize.
+Kod ekstraverzije, otvorenosti i savjesnosti razlike između spolova su
+manje izražene; medijani su vrlo slični, a distribucije se u velikoj
+mjeri preklapaju, što upućuje na izostanak izraženih spolnih razlika u
+tim osobinama na razini deskriptivne analize.
 
-Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu li zadovoljene osnovne pretpostavke testa, uključujući normalnost distribucije, homogenost varijanci te nezavisnost uzoraka.
+Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu
+li zadovoljene osnovne pretpostavke testa, uključujući normalnost
+distribucije, homogenost varijanci te nezavisnost uzoraka.
 
 Za početak ćemo provjeriti preptpostavku o normalnosti uzorka.
 
@@ -377,8 +386,9 @@ ggplot(df_sex, aes(sample = neuroticism)) +
 
 ```
 
-Distribucije su provjerene za sve osobine među spolovima i za sve osobine vrijedu da priližno slijede normalnu distribuciju.
-Zatim ćemo provjeriti varijance.
+Distribucije su provjerene za sve osobine među spolovima i za sve
+osobine vrijedu da priližno slijede normalnu distribuciju. Zatim ćemo
+provjeriti varijance.
 
 ```{r}
 traits <- c("neuroticism", "agreeableness", "openness", "extraversion", "conscientiousness")
@@ -389,6 +399,7 @@ var_by_sex <- df_sex %>%
 
 var_by_sex
 ```
+
 ```{r}
 
 var_tests <- lapply(traits, function(tr) {
@@ -404,11 +415,18 @@ var_tests <- lapply(traits, function(tr) {
 bind_rows(var_tests)
 
 ```
-Rezultati testa za jednakost varijanci pokazuju da ni za jednu od analiziranih osobina ličnosti nije utvrđena statistički značajna razlika u varijancama između muškaraca i žena. Sve dobivene p-vrijednosti veće su od 0.05, stoga se u svim slučajevima ne odbacuje nul-hipoteza o jednakosti varijanci.
 
-Dodatno, promatramo dvije nezavisne skupine: Female i Male (ostale ćemo ukloniti).
+Rezultati testa za jednakost varijanci pokazuju da ni za jednu od
+analiziranih osobina ličnosti nije utvrđena statistički značajna razlika
+u varijancama između muškaraca i žena. Sve dobivene p-vrijednosti veće
+su od 0.05, stoga se u svim slučajevima ne odbacuje nul-hipoteza o
+jednakosti varijanci.
 
-Stoga, sve pretpostavke su zadovoljene i provest ćemo t-test za nezavisne uzorke.
+Dodatno, promatramo dvije nezavisne skupine: Female i Male (ostale ćemo
+ukloniti).
+
+Stoga, sve pretpostavke su zadovoljene i provest ćemo t-test za
+nezavisne uzorke.
 
 ```{r}
 # t-test za svaku osobinu
@@ -430,11 +448,18 @@ results_df
 
 ```
 
-Rezultati dvostranih t-testova za nezavisne uzorke ukazuju na postojanje statistički značajnih spolnih razlika u pojedinim dimenzijama ličnosti. Žene postižu značajno više prosječne rezultate od muškaraca u neuroticizmu (t = 2.52, p = 0.012) i ugodnosti (t = 3.76, p < 0.001).
+Rezultati dvostranih t-testova za nezavisne uzorke ukazuju na postojanje
+statistički značajnih spolnih razlika u pojedinim dimenzijama ličnosti.
+Žene postižu značajno više prosječne rezultate od muškaraca u
+neuroticizmu (t = 2.52, p = 0.012) i ugodnosti (t = 3.76, p \< 0.001).
 
-Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = -1.71, p = 0.087) i savjesnost (t = 0.43, p = 0.669) nisu utvrđene statistički značajne razlike između spolova, iako su uočene blage razlike u prosječnim vrijednostima.
+Za otvorenost (t = 1.22, p = 0.223), ekstraverziju (t = -1.71, p =
+0.087) i savjesnost (t = 0.43, p = 0.669) nisu utvrđene statistički
+značajne razlike između spolova, iako su uočene blage razlike u
+prosječnim vrijednostima.
 
 Sad ćemo pogledati mračne osobine.
+
 ```{r}
 dark_traits <- df_sex %>%
   pivot_longer(
@@ -454,9 +479,18 @@ ggplot(dark_traits, aes(x = sex, y = score, fill = sex)) +
   )
 
 ```
-Vizualna analiza mračnih osobina ličnosti ukazuje na izraženije spolne razlike u odnosu na Big Five osobine. Muškarci u prosjeku postižu više rezultate u makijavelizmu, narcizmu, psihoticizmu i sadizmu, što je vidljivo kroz više medijane i pomak distribucija prema višim vrijednostima. Razlike su posebno izražene kod sadizma i psihoticizma, dok su kod makijavelizma i narcizma prisutne umjerene razlike uz djelomično preklapanje distribucija.
 
-Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki normalnosti distribucije i jednakosti varijanci. Analiza se temelji na istim dvjema nezavisnim skupinama ispitanik (Female i Male).
+Vizualna analiza mračnih osobina ličnosti ukazuje na izraženije spolne
+razlike u odnosu na Big Five osobine. Muškarci u prosjeku postižu više
+rezultate u makijavelizmu, narcizmu, psihoticizmu i sadizmu, što je
+vidljivo kroz više medijane i pomak distribucija prema višim
+vrijednostima. Razlike su posebno izražene kod sadizma i psihoticizma,
+dok su kod makijavelizma i narcizma prisutne umjerene razlike uz
+djelomično preklapanje distribucija.
+
+Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki
+normalnosti distribucije i jednakosti varijanci. Analiza se temelji na
+istim dvjema nezavisnim skupinama ispitanik (Female i Male).
 
 ```{r}
 ggplot(df_sex, aes(sample = narcissism)) +
@@ -477,7 +511,8 @@ ggplot(df_sex, aes(sample = narcissism)) +
 
 ```
 
-Distribucije u skupinama su priližno normalne. Test je proveden za sve mračne osobine.
+Distribucije u skupinama su priližno normalne. Test je proveden za sve
+mračne osobine.
 
 ```{r}
 dark <- c("narcissism", "machiavelism", "psychoticism", "sadism")
@@ -488,6 +523,7 @@ var_by_sex <- df_sex %>%
 
 var_by_sex
 ```
+
 ```{r}
 
 var_tests <- lapply(dark, function(tr) {
@@ -503,7 +539,9 @@ var_tests <- lapply(dark, function(tr) {
 bind_rows(var_tests)
 ```
 
-Varijance mračnih osobina ličnosti između muškaraca i žena su usporedive i približno jednake, stoga je pretpostavka homogenosti varijanci zadovoljena.
+Varijance mračnih osobina ličnosti između muškaraca i žena su usporedive
+i približno jednake, stoga je pretpostavka homogenosti varijanci
+zadovoljena.
 
 Provest ćemo t-test.
 
@@ -536,7 +574,8 @@ Rezultati pokazuju da muškarci postižu statistički značajno više
 rezultate na svim analiziranim mračnim crtama — narcizmu, makijavelizmu,
 psihoticizmu i sadizmu (sve p \< 0.05). Najizraženija razlika uočena je
 kod sadizma, gdje muškarci ostvaruju znatno više prosječne vrijednosti u
-odnosu na žene, što upućuje na izraženije spolne razlike u ovoj dimenziji ličnosti.
+odnosu na žene, što upućuje na izraženije spolne razlike u ovoj
+dimenziji ličnosti.
 
 # Jačaju li neke osobine s godinama?
 
@@ -867,8 +906,6 @@ df_neuro
 
 ```
 
-
-
 # Jesu li crte ličnosti i sklonost stresu, depresiji i anksioznosti povezane sa zanimanjem?
 
 ```{r}
@@ -918,21 +955,25 @@ ggplot(mental_long, aes(x = occupation_group, y = score, fill = occupation_group
 ```
 
 Vizualni pregled distribucija pokazuje da se razine stresa, depresije i
-anksioznosti uvelike preklapaju između skupina definiranih prema
-radnom statusu (zanimanju), što upućuje na izražene individualne razlike unutar skupina.
-Iako nezaposleni sudionici pokazuju viši medijan depresivnosti u odnosu
-na ostale skupine, razlike nisu statistički potvrđene. Također je vidljivo da se veći broj ekstremnih vrijednosti
-javlja u skupini zaposlenih na puno radno vrijeme, što dodatno ukazuje
-na veliku heterogenost unutar te skupine. Razine stresa
-pokazuju vrlo slične obrasce u svim skupinama, dok se anksioznost
-ne pojavljuje sustavno povezanom sa zanimanjem. Ovi nalazi sugeriraju da
-radni status sam po sebi ima ograničen doprinos objašnjenju
-mentalnog zdravlja te da individualne crte ličnosti vjerojatno imaju
-snažniju ulogu.
+anksioznosti uvelike preklapaju između skupina definiranih prema radnom
+statusu (zanimanju), što upućuje na izražene individualne razlike unutar
+skupina. Iako nezaposleni sudionici pokazuju viši medijan depresivnosti
+u odnosu na ostale skupine, razlike nisu statistički potvrđene. Također
+je vidljivo da se veći broj ekstremnih vrijednosti javlja u skupini
+zaposlenih na puno radno vrijeme, što dodatno ukazuje na veliku
+heterogenost unutar te skupine. Razine stresa pokazuju vrlo slične
+obrasce u svim skupinama, dok se anksioznost ne pojavljuje sustavno
+povezanom sa zanimanjem. Ovi nalazi sugeriraju da radni status sam po
+sebi ima ograničen doprinos objašnjenju mentalnog zdravlja te da
+individualne crte ličnosti vjerojatno imaju snažniju ulogu.
 
 ## Provođenje ANOVA analize - Razlikuju li se razine anksioznosti, depresije i stresa po zanimanju (radnim statusima)?
 
-Za početak je provedena provjera pretpostavki normalnosti distribucije i homogenosti varijanci za varijable anksioznost, depresiju i stres. U nastavku su prikazani rezultati testova samo za skupine zaposlenih na puno radno vrijeme i studenata, budući da te skupine imaju najveći broj ispitanika te omogućuju pouzdaniju procjenu distribucije podataka.
+Za početak je provedena provjera pretpostavki normalnosti distribucije i
+homogenosti varijanci za varijable anksioznost, depresiju i stres. U
+nastavku su prikazani rezultati testova samo za skupine zaposlenih na
+puno radno vrijeme i studenata, budući da te skupine imaju najveći broj
+ispitanika te omogućuju pouzdaniju procjenu distribucije podataka.
 
 ### Test pretpostavke normalnosti za anksioznost
 
@@ -967,11 +1008,24 @@ hist(
 par(mfrow = c(1, 1))
 
 ```
-Iz dobivenih ispisa zaključujemo da na razini značajnosti $\alpha$ = 0.05 nema potrebe za odbacivanjem nulte hipoteze o normalnosti distribucije anksioznosti na razini cijelog uzorka (p > 0.05). Na temelju grafičke analize histograma može se zaključiti da distribucije anksioznosti za skupine zaposlenih na puno radno vrijeme i studenata približno slijede normalnu distribuciju. Uočena manja odstupanja od savršene simetrije nisu izražena te se ne smatraju statistički relevantnima.
 
-Iako su testovi normalnosti i grafičke provjere provedeni za sve skupine, u radu su prikazani samo rezultati za skupine zaposlenih na puno radno vrijeme i studenata radi veće preglednosti. Postoje manja odstupanja od simetrije u preostale dvije skupine, ali to je opravdano manjim brojem članova tih skupina.
+Iz dobivenih ispisa zaključujemo da na razini značajnosti $\alpha$ =
+0.05 nema potrebe za odbacivanjem nulte hipoteze o normalnosti
+distribucije anksioznosti na razini cijelog uzorka (p \> 0.05). Na
+temelju grafičke analize histograma može se zaključiti da distribucije
+anksioznosti za skupine zaposlenih na puno radno vrijeme i studenata
+približno slijede normalnu distribuciju. Uočena manja odstupanja od
+savršene simetrije nisu izražena te se ne smatraju statistički
+relevantnima.
+
+Iako su testovi normalnosti i grafičke provjere provedeni za sve
+skupine, u radu su prikazani samo rezultati za skupine zaposlenih na
+puno radno vrijeme i studenata radi veće preglednosti. Postoje manja
+odstupanja od simetrije u preostale dvije skupine, ali to je opravdano
+manjim brojem članova tih skupina.
 
 ### Test pretpostavke normalnosti za depresiju
+
 ```{r}
 require(nortest)
 
@@ -1003,11 +1057,21 @@ hist(
 par(mfrow = c(1, 1))
 
 ```
-Lillieforsov test normalnosti ukazuje na statistički značajno odstupanje distribucije depresije od normalnosti na razini cijelog uzorka, kao i unutar skupina zaposlenih na puno radno vrijeme i studenata (p < 0.05). Kod studentske skupine odstupanje je granično, što je u skladu s vizualnom inspekcijom histograma koji upućuju na približno simetričnu, ali blago nesimetričnu distribuciju.
 
-Unatoč utvrđenim odstupanjima od normalnosti, primjena parametarskih metoda smatra se opravdanom s obzirom na veličinu uzoraka te poznatu robusnost linearne regresije i ANOVA-e na umjerena kršenja pretpostavke normalnosti. 
+Lillieforsov test normalnosti ukazuje na statistički značajno odstupanje
+distribucije depresije od normalnosti na razini cijelog uzorka, kao i
+unutar skupina zaposlenih na puno radno vrijeme i studenata (p \< 0.05).
+Kod studentske skupine odstupanje je granično, što je u skladu s
+vizualnom inspekcijom histograma koji upućuju na približno simetričnu,
+ali blago nesimetričnu distribuciju.
+
+Unatoč utvrđenim odstupanjima od normalnosti, primjena parametarskih
+metoda smatra se opravdanom s obzirom na veličinu uzoraka te poznatu
+robusnost linearne regresije i ANOVA-e na umjerena kršenja pretpostavke
+normalnosti.
 
 ### Test pretpostavki normalnosti za stres
+
 ```{r}
 require(nortest)
 
@@ -1038,11 +1102,23 @@ hist(
 
 par(mfrow = c(1, 1))
 ```
-Test normalnosti proveden je za varijablu stresa na razini cijelog uzorka, kao i unutar skupina prema radnom statusu. Rezultati Lillieforsovog testa pokazuju da nijedan od provedenih testova nije statistički značajan (p > 0.05), kako na ukupnoj razini, tako i unutar promatranih skupina.
 
-Vizualni pregled histograma za skupine zaposlenih na puno radno vrijeme i studenata dodatno potvrđuje ove nalaze, budući da distribucije ne pokazuju izražena odstupanja od normalnosti. Manja odstupanja od simetrije mogu se uočiti u skupinama s manjim brojem ispitanika (zaposleni na nepuno radno vrijeme i nezaposleni), no takva odstupanja vjerojatno su posljedica veće varijabilnosti uzrokovane manjom veličinom uzorka, a ne stvarnih odstupanja od normalne distribucije.  
+Test normalnosti proveden je za varijablu stresa na razini cijelog
+uzorka, kao i unutar skupina prema radnom statusu. Rezultati
+Lillieforsovog testa pokazuju da nijedan od provedenih testova nije
+statistički značajan (p \> 0.05), kako na ukupnoj razini, tako i unutar
+promatranih skupina.
+
+Vizualni pregled histograma za skupine zaposlenih na puno radno vrijeme
+i studenata dodatno potvrđuje ove nalaze, budući da distribucije ne
+pokazuju izražena odstupanja od normalnosti. Manja odstupanja od
+simetrije mogu se uočiti u skupinama s manjim brojem ispitanika
+(zaposleni na nepuno radno vrijeme i nezaposleni), no takva odstupanja
+vjerojatno su posljedica veće varijabilnosti uzrokovane manjom veličinom
+uzorka, a ne stvarnih odstupanja od normalne distribucije.
 
 ### Test pretpostavki homogenosti varijanci za anksioznost
+
 ```{r}
 
 bartlett.test(df_job$anxiety ~ df_job$occupation_group)
@@ -1052,9 +1128,15 @@ var((df_job$anxiety[df_job$occupation_group=='Part-Time']))
 var((df_job$anxiety[df_job$occupation_group=='Unemployed (and job seeking)']))
 var((df_job$anxiety[df_job$occupation_group=='Student']))
 ```
-Bartlettov test pokazao je da su varijance anksioznosti između skupina zanimanja međusobno jednake (p = 0.774). I pojedinačne varijance po skupinama su vrlo slične, bez izraženih odstupanja. Time je zadovoljena pretpostavka homogenosti varijanci, što opravdava primjenu ANOVA testa za usporedbu anksioznosti između skupina.  
+
+Bartlettov test pokazao je da su varijance anksioznosti između skupina
+zanimanja međusobno jednake (p = 0.774). I pojedinačne varijance po
+skupinama su vrlo slične, bez izraženih odstupanja. Time je zadovoljena
+pretpostavka homogenosti varijanci, što opravdava primjenu ANOVA testa
+za usporedbu anksioznosti između skupina.
 
 ### Test pretpostavki homogenosti varijanci za depresiju
+
 ```{r}
 
 bartlett.test(df_job$depression ~ df_job$occupation_group)
@@ -1064,9 +1146,14 @@ var((df_job$depression[df_job$occupation_group=='Part-Time']))
 var((df_job$depression[df_job$occupation_group=='Unemployed (and job seeking)']))
 var((df_job$depression[df_job$occupation_group=='Student']))
 ```
-Bartlettov test homogenosti varijanci za depresiju pokazao se neznačajnim. Dodatno, izračunate varijance po skupinama su vrlo slične. Ovi podaci upućuju na to da je pretpostavka homogenosti varijanci zadovoljena.   
+
+Bartlettov test homogenosti varijanci za depresiju pokazao se
+neznačajnim. Dodatno, izračunate varijance po skupinama su vrlo slične.
+Ovi podaci upućuju na to da je pretpostavka homogenosti varijanci
+zadovoljena.
 
 ### Test pretpostavki homogenosti varijanci za stres
+
 ```{r}
 
 bartlett.test(df_job$stress ~ df_job$occupation_group)
@@ -1076,7 +1163,12 @@ var((df_job$stress[df_job$occupation_group=='Part-Time']))
 var((df_job$stress[df_job$occupation_group=='Unemployed (and job seeking)']))
 var((df_job$stress[df_job$occupation_group=='Student']))
 ```
-Kao i u prethodnim, testovima homogenosti varijanci, test za stres nije pokazao statistički značajne razlike među skupinama zanimanja (radnog statusa), iako je uočljiva nešto veća varijabilnost u skupini studenata. Unatoč razlikama (koje nisu dovoljno izražene), potvrđena je homogenost varijanci za varijablu stres.  
+
+Kao i u prethodnim, testovima homogenosti varijanci, test za stres nije
+pokazao statistički značajne razlike među skupinama zanimanja (radnog
+statusa), iako je uočljiva nešto veća varijabilnost u skupini studenata.
+Unatoč razlikama (koje nisu dovoljno izražene), potvrđena je homogenost
+varijanci za varijablu stres.
 
 ```{r}
 summary(aov(anxiety ~ occupation_group, data = df_job))
@@ -1085,11 +1177,25 @@ summary(aov(stress ~ occupation_group, data = df_job))
 
 ```
 
-Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja razlika u razini anksioznosti, depresije i stresa između skupina definiranih prema radnom statusu (occupation_group). Prije provođenja ANOVA-e ispitane su pretpostavke normalnosti distribucije i homogenosti varijanci za sve promatrane varijable. Iako su kod pojedinih varijabli uočena manja odstupanja od normalnosti, s obzirom na veličinu uzorka i robusnost ANOVA-e na umjerena kršenja ove pretpostavke, primjena parametarskih metoda smatrana je opravdanom.
+Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja
+razlika u razini anksioznosti, depresije i stresa između skupina
+definiranih prema radnom statusu (occupation_group). Prije provođenja
+ANOVA-e ispitane su pretpostavke normalnosti distribucije i homogenosti
+varijanci za sve promatrane varijable. Iako su kod pojedinih varijabli
+uočena manja odstupanja od normalnosti, s obzirom na veličinu uzorka i
+robusnost ANOVA-e na umjerena kršenja ove pretpostavke, primjena
+parametarskih metoda smatrana je opravdanom.
 
-Rezultati jednosmjerne ANOVA-e nisu pokazali statistički značajne razlike u razini anksioznosti između skupina radnog statusa, F(3, 366) = 1.258, p = 0.288. Također, nisu utvrđene statistički značajne razlike u razini stresa, F(3, 366) = 0.4944, p = 0.687.
+Rezultati jednosmjerne ANOVA-e nisu pokazali statistički značajne
+razlike u razini anksioznosti između skupina radnog statusa, F(3, 366) =
+1.258, p = 0.288. Također, nisu utvrđene statistički značajne razlike u
+razini stresa, F(3, 366) = 0.4944, p = 0.687.
 
-Za razinu depresije uočen je trend prema razlikama između skupina, no rezultat nije dosegnuo konvencionalnu razinu statističke značajnosti, F(3, 366) = 2.29, p = 0.078. Dobiveni nalazi upućuju na to da radni status sam po sebi nije snažan prediktor razine mentalnog zdravlja u promatranom uzorku.
+Za razinu depresije uočen je trend prema razlikama između skupina, no
+rezultat nije dosegnuo konvencionalnu razinu statističke značajnosti,
+F(3, 366) = 2.29, p = 0.078. Dobiveni nalazi upućuju na to da radni
+status sam po sebi nije snažan prediktor razine mentalnog zdravlja u
+promatranom uzorku.
 
 ## Višestruka linearna regresija: doprinos radnog statusa anksioznosti uz kontrolu crta ličnosti
 
@@ -1105,13 +1211,30 @@ summary(model_anxiety)
 
 ```
 
-U svrhu ispitivanja odnosa između radnog statusa i anksioznosti proveden je model višestruke linearne regresije kojim se ispituje doprinos radnog statusa povrh crta ličnosti.
+U svrhu ispitivanja odnosa između radnog statusa i anksioznosti proveden
+je model višestruke linearne regresije kojim se ispituje doprinos radnog
+statusa povrh crta ličnosti.
 
-Rezultati pokazuju da je regresijski model statistički značajan u cjelini, F(12, 357) = 7.79, p = 6.73x$10^{-13}$. Model objašnjava oko 21% varijance anksioznosti (R² = 0.2074), dok prilagođeni koeficijent determinacije iznosi 0.1808. Iako je objašnjeni udio varijance manji u usporedbi s modelima za stres i depresiju, dobivene vrijednosti upućuju na to da model ima smisla za interpretaciju.
+Rezultati pokazuju da je regresijski model statistički značajan u
+cjelini, F(12, 357) = 7.79, p = 6.73x$10^{-13}$. Model objašnjava oko
+21% varijance anksioznosti (R-squared= 0.2074), dok prilagođeni
+koeficijent determinacije iznosi 0.1808. Iako je objašnjeni udio
+varijance manji u usporedbi s modelima za stres i depresiju, dobivene
+vrijednosti upućuju na to da model ima smisla za interpretaciju.
 
-Analizom mračnih crta ličnosti nije utvrđen nijedan statistički značajan jedinstveni prediktor anksioznosti. Narcizam, makijavelizam, psihoticizam i sadizam nisu pokazali značajan doprinos nakon kontrole ostalih crta ličnosti, što sugerira da se njihova povezanost s anksioznošću ne zadržava u ovom multivarijatnom modelu.
+Analizom mračnih crta ličnosti nije utvrđen nijedan statistički značajan
+jedinstveni prediktor anksioznosti. Narcizam, makijavelizam,
+psihoticizam i sadizam nisu pokazali značajan doprinos nakon kontrole
+ostalih crta ličnosti, što sugerira da se njihova povezanost s
+anksioznošću ne zadržava u ovom multivarijatnom modelu.
 
-Unutar petofaktorskog modela ličnosti, neuroticizam se jasno istaknuo kao ključni prediktor anksioznosti ($\beta$ = 0.37, p < 0.001). Osobe s višim razinama neuroticizma pokazuju izraženiju anksioznost, neovisno o radnom statusu i ostalim osobinama ličnosti, što je u skladu s postojećim teorijskim i empirijskim nalazima. Ekstraverzija nije bila statistički značajan prediktor anksioznosti (p = 0.118), kao ni ostale Big Five crte ličnosti.
+Unutar petofaktorskog modela ličnosti, neuroticizam se jasno istaknuo
+kao ključni prediktor anksioznosti ($\beta$ = 0.37, p \< 0.001). Osobe s
+višim razinama neuroticizma pokazuju izraženiju anksioznost, neovisno o
+radnom statusu i ostalim osobinama ličnosti, što je u skladu s
+postojećim teorijskim i empirijskim nalazima. Ekstraverzija nije bila
+statistički značajan prediktor anksioznosti (p = 0.118), kao ni ostale
+Big Five crte ličnosti.
 
 ## Višestruka linearna regresija: doprinos radnog statusa depresiji uz kontrolu crta ličnosti
 
@@ -1127,13 +1250,30 @@ summary(model_depression)
 
 ```
 
-Kako bi se ispitao doprinos radnog statusa razini depresije uz kontrolu crta ličnosti, proveden je model višestruke linearne regresije.
+Kako bi se ispitao doprinos radnog statusa razini depresije uz kontrolu
+crta ličnosti, proveden je model višestruke linearne regresije.
 
-Regresijski model pokazao se statistički značajnim u cjelini, F(12, 357) = 26.33, p < 2.2x$10^{-16}$. Model objašnjava približno 47% varijance depresije (R² = 0.4695), dok prilagođeni koeficijent determinacije iznosi 0.4517, što upućuje na vrlo dobru objašnjavajuću snagu modela.
+Regresijski model pokazao se statistički značajnim u cjelini, F(12, 357)
+= 26.33, p \< 2.2x$10^{-16}$. Model objašnjava približno 47% varijance
+depresije (R-squared= 0.4695), dok prilagođeni koeficijent determinacije
+iznosi 0.4517, što upućuje na vrlo dobru objašnjavajuću snagu modela.
 
-Među mračnim crtama ličnosti, psihoticizam se pokazao statistički značajnim pozitivnim prediktorom depresije ($\beta$ = 0.134, p = 0.029), što sugerira da osobe s izraženijim obilježjima psihoticizma imaju višu razinu depresije i nakon kontrole ostalih osobina ličnosti i radnog statusa. Makijavelizam je pokazao slab, ali statistički neznačajan trend ($\beta$ = 0.088, p = 0.093), dok narcizam i sadizam nisu imali značajan doprinos u objašnjenju depresije.
+Među mračnim crtama ličnosti, psihoticizam se pokazao statistički
+značajnim pozitivnim prediktorom depresije ($\beta$ = 0.134, p = 0.029),
+što sugerira da osobe s izraženijim obilježjima psihoticizma imaju višu
+razinu depresije i nakon kontrole ostalih osobina ličnosti i radnog
+statusa. Makijavelizam je pokazao slab, ali statistički neznačajan trend
+($\beta$ = 0.088, p = 0.093), dok narcizam i sadizam nisu imali značajan
+doprinos u objašnjenju depresije.
 
-Unutar petofaktorskog modela ličnosti, neuroticizam se ponovno istaknuo kao najsnažniji pozitivni prediktor depresije ($\beta$ = 0.437, p < 0.001), potvrđujući njegovu ključnu ulogu u objašnjenju emocionalnih poteškoća. Za razliku od modela za anksioznost i stres, ekstraverzija se ovdje pokazala statistički značajnim negativnim prediktorom depresije ($\beta$ = -0.306, p < 0.001), što upućuje na niže razine depresije kod osoba s višom razinom ekstraverzije. Ostale crte Big Five modela nisu se pokazale statistički značajnima.
+Unutar petofaktorskog modela ličnosti, neuroticizam se ponovno istaknuo
+kao najsnažniji pozitivni prediktor depresije ($\beta$ = 0.437, p \<
+0.001), potvrđujući njegovu ključnu ulogu u objašnjenju emocionalnih
+poteškoća. Za razliku od modela za anksioznost i stres, ekstraverzija se
+ovdje pokazala statistički značajnim negativnim prediktorom depresije
+($\beta$ = -0.306, p \< 0.001), što upućuje na niže razine depresije kod
+osoba s višom razinom ekstraverzije. Ostale crte Big Five modela nisu se
+pokazale statistički značajnima.
 
 ## Višestruka linearna regresija: doprinos radnog statusa stresu uz kontrolu crta ličnosti
 
