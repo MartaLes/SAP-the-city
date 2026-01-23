@@ -7,10 +7,10 @@ author:
 - Karla Šoštar
 date: "2026-01-21"
 output:
-  word_document: default
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
+  word_document: default
 editor_options:
   markdown:
     wrap: 72
@@ -846,9 +846,7 @@ individualne crte ličnosti vjerojatno imaju snažniju ulogu.
 
 Za početak je provedena provjera pretpostavki normalnosti distribucije i
 homogenosti varijanci za varijable anksioznost, depresiju i stres. U
-nastavku su prikazani rezultati testova samo za skupine zaposlenih na
-puno radno vrijeme i studenata, budući da te skupine imaju najveći broj
-ispitanika te omogućuju pouzdaniju procjenu distribucije podataka.
+nastavku su prikazani rezultati testova.
 
 ### Test pretpostavke normalnosti za anksioznost
 
@@ -858,8 +856,10 @@ require(nortest)
 # Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$anxiety)
 
-# Lilliefors test po skupinama zanimanja (samo Full-Time i Student)
+# Lilliefors test po skupinama zanimanja
 lillie.test(df_job$anxiety[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$anxiety[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$anxiety[df_job$occupation_group == "Unemployed (and job seeking)"])
 lillie.test(df_job$anxiety[df_job$occupation_group == "Student"])
 
 par(mfrow = c(1, 2), mar = c(4, 3, 2, 1))
@@ -894,10 +894,10 @@ savršene simetrije nisu izražena te se ne smatraju statistički
 relevantnima.
 
 Iako su testovi normalnosti i grafičke provjere provedeni za sve
-skupine, u radu su prikazani samo rezultati za skupine zaposlenih na
-puno radno vrijeme i studenata radi veće preglednosti. Postoje manja
-odstupanja od simetrije u preostale dvije skupine, ali to je opravdano
-manjim brojem članova tih skupina.
+skupine, ovdje su prikazani samo rezultati za skupine zaposlenih na
+puno radno vrijeme i studenata radi vizualne reprezentacije. Postoje manja
+odstupanja od normalnosti u skupini Part-Time, ali to je opravdano
+manjim brojem članova te skupine.
 
 ### Test pretpostavke normalnosti za depresiju
 
@@ -907,38 +907,16 @@ require(nortest)
 # Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$depression)
 
-# Lilliefors test po skupinama zanimanja (samo Full-Time i Student)
+# Lilliefors test po skupinama zanimanja
 lillie.test(df_job$depression[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$depression[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$depression[df_job$occupation_group == "Unemployed (and job seeking)"])
 lillie.test(df_job$depression[df_job$occupation_group == "Student"])
-
-par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
-
-hist(
-  df_job$depression[df_job$occupation_group == "Full-Time"],
-  main = "Depression – Full-Time",
-  xlab = "Depression",
-  col = "lightgray",
-  border = "white"
-)
-
-hist(
-  df_job$depression[df_job$occupation_group == "Student"],
-  main = "Depression – Student",
-  xlab = "Depression",
-  col = "lightgray",
-  border = "white"
-)
-
-par(mfrow = c(1, 1))
-
 ```
 
 Lillieforsov test normalnosti ukazuje na statistički značajno odstupanje
 distribucije depresije od normalnosti na razini cijelog uzorka, kao i
-unutar skupina zaposlenih na puno radno vrijeme i studenata (p \< 0.05).
-Kod studentske skupine odstupanje je granično, što je u skladu s
-vizualnom inspekcijom histograma koji upućuju na približno simetričnu,
-ali blago nesimetričnu distribuciju.
+unutar svih skupina osim kod nezaposlenih (p \< 0.05). Kod studentske skupine odstupanje je granično.
 
 Unatoč utvrđenim odstupanjima od normalnosti, primjena parametarskih
 metoda smatra se opravdanom s obzirom na veličinu uzoraka te poznatu
@@ -953,44 +931,19 @@ require(nortest)
 # Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$stress)
 
-# Lilliefors test po skupinama zanimanja (samo Full-Time i Student)
+# Lilliefors test po skupinama zanimanja
 lillie.test(df_job$stress[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$stress[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$stress[df_job$occupation_group == "Unemployed (and job seeking)"])
 lillie.test(df_job$stress[df_job$occupation_group == "Student"])
-
-par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
-
-hist(
-  df_job$stress[df_job$occupation_group == "Full-Time"],
-  main = "Stress – Full-Time",
-  xlab = "Stress",
-  col = "lightgray",
-  border = "white"
-)
-
-hist(
-  df_job$stress[df_job$occupation_group == "Student"],
-  main = "Stress – Student",
-  xlab = "Stress",
-  col = "lightgray",
-  border = "white"
-)
-
-par(mfrow = c(1, 1))
 ```
 
 Test normalnosti proveden je za varijablu stresa na razini cijelog
 uzorka, kao i unutar skupina prema radnom statusu. Rezultati
 Lillieforsovog testa pokazuju da nijedan od provedenih testova nije
 statistički značajan (p \> 0.05), kako na ukupnoj razini, tako i unutar
-promatranih skupina.
+promatranih skupina - ne možemo odbaciti nultu hipotezu o normalnosti uzorka.
 
-Vizualni pregled histograma za skupine zaposlenih na puno radno vrijeme
-i studenata dodatno potvrđuje ove nalaze, budući da distribucije ne
-pokazuju izražena odstupanja od normalnosti. Manja odstupanja od
-simetrije mogu se uočiti u skupinama s manjim brojem ispitanika
-(zaposleni na nepuno radno vrijeme i nezaposleni), no takva odstupanja
-vjerojatno su posljedica veće varijabilnosti uzrokovane manjom veličinom
-uzorka, a ne stvarnih odstupanja od normalne distribucije.
 
 ### Test pretpostavki homogenosti varijanci za anksioznost
 
@@ -1168,25 +1121,25 @@ Iz modela višestruke linearne regresije koji izračunava doprinos
 zanimanja stresu povrh ličnosti zaključujemo sljedeće stvari.
 
 Model se pokazuje statistički značajnim u cjelini s vrijednostima F(12,
-361) = 13.12 i p = 2.2x$10^{-16}$ (\< 0.001) te je Multiple R-squared =
-0.3036 i Adjusted R-squared = 0.2805. Ove vrijednosti upućuju da model
-ima dobru potpornu (objašnjavajuću) snagu.
+357) = 13.22 i p = 2.2x$10^{-16}$ (\< 0.001) te je Multiple R-squared =
+0.3076 i Adjusted R-squared = 0.2843. Ove vrijednosti upućuju da model
+ima dobru objašnjavajuću snagu.
 
 Među mračnim crtama ličnosti, psihoticizam se istaknuo kao statistički
-značajan pozitivan prediktor ($\beta$ = 0.204240, p = 0.00316 (\<
+značajan pozitivan prediktor ($\beta$ = 0.2158670, p = 0.00192 (\<
 0.01)). To znači da osobe s višim razinama psihoticizma pokazuju višu
 razinu stresa, čak i nakon utjecaja ostalih crta ličnosti i oblika
 radnog angažmana. Makijavelizam je pokazao trend prema pozitivnoj
-povezanosti ($\beta$ = 0.112090, p = 0.05728 (\< 0.1)), ali rezultati su
+povezanosti ($\beta$ = 0.1107641, p = 0.06075 (\< 0.1)), ali rezultati su
 nedovoljni za snažnu povezanost. Narcizam i sadizam nisu pokazali
 značajan doprinos.
 
-Unutar petofaktorskog Big 5 modela, neurocitizam se pokazao daleko
-najsnažnijim prediktorom ishoda ($\beta$ = 0.406136, p = 1.42x$10^{-9}$
+Unutar petofaktorskog Big 5 modela, neuroticizam se pokazao daleko
+najsnažnijim prediktorom ishoda ($\beta$ = 0.3993105, p = 3.05x$10^{-9}$
 (\< 0.001)). Viša razina neurocitizma povezana je s višom razinom
 stresa, neovisno o radnom odnosu i ostalim crtama ličnosti. Ovaj
 rezultat je u potpunosti u skladu s teorijskim očekivanjima. Izdvajamo i
 otvorenost kao statistički značajan pozititvan prediktor ($\beta$ =
-0.142228, p = 0.00554 (\< 0.01). Ovaj podatak sugerira da osobe s više
+0.1384934, p = 0.00708 (\< 0.01). Ovaj podatak sugerira da osobe s više
 otvorenosti mogu biti osjetljivije na stres. Ekstraverzija, ugodnost i
 savjesnost nisu pokazale statistički značajan utjecaj u ovom modelu.
