@@ -7,9 +7,10 @@ author:
 - Karla Šoštar
 date: "2026-01-21"
 output:
-  pdf_document: default
+  word_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 editor_options:
   markdown:
     wrap: 72
@@ -354,7 +355,7 @@ Prije provedbe t-testa za nezavisne uzorke, potrebno je provjeriti jesu
 li zadovoljene osnovne pretpostavke testa, uključujući normalnost
 distribucije, homogenost varijanci te nezavisnost uzoraka.
 
-Za početak ćemo provjeriti preptpostavku o normalnosti uzorka.
+Za početak ćemo provjeriti pretpostavku o normalnosti uzorka.
 
 ```{r}
 
@@ -607,32 +608,32 @@ ggplot(data_clean, aes(age)) +
 
 Histogram dobi prikazuje raspodjelu ispitanika po dobnim skupinama te
 omogućuje procjenu raspona i strukture dobi u uzorku.
-
+Grafički prikaz prikazan je samo za jednu dimenziju ličnosti jer su za ostale dimenzije dobiveni vrlo slični obrasci odnosa s dobi. Radi preglednosti dodatni grafovi nisu uključeni.
 ```{r}
 ggplot(data_clean, aes(age, extraversion)) +
   geom_point(alpha = 0.4) +
   geom_smooth(method = "lm", se = TRUE) +
   theme_minimal()
 
-ggplot(data_clean, aes(age, agreeableness)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal()
+#ggplot(data_clean, aes(age, agreeableness)) +
+#  geom_point(alpha = 0.4) +
+#  geom_smooth(method = "lm", se = TRUE) +
+#  theme_minimal()
 
-ggplot(data_clean, aes(age, conscientiousness)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal()
+#ggplot(data_clean, aes(age, conscientiousness)) +
+#  geom_point(alpha = 0.4) +
+#  geom_smooth(method = "lm", se = TRUE) +
+#  theme_minimal()
 
-ggplot(data_clean, aes(age, neuroticism)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal()
+#ggplot(data_clean, aes(age, neuroticism)) +
+#  geom_point(alpha = 0.4) +
+#  geom_smooth(method = "lm", se = TRUE) +
+#  theme_minimal()
 
-ggplot(data_clean, aes(age, openness)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal()
+#ggplot(data_clean, aes(age, openness)) +
+#  geom_point(alpha = 0.4) +
+#  geom_smooth(method = "lm", se = TRUE) +
+#  theme_minimal()
 
 ```
 
@@ -754,7 +755,7 @@ chisq.test(table(data_clean$age_group, data_clean$agreeableness_cat))
 chisq.test(table(data_clean$age_group, data_clean$conscientiousness_cat))
 chisq.test(table(data_clean$age_group, data_clean$neuroticism_cat))
 chisq.test(table(data_clean$age_group, data_clean$openness_cat))
-table(data_clean$age_group, data_clean$openness_cat)
+#table(data_clean$age_group, data_clean$openness_cat)
 ```
 
 Hi-kvadrat testom ispitana je povezanost između dobnih skupina i
@@ -779,126 +780,6 @@ Na temelju hi-kvadrat analize kategoriziranih varijabli ne može se
 zaključiti da se crte ličnosti značajno mijenjaju ili jačaju s godinama
 u promatranom uzorku.
 
-Kako bi se istovremeno procijenio doprinos više prediktora u objašnjenju
-varijabilnosti crta ličnosti, primijenjena je višestruka linearna
-regresija u kojoj su dob i ostale relevantne varijable uključene kao
-nezavisni prediktori, dok su crte ličnosti tretirane kao kontinuirane
-zavisne varijable.
-
-```{r}
-data_clean$occupation <- factor(data_clean$"employment status")
-
-```
-
-```{r}
-data_clean$occupation <- fct_lump_min(
-  data_clean$occupation,
-  min = 10
-)
-```
-
-```{r}
-
-chisq.test(
-  table(data_clean$occupation, data_clean$extraversion_cat),simulate.p.value = TRUE
-)
-chisq.test(
-  table(data_clean$occupation, data_clean$agreeableness_cat),simulate.p.value = TRUE
-)
-chisq.test(
-  table(data_clean$occupation, data_clean$conscientiousness_cat),simulate.p.value = TRUE
-)
-chisq.test(
-  table(data_clean$occupation, data_clean$neuroticism_cat),simulate.p.value = TRUE
-)
-chisq.test(
-  table(data_clean$occupation, data_clean$openness_cat),simulate.p.value = TRUE
-)
-
-
-```
-
-Zbog niskih očekivanih frekvencija u pojedinim ćelijama korištena je
-Monte Carlo simulacija p-vrijednosti.
-
-Ovi nalazi upućuju na to da se razine pojedinih crta ličnosti razlikuju
-između skupina različitog zanimanja. Zanimanje se pokazalo značajno
-povezanim s ekstraverzijom, savjesnošću i neuroticizmom, dok za ugodnost
-i otvorenost takva povezanost nije utvrđena. Time se sugerira da
-socijalni i radni kontekst može biti povezan s izraženošću određenih
-crta ličnosti.
-
-```{r}
-library(rcompanion)
-
-# Ekstraverzija
-cramerV(table(data_clean$occupation, data_clean$extraversion_cat))
-prop_extr <- prop.table(
-  table(data_clean$occupation, data_clean$extraversion_cat),
-  1
-)
-
-round(prop_extr * 100, 1)
-
-
-# Savjesnost
-cramerV(table(data_clean$occupation, data_clean$conscientiousness_cat))
-prop_consc <- prop.table(
-  table(data_clean$occupation, data_clean$conscientiousness_cat),
-  1
-)
-
-round(prop_consc * 100, 1)
-
-
-# Neuroticizam
-cramerV(table(data_clean$occupation, data_clean$neuroticism_cat))
-prop_neuro <- prop.table(
-  table(data_clean$occupation, data_clean$neuroticism_cat),
-  1
-)
-
-round(prop_neuro * 100, 1)
-
-```
-
-Dok analize prema dobnim skupinama nisu pokazale statistički značajne
-razlike u crtama ličnosti, rezultati prema zanimanju sugeriraju da se
-ekstraverzija, savjesnost i neuroticizam mogu razlikovati ovisno o
-socijalnom/profesionalnom kontekstu, a ne nužno o kronološkoj dobi.
-
-Ukupno gledano, zanimanje je statistički značajno povezano s
-ekstraverzijom, savjesnošću i neuroticizmom, pri čemu su efekti slabi do
-umjereni; pritom se u skupinama nezaposlenih i osoba izvan plaćenog rada
-češće uočavaju nepovoljniji profili (niža savjesnost i viši
-neuroticizam), dok su zaposleni s punim radnim vremenom češće u
-niskom/srednjem neuroticizmu te srednjoj/visokoj savjesnosti i
-ekstraverziji.
-
-Budući da su skupine zanimanja različitih veličina, zaključci se temelje
-na relativnim razlikama u raspodjelama (udjelima) kategorija unutar
-skupina, a ne na apsolutnim frekvencijama.
-
-```{r}
-make_percent_table <- function(x, row_var, col_var) {
-  tab <- prop.table(table(x[[row_var]], x[[col_var]]), 1) * 100
-  df <- as.data.frame.matrix(round(tab, 1))
-  df[[row_var]] <- rownames(df)
-  rownames(df) <- NULL
-  df <- df[, c(row_var, colnames(df)[colnames(df) != row_var])]
-  df
-}
-
-df_extr  <- make_percent_table(data_clean, "occupation", "extraversion_cat")
-df_consc <- make_percent_table(data_clean, "occupation", "conscientiousness_cat")
-df_neuro <- make_percent_table(data_clean, "occupation", "neuroticism_cat")
-
-df_extr
-df_consc
-df_neuro
-
-
-```
 
 # Jesu li crte ličnosti i sklonost stresu, depresiji i anksioznosti povezane sa zanimanjem?
 
