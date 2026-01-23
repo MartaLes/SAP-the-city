@@ -102,8 +102,6 @@ head(data_clean)
 
 # Jesu li ljudi s izraženijom mračnom trijadom skloniji depresiji?
 
-## Upoznavanje podataka
-
 Po analizi podataka već odrađenoj u uvodu znamo da radimo s numeričkim
 podacima, te da je za ispitivanje povezanosti osobina mračne trijade i
 depresije prikladno raditi linearnu regresiju. Prema tome, nezavisne
@@ -121,11 +119,9 @@ i 3.0, s medijanima i srednjim vrijednostima uvijek blizu nule. Također,
 uz n=398, znamo da radimo s velikim uzorkom što povećava statističku
 snagu analize.
 
-## Jednostavna linearna regresija
-
 Za potrebe analize zasebnog utjecaja svake od ovih varijabli,
-procijeniti ćemo jednostavne regresijske modele, pri čemu će se za svaku
-nezavisnu varijablu izgraditi poseban model.
+procijeniti ćemo jednostavne **modele linearne regresije**, pri čemu će
+se za svaku nezavisnu varijablu izgraditi poseban model.
 
 ```{r}
 
@@ -151,7 +147,9 @@ na varijablu depresija. Model narcizma jedini ima negativan nagib,
 ukazujući na negativan utjecaj, dok psihoticizam i makijavelizam imaju
 pozitivan učinak.
 
-## Pearsonove korelacije
+Iduće, pretpostavljene zaključke dobivene analizom grafova linearne
+regresije potvrditi ćemo izračunom **Pearsonovih korelacijskih
+koeficijenata**.
 
 ```{r}
 cor.test(data_clean$depression, data_clean$narcissism)
@@ -200,10 +198,8 @@ rasponu 0,36–0,42, p \< 0,001). Iako su ove osobine povezane, snaga
 korelacija ne sugerira problematičnu multikolinearnost, što podupire
 uključivanje njih kao zasebnih prediktora u regresijski model.
 
-## Višestruka linearna regresija
-
-Sada možemo definirati model višestruke linearne regresije, gdje gledamo
-sveukupni utjecaj mračne trijade na depresiju.
+Sada možemo definirati model **višestruke linearne regresije**, gdje
+gledamo sveukupni utjecaj mračne trijade na depresiju.
 
 ```{r}
 model_dark_triad <- lm(depression ~ narcissism + machiavelism + psychoticism,
@@ -281,10 +277,8 @@ vif(model_2)
 VIF faktori za sve prediktore manji su od 5, što ukazuje da ne postoji
 značajna multikolinearnost među varijablama.
 
-### Provjera pretpostavki linearnih regresija
-
-Još je preostalo provjeriti prate li reziduali ovih modela normalnu
-distribuciju.
+Još je preostalo provjeriti **pretpostavke regresija**, tj. prate li
+reziduali ovih modela normalnu distribuciju.
 
 ```{r}
 qqnorm(
