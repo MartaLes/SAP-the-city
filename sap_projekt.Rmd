@@ -106,7 +106,7 @@ head(data_clean)
 
 Po analizi podataka već odrađenoj u uvodu znamo da radimo s numeričkim
 podacima, te da je za ispitivanje povezanosti osobina mračne trijade i
-depresije prikladno raditi linearnu regresiju. Dakle, nezavisne
+depresije prikladno raditi linearnu regresiju. Prema tome, nezavisne
 varijable ovdje su: narcizam, makijavelizam i psihoticizam, a zavisna
 varijabla je depresija.
 
@@ -123,8 +123,8 @@ snagu analize.
 
 ## Jednostavna linearna regresija
 
-Kako bismo analizirali zaseban utjecaj svake od ovih varijabli,
-procijenit ćemo jednostavne regresijske modele, pri čemu će se za svaku
+Za potrebe analize zasebnog utjecaja svake od ovih varijabli,
+procijeniti ćemo jednostavne regresijske modele, pri čemu će se za svaku
 nezavisnu varijablu izgraditi poseban model.
 
 ```{r}
