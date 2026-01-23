@@ -359,21 +359,21 @@ ggplot(df_sex, aes(sample = neuroticism)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~sex)
 
-# #gplot(df_sex, aes(sample = agreeableness)) +
-#   stat_qq() + stat_qq_line() +
-#   facet_wrap(~sex)
-# 
-# ggplot(df_sex, aes(sample = openness)) +
-#   stat_qq() + stat_qq_line() +
-#   facet_wrap(~sex)
-# 
-# ggplot(df_sex, aes(sample = extraversion)) +
-#   stat_qq() + stat_qq_line() +
-#   facet_wrap(~sex)
-# 
-# ggplot(df_sex, aes(sample = conscientiousness)) +
-#   stat_qq() + stat_qq_line() +
-#   facet_wrap(~sex)
+ggplot(df_sex, aes(sample = agreeableness)) +
+   stat_qq() + stat_qq_line() +
+   facet_wrap(~sex)
+ 
+ ggplot(df_sex, aes(sample = openness)) +
+    stat_qq() + stat_qq_line() +
+   facet_wrap(~sex)
+ 
+ ggplot(df_sex, aes(sample = extraversion)) +
+   stat_qq() + stat_qq_line() +
+   facet_wrap(~sex)
+ 
+ ggplot(df_sex, aes(sample = conscientiousness)) +
+   stat_qq() + stat_qq_line() +
+   facet_wrap(~sex)
 
 ```
 
@@ -462,18 +462,18 @@ Također, za mračne osobine ličnosti provest ćemo provjeru pretpostavki norma
 ggplot(df_sex, aes(sample = narcissism)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~sex)
-# 
-# ggplot(df_sex, aes(sample = machiavelism)) +
-#   stat_qq() + stat_qq_line() +
-#   facet_wrap(~sex)
-# 
-# ggplot(df_sex, aes(sample = psychoticism)) +
-#   stat_qq() + stat_qq_line() +
-#   facet_wrap(~sex)
-# 
-# ggplot(df_sex, aes(sample = sadism)) +
-#   stat_qq() + stat_qq_line() +
-#   facet_wrap(~sex)
+ 
+ggplot(df_sex, aes(sample = machiavelism)) +
+   stat_qq() + stat_qq_line() +
+   facet_wrap(~sex)
+ 
+ggplot(df_sex, aes(sample = psychoticism)) +
+   stat_qq() + stat_qq_line() +
+   facet_wrap(~sex)
+ 
+ggplot(df_sex, aes(sample = sadism)) +
+   stat_qq() + stat_qq_line() +
+   facet_wrap(~sex)
 
 ```
 
@@ -922,7 +922,7 @@ anksioznosti uvelike preklapaju između skupina definiranih prema
 radnom statusu (zanimanju), što upućuje na izražene individualne razlike unutar skupina.
 Iako nezaposleni sudionici pokazuju viši medijan depresivnosti u odnosu
 na ostale skupine, razlike nisu statistički potvrđene. Također je vidljivo da se veći broj ekstremnih vrijednosti
-javlja u skupini zaposlenih na puno radno vrijeme, što dodatno ukazuje
+javlja u skupini zaposlenih s punim radnim vremenom, što dodatno ukazuje
 na veliku heterogenost unutar te skupine. Razine stresa
 pokazuju vrlo slične obrasce u svim skupinama, dok se anksioznost
 ne pojavljuje sustavno povezanom sa zanimanjem. Ovi nalazi sugeriraju da
@@ -932,7 +932,7 @@ snažniju ulogu.
 
 ## Provođenje ANOVA analize - Razlikuju li se razine anksioznosti, depresije i stresa po zanimanju (radnim statusima)?
 
-Za početak je provedena provjera pretpostavki normalnosti distribucije i homogenosti varijanci za varijable anksioznost, depresiju i stres. U nastavku su prikazani rezultati testova samo za skupine zaposlenih na puno radno vrijeme i studenata, budući da te skupine imaju najveći broj ispitanika te omogućuju pouzdaniju procjenu distribucije podataka.
+Za početak potrebno je provesti testove pretpostavki normalnosti podataka i homogenosti varijanci za anksioznost, depresiju i stres.
 
 ### Test pretpostavke normalnosti za anksioznost
 
@@ -942,15 +942,33 @@ require(nortest)
 # Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$anxiety)
 
-# Lilliefors test po skupinama zanimanja (samo Full-Time i Student)
+# Lilliefors test po skupinama zanimanja
 lillie.test(df_job$anxiety[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$anxiety[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$anxiety[df_job$occupation_group == "Unemployed (and job seeking)"])
 lillie.test(df_job$anxiety[df_job$occupation_group == "Student"])
 
-par(mfrow = c(1, 2), mar = c(4, 3, 2, 1))
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
 
 hist(
   df_job$anxiety[df_job$occupation_group == "Full-Time"],
   main = "Anxiety – Full-Time",
+  xlab = "Anxiety",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$anxiety[df_job$occupation_group == "Part-Time"],
+  main = "Anxiety – Part-Time",
+  xlab = "Anxiety",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$anxiety[df_job$occupation_group == "Unemployed (and job seeking)"],
+  main = "Anxiety – Unemployed",
   xlab = "Anxiety",
   col = "lightgray",
   border = "white"
@@ -967,9 +985,8 @@ hist(
 par(mfrow = c(1, 1))
 
 ```
-Iz dobivenih ispisa zaključujemo da na razini značajnosti $\alpha$ = 0.05 nema potrebe za odbacivanjem nulte hipoteze o normalnosti distribucije anksioznosti na razini cijelog uzorka (p > 0.05). Na temelju grafičke analize histograma može se zaključiti da distribucije anksioznosti za skupine zaposlenih na puno radno vrijeme i studenata približno slijede normalnu distribuciju. Uočena manja odstupanja od savršene simetrije nisu izražena te se ne smatraju statistički relevantnima.
-
-Iako su testovi normalnosti i grafičke provjere provedeni za sve skupine, u radu su prikazani samo rezultati za skupine zaposlenih na puno radno vrijeme i studenata radi veće preglednosti. Postoje manja odstupanja od simetrije u preostale dvije skupine, ali to je opravdano manjim brojem članova tih skupina.
+Iz dobivenih ispisa zaključujemo da na temelju cijelog uzorka nema potrebe za odbacivanjem nulte hipoteze o normalnosti uzorka (p > 0.05). Gledajući svaku skupinu radnog statusa zasebno, možemo uočiti kako jedino statistički značajno odstupanje od normalnosti postoji kod ispitanika koji rade na nepuno radno vrijeme, ali to možemo izuzeti iz općeg zaključka jer se ta skupina sastoji od malog uzorka na koje su testovi o normalnosti osjetljivi.  
+Gledajući histograme, manja odstupanja od simetrije vidljiva su u skupinama s manjim brojem ispitanika (osobito kod zaposlenih s nepunim radnim vremenom i nezaposlenih), što je vjerojatno posljedica veličine uzorka, a ne stvarnih razlika u raspodjeli anksioznosti.  
 
 ### Test pretpostavke normalnosti za depresiju
 ```{r}
@@ -978,15 +995,33 @@ require(nortest)
 # Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$depression)
 
-# Lilliefors test po skupinama zanimanja (samo Full-Time i Student)
+# Lilliefors test po skupinama zanimanja
 lillie.test(df_job$depression[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$depression[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$depression[df_job$occupation_group == "Unemployed (and job seeking)"])
 lillie.test(df_job$depression[df_job$occupation_group == "Student"])
 
-par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
 
 hist(
   df_job$depression[df_job$occupation_group == "Full-Time"],
   main = "Depression – Full-Time",
+  xlab = "Depression",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$depression[df_job$occupation_group == "Part-Time"],
+  main = "Depression – Part-Time",
+  xlab = "Depression",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$depression[df_job$occupation_group == "Unemployed (and job seeking)"],
+  main = "Depression – Unemployed",
   xlab = "Depression",
   col = "lightgray",
   border = "white"
@@ -1003,9 +1038,8 @@ hist(
 par(mfrow = c(1, 1))
 
 ```
-Lillieforsov test normalnosti ukazuje na statistički značajno odstupanje distribucije depresije od normalnosti na razini cijelog uzorka, kao i unutar skupina zaposlenih na puno radno vrijeme i studenata (p < 0.05). Kod studentske skupine odstupanje je granično, što je u skladu s vizualnom inspekcijom histograma koji upućuju na približno simetričnu, ali blago nesimetričnu distribuciju.
-
-Unatoč utvrđenim odstupanjima od normalnosti, primjena parametarskih metoda smatra se opravdanom s obzirom na veličinu uzoraka te poznatu robusnost linearne regresije i ANOVA-e na umjerena kršenja pretpostavke normalnosti. 
+Lillieforsov test pokazuje da distribucija depresije odstupa od normalnosti kod zaposlenih ispitanika (Full-Time i Part-Time) i studenata pomalo. Kod nezaposlenih nema statistički značajnog odstupanja.  
+Histogrami potvrđuju ove nalaze, iako je distribucija kod studenata pravilnija, a kod nezaposlenih ispitanika dosta manje od očekivanog. Unatoč navedenim odstupanjima, primjena parametarskih metoda čini se opravdanom s obzirom na veličinu uzoraka i karakteristike robustnosti linearne regresije i ANOVA-e na kršenja pretpostavki normalnosti uzoraka.  
 
 ### Test pretpostavki normalnosti za stres
 ```{r}
@@ -1014,15 +1048,33 @@ require(nortest)
 # Lilliefors test normalnosti (ukupno)
 lillie.test(df_job$stress)
 
-# Lilliefors test po skupinama zanimanja (samo Full-Time i Student)
+# Lilliefors test po skupinama zanimanja
 lillie.test(df_job$stress[df_job$occupation_group == "Full-Time"])
+lillie.test(df_job$stress[df_job$occupation_group == "Part-Time"])
+lillie.test(df_job$stress[df_job$occupation_group == "Unemployed (and job seeking)"])
 lillie.test(df_job$stress[df_job$occupation_group == "Student"])
 
-par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
 
 hist(
   df_job$stress[df_job$occupation_group == "Full-Time"],
   main = "Stress – Full-Time",
+  xlab = "Stress",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$stress[df_job$occupation_group == "Part-Time"],
+  main = "Stress – Part-Time",
+  xlab = "Stress",
+  col = "lightgray",
+  border = "white"
+)
+
+hist(
+  df_job$stress[df_job$occupation_group == "Unemployed (and job seeking)"],
+  main = "Stress – Unemployed",
   xlab = "Stress",
   col = "lightgray",
   border = "white"
@@ -1038,9 +1090,8 @@ hist(
 
 par(mfrow = c(1, 1))
 ```
-Test normalnosti proveden je za varijablu stresa na razini cijelog uzorka, kao i unutar skupina prema radnom statusu. Rezultati Lillieforsovog testa pokazuju da nijedan od provedenih testova nije statistički značajan (p > 0.05), kako na ukupnoj razini, tako i unutar promatranih skupina.
-
-Vizualni pregled histograma za skupine zaposlenih na puno radno vrijeme i studenata dodatno potvrđuje ove nalaze, budući da distribucije ne pokazuju izražena odstupanja od normalnosti. Manja odstupanja od simetrije mogu se uočiti u skupinama s manjim brojem ispitanika (zaposleni na nepuno radno vrijeme i nezaposleni), no takva odstupanja vjerojatno su posljedica veće varijabilnosti uzrokovane manjom veličinom uzorka, a ne stvarnih odstupanja od normalne distribucije.  
+Također, test normalnosti proveden je i za varijablu stresa na ukupnom uzorku te unutar svake skupine prema radnom statusu. Rezultati pokazuju da nijedan test nije statistički značajan, kako na ukupnoj razini, tako i na pojedinačnoj.  
+Vizualni pregled histograma dodatno potvrđuje ove nalaze. Manja odstupanja i asimetrije prisutne su u skupini nezaposlenih i zaposlenih na nepuno radno vrijeme, što je očekivano i prihvatljivo s obzirom na manju količinu uzorka.  
 
 ### Test pretpostavki homogenosti varijanci za anksioznost
 ```{r}
@@ -1084,7 +1135,6 @@ summary(aov(depression ~ occupation_group, data = df_job))
 summary(aov(stress ~ occupation_group, data = df_job))
 
 ```
-
 Provedene su jednosmjerne analize varijance (ANOVA) s ciljem ispitivanja razlika u razini anksioznosti, depresije i stresa između skupina definiranih prema radnom statusu (occupation_group). Prije provođenja ANOVA-e ispitane su pretpostavke normalnosti distribucije i homogenosti varijanci za sve promatrane varijable. Iako su kod pojedinih varijabli uočena manja odstupanja od normalnosti, s obzirom na veličinu uzorka i robusnost ANOVA-e na umjerena kršenja ove pretpostavke, primjena parametarskih metoda smatrana je opravdanom.
 
 Rezultati jednosmjerne ANOVA-e nisu pokazali statistički značajne razlike u razini anksioznosti između skupina radnog statusa, F(3, 366) = 1.258, p = 0.288. Također, nisu utvrđene statistički značajne razlike u razini stresa, F(3, 366) = 0.4944, p = 0.687.
@@ -1175,3 +1225,4 @@ otvorenost kao statistički značajan pozititvan prediktor ($\beta$ =
 0.142228, p = 0.00554 (\< 0.01). Ovaj podatak sugerira da osobe s više
 otvorenosti mogu biti osjetljivije na stres. Ekstraverzija, ugodnost i
 savjesnost nisu pokazale statistički značajan utjecaj u ovom modelu.
+
